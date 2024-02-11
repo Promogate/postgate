@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "../ui/navigation-menu";
 import React from "react";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "../ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { UserButton, auth } from "@clerk/nextjs";
+import { Actions } from "./actions";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -47,6 +48,7 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 export function Root() {
+
   return (
     <div className="flex justify-between items-center w-full mx-10 2xl:max-w-screen-2xl 2xl:mx-auto">
       <div className="relative w-36 h-10">
@@ -107,14 +109,7 @@ export function Root() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <div className="flex items-center gap-x-8">
-        <Link href={"/sign-in"}>
-          <Button variant={"outline"}>
-            Login
-          </Button>
-        </Link>
-        <UserButton afterSignOutUrl="/" />
-      </div>
+      <Actions />
     </div>
   )
 }

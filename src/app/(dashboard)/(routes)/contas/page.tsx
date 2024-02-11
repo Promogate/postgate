@@ -1,7 +1,7 @@
 export default function Page() {
   return (
     <h2>
-      Dashboard
+      Contas
     </h2>
   )
 }

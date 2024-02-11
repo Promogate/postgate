@@ -1,12 +1,13 @@
 import { Montserrat } from "next/font/google"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { ChevronRight } from "lucide-react"
 
 const font = Montserrat({ subsets: ["latin"], preload: true })
 
 export function Root() {
   return (
-    <section className="flex flex-col text-center place-items-center xl:h-[calc(100vh-224px)] 2xl:h-[calc(100vh-352px)] 2xl:max-w-screen-2xl 2xl:mx-auto my-16 2xl:my-32">
+    <section className="flex flex-col text-center md:gap-y-8 place-items-center xl:h-[calc(100vh-224px)] 2xl:h-[calc(100vh-352px)] 2xl:max-w-screen-2xl 2xl:mx-auto my-16 2xl:my-32">
       <div className="lg:max-w-screen-lg grid gap-y-8">
         <h1 className="text-5xl font-extrabold leading-tight" style={{ fontFamily: font.style.fontFamily }}>
           Acelere o seu crescimento desbloqueando todo o potencional do seu aplicativo de mensagens!
@@ -16,8 +17,9 @@ export function Root() {
         </p>
       </div>
       <Link href={"/sign-up"} className="2xl:mt-20">
-        <Button className="bg-[#5528ff] hover:bg-[#4822D9] transition-all ease-in-out" size={"lg"}>
+        <Button className="bg-[#5528ff] hover:bg-[#4822D9] transition-all ease-in-out flex gap-x-2 items-center" size="xl">
           Começar grátis
+          <ChevronRight />
         </Button>
       </Link>
     </section>
