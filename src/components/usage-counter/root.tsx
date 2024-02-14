@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Zap } from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { MAX_FREE_MESSAGES } from "@/config";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
 import { useModal } from "@/hooks/use-modal";
+import { useAuth } from "@clerk/nextjs";
 
 type RootProps = {
   limitCount: number;
@@ -17,6 +19,7 @@ const apiCount = 125;
 export function Root() {
   const { onOpen } = useModal();
   const [isMounted, setIsMounted] = useState(false);
+  const { userId } = useAuth();
 
   useEffect(() => {
     setIsMounted(true)

@@ -27,3 +27,27 @@ model UserSubscription {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 }
+
+model Redirector {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String?
+  userId           String?
+  groups           Group[]
+  redirectorLink   String?
+  timesClicked     Int     @default(0)
+  type             String  @default("sequential")
+  currentGroup     Int     @default(0)
+  redirectorStatus String  @default("started")
+}
+
+model Group {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  title           String?
+  destinationLink String
+  members         Int
+  limit           Int     @default(1024)
+
+  redirector   Redirector @relation(fields: [redirectorId], references: [id], onDelete: Cascade)
+  redirectorId String     @db.ObjectId
+}
