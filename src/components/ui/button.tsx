@@ -20,7 +20,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         upgrade: "bg-gradient-to-r from-[#fdfc47] to-[#24fe41]",
-        primary: "bg-[#5528ff] w-full text-white uppercase"
+        primary: "bg-[#5528ff] w-full text-white uppercase",
+        "primary-action": "bg-[#5528ff] text-white",
+        clipboard: "bg-[#5528ff] text-white",
       },
       size: {
         default: "h-9 px-4 py-2",

@@ -9,7 +9,11 @@ export default authMiddleware({
     "/contato",
     "/ferramentas",
     "/api/stripe/webhook",
-    "/api/redirector/(.*)"
+    "/api/redirector",
+    "/api/redirector/(.*)",
+    "/api/group",
+    "/api/group/(.*)",
+    "/api/redirect/(.*)"
   ],
 });
 

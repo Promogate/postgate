@@ -4,6 +4,7 @@ import prismaClient from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { pgateClient } from "@/lib/pgate";
 import { absoluteUrl } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -35,5 +36,17 @@ export async function POST(req: NextRequest) {
       status: "error",
       message: error.message
     }), { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  const { userId } = auth();
+  try {
+    const redirectors = await prismaClient.redirector.findMany({
+      where: { userId: userId }
+    });
+    return NextResponse.json({ status: "success", data: redirectors })
+  } catch (error: any) {
+    return new NextResponse( JSON.stringify({ status: "error" }) , { status: 500 });
   }
 }

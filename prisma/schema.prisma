@@ -51,3 +51,9 @@ model Group {
   redirector   Redirector @relation(fields: [redirectorId], references: [id], onDelete: Cascade)
   redirectorId String     @db.ObjectId
 }
+
+model WhatstappSession {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  hash   String? @unique
+  userId String?
+}
