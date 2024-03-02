@@ -22,6 +22,8 @@ const buttonVariants = cva(
         upgrade: "bg-gradient-to-r from-[#fdfc47] to-[#24fe41]",
         primary: "bg-[#5528ff] w-full text-white uppercase",
         "primary-action": "bg-[#5528ff] text-white",
+        "primary-outline":
+          "border border-input border-[#5528ff] text-[#5528ff] bg-background shadow-sm hover:bg-[#5528ff] hover:text-white transforma ease-in-out",
         clipboard: "bg-[#5528ff] text-white",
       },
       size: {

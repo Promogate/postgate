@@ -57,3 +57,12 @@ model WhatstappSession {
   hash   String? @unique
   userId String?
 }
+
+model Workflow {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  userId      String
+  nodes       String?
+  edges       String?
+}

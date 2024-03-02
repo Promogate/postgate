@@ -10,8 +10,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
       <main className="md:pl-72">
         <Navbar.Root />
-        <div className="mb-8 space-y-4">
-          <div className="px-4 md:px-8 space-y-4">
+        <div className="space-y-4">
+          <div className="space-y-4">
             {children}
           </div>
         </div>
