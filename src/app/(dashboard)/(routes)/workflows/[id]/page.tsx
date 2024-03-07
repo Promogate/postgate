@@ -1,14 +1,16 @@
 "use client";
 
 import CustomEdge from "@/components/flow/custom-edge";
-import { First } from "@/components/flow/custom-nodes/first";
+import { IntervalNode } from "@/components/flow/custom-nodes/interval";
+import { TextNode } from "@/components/flow/custom-nodes/text";
 import { NavigationNodes } from "@/components/flow/navigation-nodes";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { useFlowContext } from "@/contexts/flow";
-import { cn } from "@/lib/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Menu, Save, Settings, X } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 import {
   Background,
   Controls,
@@ -20,11 +22,17 @@ import {
 import "reactflow/dist/style.css";
 
 const nodeTypes = {
-  first: First
+  text: TextNode,
+  interval: IntervalNode
 }
+
+const edgeTypes = {
+  "custom-edge": CustomEdge,
+};
 
 export default function Page() {
   const { id } = useParams() as { id: string };
+  const { toast } = useToast();
 
   const {
     edges,
@@ -35,17 +43,36 @@ export default function Page() {
     reactFlowWrapper,
     setReactFlowInstance,
     onDrop,
-    onDragOver
+    onDragOver,
+    handleSaveWorkflow,
+    handleGetWorkflow
   } = useFlowContext();
 
-  const edgeTypes = {
-    "custom-edge": CustomEdge,
-  };
+  const mutation = useMutation({
+    mutationKey: ["saving_flow", id],
+    mutationFn: async () => {
+      await handleSaveWorkflow(id)
+    },
+    onSuccess: () => {
+      toast({
+        variant: "default",
+        title: "Salvo com sucesso!"
+      })
+    }
+  });
+
+  const handleSave = () => mutation.mutateAsync();
+
+  const query = useQuery({
+    queryKey: ["flow_data", id],
+    queryFn: async () => await handleGetWorkflow(id),
+    staleTime: 1000 * 60 * 60 * 24,
+  })
 
   return (
-    <div className="xl:w-[calc(100vw-296px)] xl:h-[calc(100vh-72px)] flex flex-col h-full flex-1">
+    <div className="xl:w-[calc(100vw-288px)] xl:h-[calc(100vh-65px)] flex flex-col h-full flex-1">
       <ReactFlowProvider>
-        <div ref={reactFlowWrapper} className="flex-1 h-full">
+        <div ref={reactFlowWrapper} className="flex-1 h-full bg-slate-100">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -66,8 +93,15 @@ export default function Page() {
             </Panel>
             <Panel position="bottom-right">
               <div className="flex items-center gap-4">
-                <Button variant="primary-outline" className="rounded-full flex items-center justify-center gap-4">
-                  <Save size={16} />
+                <Button variant="primary-outline" className="rounded-full flex items-center justify-center gap-4" onClick={handleSave}>
+                  {mutation.isPending ? <RotatingLines
+                    visible={true}
+                    width="12"
+                    strokeWidth="4"
+                    strokeColor="#5528ff"
+                    animationDuration="0.75"
+                    ariaLabel="rotating-lines-loading"
+                  /> : <Save size={16} />}
                   Salvar
                 </Button>
                 <Button variant="primary-action" className="rounded-full flex items-center justify-center gap-4">

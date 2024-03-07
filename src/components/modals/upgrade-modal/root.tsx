@@ -19,7 +19,6 @@ export function Root() {
   const onSubscribe = async (planType: string) => {
     try {
       const response = await axios.get(`/api/stripe?plan_type=${planType}`)
-      console.log(response)
       window.location.href = response.data.url;
     } catch (error: any) {
       console.log(error, "STRIPE_CLIENT_ERROR");

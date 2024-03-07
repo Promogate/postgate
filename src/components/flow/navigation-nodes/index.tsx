@@ -17,12 +17,14 @@ const IconList = ({ isOpen }: { isOpen: boolean }) => {
     {
       icon: MessageSquareText,
       tip: "Mensagem de texto",
-      type: "text"
+      type: "text",
+      background: "bg-[#5528FF]"
     },
     {
       icon: Clock,
-      tip: "Temporizador",
-      type: "temporizer"
+      tip: "Intervalo",
+      type: "interval",
+      background: "bg-amber-500"
     }
   ]; // Adicione seus ícones aqui
 
@@ -35,7 +37,7 @@ const IconList = ({ isOpen }: { isOpen: boolean }) => {
     >
       {icons.map((icon, index) => (
         <motion.li key={index}>
-          <div className={cn("flex items-center py-1 p-4 bg-[#5528ff] text-white rounded-full", isGrabbing ? "cursor-grabbing" : "cursor-grab")} draggable onDragStart={(event) => onDragStart(event, icon.type)}>
+        <div className={cn(`flex items-center py-1 p-4 ${icon.background} text-white rounded-full`, isGrabbing ? "cursor-grabbing" : "cursor-grab")} draggable onDragStart={(event) => onDragStart(event, icon.type)}>
             <Tooltip content={icon.tip}>
               <icon.icon
                 onMouseDown={() => setIsGrabbing(true)}

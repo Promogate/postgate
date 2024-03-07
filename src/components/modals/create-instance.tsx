@@ -17,7 +17,6 @@ export function CreateInstanceModal() {
     queryFn: async () => {
       const instanceId = uuid();
       const { data } = await axios.post("/api/wapp/instance", { instanceName: instanceId });
-      console.log(data)
       return data;
     },
     staleTime: 1000 * 60 * 60

@@ -341,3 +341,13 @@ export type Group = {
   limit: number;
   redirectorId: string;
 }
+
+export type TextNodeProps = {
+  previewLink: string;
+  message: string;
+}
+
+export type IntervalNodeProps = {
+  interval: string;
+  unity: string;
+}

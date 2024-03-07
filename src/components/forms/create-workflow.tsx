@@ -44,7 +44,6 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
      return data;
     },
     onSuccess: (data) => {
-      console.log(data);
       toast({
         title: "Workflow criado com sucesso!",
         variant: "default",
