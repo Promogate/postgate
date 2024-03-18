@@ -1,14 +1,31 @@
 import axios from "axios";
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { addEdge, applyEdgeChanges, applyNodeChanges } from "reactflow";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState
+} from "react";
+import {
+  addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
+  useEdgesState,
+  useNodesState
+} from "reactflow";
 import { v4 } from "uuid";
 
 import { useToast } from "@/components/ui/use-toast";
-import { TextNodeProps } from "@/@types";
+import {
+  ImageNodeProps,
+  TextNodeProps
+} from "@/@types";
 
 type FlowContextProps = {
   nodes: any;
   edges: any;
+  setNodes: React.Dispatch<any>;
+  setEdges: React.Dispatch<any>;
   onNodesChange: any;
   onEdgesChange: any;
   onConnect: any;
@@ -17,9 +34,10 @@ type FlowContextProps = {
   reactFlowWrapper: any;
   setReactFlowInstance: any;
   handleSaveWorkflow: (id: string) => Promise<void>;
-  handleGetWorkflow: (id: string) => Promise<any>
+  handleGetWorkflow: (id: string) => Promise<{ nodes: any, edges: any }>
   handleNodeDelete: (id: string) => void,
   handleEditNodeData: (id: string, values: any) => void
+  handleEditImageNodeData: (id: string, values: any) => void
 }
 
 type NodeProps = {
@@ -52,18 +70,24 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
 
   const { toast } = useToast();
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes] = useState<any>(initialNodes);
-  const [edges, setEdges] = useState<any>(initialEdges);
+  const [nodes, setNodes] = useNodesState<any>(initialNodes);
+  const [edges, setEdges] = useEdgesState<any>(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
   const onNodesChange = useCallback(
-    (changes: any) => setNodes((nds: any) => applyNodeChanges(changes, nds)),
+    (changes: any) => {
+      setNodes((prevNodes: any) => applyNodeChanges(changes, prevNodes));
+    },
     [setNodes]
   );
+
   const onEdgesChange = useCallback(
-    (changes: any) => setEdges((eds: any) => applyEdgeChanges(changes, eds)),
+    (changes: any) => {
+      setEdges((eds: any) => applyEdgeChanges(changes, eds))
+    },
     [setEdges]
   );
+
   const onConnect = useCallback(
     (connection: any) => setEdges((eds: any) => addEdge(connection, eds)),
     [setEdges]
@@ -90,12 +114,12 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         id: newNodeId,
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: `${type}_node` },
       };
 
       setNodes((nds: any) => nds.concat(newNode));
     },
-    [reactFlowInstance],
+    [reactFlowInstance, setNodes],
   );
 
   const handleSaveWorkflow = async (id: string) => {
@@ -111,7 +135,10 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
       const flow = data.data;
       setNodes(JSON.parse(flow.nodes));
       setEdges(JSON.parse(flow.edges));
-      return data.data;
+      return {
+        nodes: JSON.parse(flow.nodes),
+        edges: JSON.parse(flow.edges)
+      };
     } catch (error: any) {
       toast({
         title: "Erro ao buscar informações do fluxo",
@@ -126,15 +153,10 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
       setNodes((prevNodes: any) => {
         const updatedNodes = prevNodes.filter((node: any) => {
           const { type, id, parentNode } = node
-
-          // Removing the "buttonsChildNode" nodes that have as parent the id equal to the nodeId received by parameter
           if (type === 'buttonsChildNode' && parentNode === nodeId) return
-
-          // Returning all nodes that are different from the nodeId
           return id !== nodeId
         })
 
-        // Removing all connections the node has
         setEdges((prevEdges: any) =>
           prevEdges.filter((edge: any) => edge.source !== nodeId && edge.target !== nodeId),
         )
@@ -158,10 +180,34 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
       });
     })
   }, [setNodes]);
-  
+
+  const handleEditImageNodeData = useCallback(async (nodeId: string, values: ImageNodeProps) => {
+    let bodyFormData = new FormData();
+    bodyFormData.append("userId", values.userId);
+    bodyFormData.append("image", values.image);
+    bodyFormData.append("message", values.message)
+    const result = await axios.post("/api/s3-upload", bodyFormData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    setNodes((prevNodes: any) => {
+      return prevNodes.map((node: any) => {
+        if (node.id === nodeId) {
+          node.data = {
+            ...node.data,
+            image: result.data.url,
+            message: values.message
+          }
+        }
+        return node;
+      });
+    })
+  }, [setNodes]);
+
   const values = {
     nodes,
     edges,
+    setNodes,
+    setEdges,
     onNodesChange,
     onEdgesChange,
     onConnect,
@@ -172,7 +218,8 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
     handleSaveWorkflow,
     handleGetWorkflow,
     handleNodeDelete,
-    handleEditNodeData
+    handleEditNodeData,
+    handleEditImageNodeData
   }
 
   return (

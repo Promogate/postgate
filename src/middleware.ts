@@ -13,7 +13,8 @@ export default authMiddleware({
     "/api/redirector/(.*)",
     "/api/group",
     "/api/group/(.*)",
-    "/api/redirect/(.*)"
+    "/api/redirect/(.*)",
+    "/api/s3-upload"
   ],
 });
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Clock, Menu, MessageSquareText, Mic, X } from "lucide-react";
+import { Clock, Image, Menu, MessageSquareText, Mic, X } from "lucide-react";
 import { Tooltip } from "@/components/common/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -21,12 +21,18 @@ const IconList = ({ isOpen }: { isOpen: boolean }) => {
       background: "bg-[#5528FF]"
     },
     {
+      icon: Image,
+      tip: "Imagem",
+      type: "image",
+      background: "bg-red-500"
+    },
+    {
       icon: Clock,
       tip: "Intervalo",
       type: "interval",
       background: "bg-amber-500"
     }
-  ]; // Adicione seus ícones aqui
+  ];
 
   return (
     <motion.ul

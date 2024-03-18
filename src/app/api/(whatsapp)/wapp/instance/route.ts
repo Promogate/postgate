@@ -13,11 +13,11 @@ export async function POST(request: NextRequest) {
     await prismaClient.whatstappSession.create({
       data: {
         userId: userId,
-        hash: data.hash.jwt
+        hash: data.Auth.token,
+        instance: data.name
       }
     })
-    const qrCode = await wappClient.get("/instance/qrcode/" + body.instanceName, { headers: { apikey: apiKey } });
-    return new NextResponse(JSON.stringify(qrCode.data), { status: 200 });
+    return new NextResponse(null, { status: 200 });
   } catch (error: any) {
     return new NextResponse(JSON.stringify({ message: error.message }), { status: 500 });
   }

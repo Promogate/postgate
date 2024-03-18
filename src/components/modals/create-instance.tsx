@@ -12,20 +12,21 @@ import { useAuth } from "@clerk/nextjs";
 export function CreateInstanceModal() {
   const { userId } = useAuth();
 
-  const { isLoading, isError, data} = useQuery({
+  const { isLoading, isError, data, refetch } = useQuery({
     queryKey: ["instance", userId],
     queryFn: async () => {
       const instanceId = uuid();
       const { data } = await axios.post("/api/wapp/instance", { instanceName: instanceId });
       return data;
     },
-    staleTime: 1000 * 60 * 60
+    staleTime: 1000 * 60 * 60,
+    enabled: false 
   });
 
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="primary-action">
+        <Button variant="primary-action" onClick={() => refetch()}>
           <Plus />
           Adicionar conta
         </Button >

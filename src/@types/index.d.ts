@@ -347,6 +347,12 @@ export type TextNodeProps = {
   message: string;
 }
 
+export type ImageNodeProps = {
+  userId: string;
+  image: File | string;
+  message: string;
+}
+
 export type IntervalNodeProps = {
   interval: string;
   unity: string;

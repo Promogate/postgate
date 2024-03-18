@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Smartphone, CalendarDays, Split, Workflow, Settings } from "lucide-react";
+import { LayoutDashboard, Smartphone, CalendarDays, Split, Workflow, Settings, ListChecks } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,6 +36,12 @@ const routes = [
     label: "Workflows",
     icon: Workflow,
     href: "/workflows",
+    color: "text-[#5528ff]"
+  },
+  {
+    label: "Listas de disparo",
+    icon: ListChecks,
+    href: "/listas-de-disparo",
     color: "text-[#5528ff]"
   },
   {

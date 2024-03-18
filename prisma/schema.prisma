@@ -53,16 +53,22 @@ model Group {
 }
 
 model WhatstappSession {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  hash   String? @unique
-  userId String?
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  hash        String?  @unique
+  userId      String?
+  instance    String   @unique
+  isConnected Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Workflow {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String?
-  userId      String
-  nodes       String?
-  edges       String?
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String?
+  isPublished  Boolean @default(false)
+  scheduleDate String?
+  userId       String
+  nodes        String?
+  edges        String?
 }
