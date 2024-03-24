@@ -204,7 +204,7 @@ export type OfferWithClicks = APIOffer & {
         whatsapp: string,
         instagram: string,
         telegram: string,
-        twitter:string,
+        twitter: string,
         user_profile_id: string
       }
     }
@@ -215,26 +215,26 @@ export type OfferWithClicks = APIOffer & {
 }
 
 export type MeResponse = {
-	status: string,
-	user: {
-		id: string,
-		name: string,
-		email: string,
-		created_at: string,
-		user_profile: {
-			id: string,
-			store_image: string,
-			store_name: string,
+  status: string,
+  user: {
+    id: string,
+    name: string,
+    email: string,
+    created_at: string,
+    user_profile: {
+      id: string,
+      store_image: string,
+      store_name: string,
       store_name_display: string,
       lomadee_source_id: string,
       admitad_verification: string,
-			role: string,
-			user_id: string,
+      role: string,
+      user_id: string,
       resources: {
-				id: string,
-				created_at: string,
-				user_profile_id: string,
-			},
+        id: string,
+        created_at: string,
+        user_profile_id: string,
+      },
       social_media?: {
         facebook?: string;
         whatsapp?: string;
@@ -242,8 +242,8 @@ export type MeResponse = {
         telegram?: string;
         twitter?: string;
       }
-		}
-	}
+    }
+  }
 }
 
 export type UserMeResponse = {
@@ -272,7 +272,7 @@ export type SignInFormInput = {
 
 export type SignInFormOutput = {
   token: string,
-	user: {
+  user: {
     id: string;
     name: string;
     email: string;
@@ -356,4 +356,51 @@ export type ImageNodeProps = {
 export type IntervalNodeProps = {
   interval: string;
   unity: string;
+}
+
+export type RemoteWappGroup = {
+  id: string;
+  subject: string;
+  subjectOwner: string;
+  subjectTime: number;
+  size: number;
+  creation: number;
+  desc: string;
+  descId: string;
+  restrict: boolean;
+  announce: boolean;
+  isCommunity: boolean,
+  isCommunityAnnounce: boolean;
+  joinApprovalMode: boolean;
+  memberAddMode: boolean;
+  participants: Participant[];
+}
+
+export type WappGroup = {
+  id: string;
+  remoteJid: string;
+  subject?: string;
+  description?: string;
+  isRestrict?: boolean;
+  isCommunity?: boolean;
+  isCommunityAnnounce?: boolean;
+  owner?: string;
+  isRaw?: boolean;
+}
+
+export type WappChat = {
+  id: string,
+  remoteJid: string,
+  createdAt: string,
+  updatedAt: string,
+  instanceId: string
+}
+
+export type SendingList = {
+  id: string;
+  userId: string;
+  name: string | null;
+  instanceId: string | null;
+  list: string | null;
+  groupsInfo: string | null;
 }

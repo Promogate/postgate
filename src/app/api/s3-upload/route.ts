@@ -29,7 +29,6 @@ async function uploadFileToS3(file: any, filename: string) {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    console.log(formData);
     const file = formData.get("image") as File;
     const userId = formData.get("userId") as string;
     if (!file) {

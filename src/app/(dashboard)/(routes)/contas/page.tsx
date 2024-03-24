@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
 import { useToast } from "@/components/ui/use-toast";
+import { Instance } from "@/components/instance";
 
 export default function Page() {
   const { userId } = useAuth();
@@ -103,7 +104,7 @@ export default function Page() {
             (
               <p>Você ainda não possui contas whatsapp conectadas.</p>
             ) : (
-              <p>{JSON.stringify(data)}</p>
+              <Instance.Root data={data}/>
             )
         }
       </section>

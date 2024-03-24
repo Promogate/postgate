@@ -10,5 +10,12 @@ export async function GET(req: NextRequest, route: { params: { id: string } }) {
     }
   })
 
+  instances.map(async (instance) => {
+    if (!instance.profilePicUrl || !instance.ownerJid) {
+      
+    }
+  })
+
+
   return new NextResponse(JSON.stringify(instances), { status: 200 });
 }

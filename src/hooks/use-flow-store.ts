@@ -42,7 +42,6 @@ export const useFlowStore = create<RFState>((set, get) => ({
   edges: [],
   scheduleTime: null,
   setScheduleTime: (value: string) => {
-    console.log(value);
     set({ scheduleTime: value });
   },
   reactFlowInstance: null,

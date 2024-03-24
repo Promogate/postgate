@@ -53,13 +53,15 @@ model Group {
 }
 
 model WhatstappSession {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  hash        String?  @unique
-  userId      String?
-  instance    String   @unique
-  isConnected Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  hash          String?  @unique
+  userId        String?
+  ownerJid      String?
+  profilePicUrl String?
+  instance      String   @unique
+  isConnected   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Workflow {
@@ -71,4 +73,26 @@ model Workflow {
   userId       String
   nodes        String?
   edges        String?
+}
+
+model WhatsappChat {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  remoteJid           String   @unique
+  instanceId          String
+  subject             String?
+  description         String?
+  isRestrict          Boolean?
+  isCommunity         Boolean?
+  isCommunityAnnounce Boolean?
+  owner               String?
+  isRaw               Boolean? @default(true)
+}
+
+model SendingList {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String
+  name       String?
+  instanceId String?
+  list       String?
+  groupsInfo String?
 }

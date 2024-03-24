@@ -14,7 +14,8 @@ export default authMiddleware({
     "/api/group",
     "/api/group/(.*)",
     "/api/redirect/(.*)",
-    "/api/s3-upload"
+    "/api/s3-upload",
+    "/api/wapp/webhook"
   ],
 });
 

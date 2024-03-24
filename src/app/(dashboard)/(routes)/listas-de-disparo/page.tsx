@@ -1,10 +1,82 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { ArrowRight, Plus, XCircle } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
+import { RotatingLines } from "react-loader-spinner";
+import { SendingList } from "@/@types";
+import Link from "next/link";
 
 export default function Page() {
+  const { userId } = useAuth();
+  const { toast } = useToast();
+
+  const sendingListQuery = useQuery<SendingList[]>({
+    queryKey: ["sending_list_data", userId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/wapp/sending_list`)
+      return data;
+    },
+    staleTime: 1000 * 60 * 5
+  })
+
+  const mutation = useMutation({
+    mutationKey: ["sending_list_mutation", userId],
+    mutationFn: async () => {
+      await axios.post("/api/wapp/sending_list");
+    },
+    onSuccess: () => {
+      toast({
+        title: "Lista criada com sucesso"
+      })
+      sendingListQuery.refetch()
+    }
+  })
+
+  const handleCreateAList = async () => {
+    await mutation.mutateAsync();
+  }
+
+  if (sendingListQuery.isLoading) {
+    return (
+      <section className="p-4">
+        <h1 className="text-xl font-bold text-gray-800">
+          Listas de disparo
+        </h1>
+        <div className="w-full h-96 flex items-center justify-center my-8 ">
+          <RotatingLines
+            visible={true}
+            width="80"
+            strokeWidth="5"
+            strokeColor="#5528ff"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
+      </section>
+    )
+  }
+
+  if (sendingListQuery.isError) {
+    return (
+      <section className="p-4">
+        <h1 className="text-xl font-bold text-gray-800">
+          Contas
+        </h1>
+        <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
+          <XCircle />
+          <span>Ocorreu algum erro, tente novamente</span>
+          <Button variant="outline" onClick={() => sendingListQuery.refetch()}>
+            Recarregar página
+          </Button>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="p-4">
@@ -12,9 +84,28 @@ export default function Page() {
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo
         </h1>
-        <Button variant="primary-action" size="icon" onClick={() => {}}>
+        <Button variant="primary-action" onClick={handleCreateAList} className="flex items-center gap-2">
           <Plus />
+          Criar lista de disparo
         </Button >
+      </div>
+      <div className="my-4 grid grid-cols-3 gap-4">
+        {sendingListQuery.data?.map((list) => {
+          return (
+            <div key={list.id} className="border p-2 rounded-md flex flex-col gap-2">
+              <div className="">
+                <p>{list.name ? list.name : list.id}</p>
+              </div>
+              <div className="flex items-center justify-end">
+                <Link href={`/listas-de-disparo/${list.id}`}>
+                  <Button size="icon" variant="primary-action">
+                    <ArrowRight size={16} />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </section>
   )

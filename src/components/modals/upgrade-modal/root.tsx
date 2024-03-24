@@ -21,7 +21,6 @@ export function Root() {
       const response = await axios.get(`/api/stripe?plan_type=${planType}`)
       window.location.href = response.data.url;
     } catch (error: any) {
-      console.log(error, "STRIPE_CLIENT_ERROR");
     } finally {
     }
   }
