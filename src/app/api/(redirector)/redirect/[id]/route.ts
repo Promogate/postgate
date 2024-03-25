@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, route: { params: { id: string; } }) 
             redirectorStatus: "completed"
           }
         });
-        return null;
+        return;
       }
       const addedTimesClicked = redirector.timesClicked + 1;
       await prismaClient.redirector.update({

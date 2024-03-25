@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useParams } from "next/navigation";
@@ -110,6 +111,7 @@ export default function Page() {
       </section>
     )
   }
+  console.log(instancesQuery.data)
 
   return (
     <section className="p-4">
@@ -155,12 +157,21 @@ export default function Page() {
               <SelectLabel>Conexões</SelectLabel>
               {instancesQuery.data.map((instance: any) => {
                 return (
-                  <SelectItem key={instance.id} value={instance.id}>{instance.id}</SelectItem>
+                  <SelectItem key={instance.id} value={instance.id}>
+                    <div  className="flex items-center gap-x-2">
+                      <img src={instance.profilePicUrl} alt={instance.id} className="w-6 h-6 rounded-full overflow-hidden" />
+                      <p>{instance.ownerJid}</p>
+                    </div>
+                  </SelectItem>
                 )
               })}
             </SelectGroup>
           </SelectContent>
         </Select>
+        <div className="grid grid-cols-2">
+            <div>1</div>
+            <div>2</div>
+        </div>
       </form>
     </section>
   )
