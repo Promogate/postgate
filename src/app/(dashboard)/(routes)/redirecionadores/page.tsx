@@ -44,7 +44,7 @@ export default function Page() {
   if (isLoading) {
     return (
       <section>
-        <h1 className="text-xl font-bold text-gray-800">
+        <h1 className="text-xl font-bold text-gray-800 p-4">
           Redirecionadores
         </h1>
         <div className="w-full h-96 flex items-center justify-center my-8 ">
@@ -64,7 +64,7 @@ export default function Page() {
   if (isError) {
     return (
       <section>
-        <h1 className="text-xl font-bold text-gray-800">
+        <h1 className="text-xl font-bold text-gray-800 p-4">
           Redirecionadores
         </h1>
         <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
@@ -79,8 +79,8 @@ export default function Page() {
   }
 
   return (
-    <section>
-      <div className="flex items-center justify-between mt-8">
+    <section className="p-4">
+      <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800">
           Redirecionadores
         </h1>
@@ -91,7 +91,7 @@ export default function Page() {
           <CreateRedirectorForm onClose={onClose} />
         </Sheet.Root>
       </div>
-      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 my-8">
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-4">
         {data?.map((redirector: any) => {
           return (
             <Card key={redirector.id}>
