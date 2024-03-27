@@ -48,7 +48,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
         title: "Workflow criado com sucesso!",
         variant: "default",
       });
-      query.invalidateQueries({ queryKey: ["redirectors", userId] });
+      query.invalidateQueries({ queryKey: ["workflows", userId] });
       onClose(ADD_WORKFLOW_MODAL);
     },
     onError: (error: any) => {

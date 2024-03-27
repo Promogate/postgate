@@ -91,8 +91,12 @@ export default function Page() {
     queryKey: ["flow_data", id],
     queryFn: async () => {
       const { nodes, edges } = await handleGetWorkflow(id);
-      setNodes(nodes);
-      setEdges(edges);
+      if (nodes !== null) {
+        setNodes(nodes);
+      }
+      if (edges !== null) {
+        setEdges(edges);
+      }
       return { nodes, edges };
     },
     staleTime: 1000 * 60 * 60 * 24,
