@@ -91,8 +91,12 @@ export default function Page() {
     queryKey: ["flow_data", id],
     queryFn: async () => {
       const { nodes, edges } = await handleGetWorkflow(id);
-      setNodes(nodes);
-      setEdges(edges);
+      if (nodes !== null) {
+        setNodes(nodes);
+      }
+      if (edges !== null) {
+        setEdges(edges);
+      }
       return { nodes, edges };
     },
     staleTime: 1000 * 60 * 60 * 24,
@@ -104,6 +108,9 @@ export default function Page() {
     }, 15000)
     return () => clearInterval(savingInterval);
   })
+
+  console.log("NODES::: ", nodes)
+  console.log("EDGES::: ", edges)
 
   return (
     <div className="xl:w-[calc(100vw-288px)] xl:h-[calc(100vh-65px)] flex flex-col h-full flex-1">

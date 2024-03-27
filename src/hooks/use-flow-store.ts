@@ -14,7 +14,7 @@ import {
   applyNodeChanges
 } from "reactflow";
 import { v4 } from "uuid";
-import { create } from "zustand";
+import { createWithEqualityFn } from "zustand/traditional";
 
 export type RFState = {
   nodes: Node[];
@@ -37,7 +37,7 @@ export type RFState = {
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-export const useFlowStore = create<RFState>((set, get) => ({
+export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
   nodes: [],
   edges: [],
   scheduleTime: null,
