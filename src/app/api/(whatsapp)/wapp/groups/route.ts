@@ -21,23 +21,25 @@ export async function GET(req: NextRequest, route: { params: { id: string } }) {
     }
   });
   const onlyGroupChats = allChats.data.filter((chat: WappChat) => chat.remoteJid.includes("@g.us"));
-  console.log("chats::: ", onlyGroupChats);
-  onlyGroupChats.forEach(async (chat) => {
-    console.log("entered loop::: ");
-    await prismaClient.whatsappChat.upsert({
-      where: {
-        remoteJid: chat.remoteJid
-      },
-      update: {
-        remoteJid: chat.remoteJid,
-        instanceId: instanceId
-      },
-      create: {
-        remoteJid: chat.remoteJid,
-        instanceId: instanceId
-      }
-    })
+  const promise = new Promise((resolve) => {
+    onlyGroupChats.forEach(async (chat) => {
+      await prismaClient.whatsappChat.upsert({
+        where: {
+          remoteJid: chat.remoteJid
+        },
+        update: {
+          remoteJid: chat.remoteJid,
+          instanceId: instanceId
+        },
+        create: {
+          remoteJid: chat.remoteJid,
+          instanceId: instanceId
+        }
+      })
+    });
+    resolve("resolved");
   });
+  await Promise.all([promise])
   const result = await prismaClient.whatsappChat.findMany({
     where: {
       instanceId: instanceId
