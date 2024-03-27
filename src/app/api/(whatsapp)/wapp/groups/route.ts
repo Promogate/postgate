@@ -19,9 +19,11 @@ export async function GET(req: NextRequest, route: { params: { id: string } }) {
     headers: {
       "apiKey": apiKey
     }
-  })
-  const onlyGroupChats = allChats.data.filter((chat: WappChat) => chat.remoteJid.includes("@g.us"))
-  onlyGroupChats.map(async (chat) => {
+  });
+  const onlyGroupChats = allChats.data.filter((chat: WappChat) => chat.remoteJid.includes("@g.us"));
+  console.log("chats::: ", onlyGroupChats);
+  onlyGroupChats.forEach(async (chat) => {
+    console.log("entered loop::: ");
     await prismaClient.whatsappChat.upsert({
       where: {
         remoteJid: chat.remoteJid
