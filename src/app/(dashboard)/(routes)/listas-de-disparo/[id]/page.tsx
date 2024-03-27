@@ -87,8 +87,21 @@ export default function Page() {
       })
       return data;
     },
-    staleTime: 1000 * 60 * 60
+    staleTime: 1000 * 60 * 60,
   })
+
+  // useEffect(() => {
+  //   if (listQuery.isSuccess) {
+  //     setInstanceId(listQuery.data.instanceId);
+  //     chatsQuery.refetch();
+  //   }
+  // }, [chatsQuery, listQuery.data?.instanceId, listQuery.isSuccess])
+
+  // useEffect(() => {
+  //   if (listQuery.data?.groupsInfo) {
+  //     setGroupsInfo(JSON.parse(listQuery.data?.groupsInfo))
+  //   }
+  // }, [listQuery.data?.groupsInfo])
 
   const nameForm = useForm({
     defaultValues: {
@@ -159,18 +172,9 @@ export default function Page() {
     setInstanceId(value);
   }
 
-  useEffect(() => {
-    if (listQuery.isSuccess) {
-      setInstanceId(listQuery.data.instanceId);
-      chatsQuery.refetch();
-    }
-  }, [chatsQuery, listQuery.data?.instanceId, listQuery.isSuccess])
-
-  useEffect(() => {
-    if (listQuery.data?.groupsInfo) {
-      setGroupsInfo(JSON.parse(listQuery.data?.groupsInfo))
-    }
-  }, [listQuery.data?.groupsInfo])
+  const handleFindInstanceGroups = () => {
+    chatsQuery.refetch();
+  }
 
   const handleDeleteGroup = (id: string, jid: string) => {
     const updatedList = list.filter(item => item !== jid);
@@ -247,12 +251,12 @@ export default function Page() {
           }
         </form>
       </Form>
-      <form>
+      <div className="flex items-center gap-x-4">
         <Select onValueChange={(value) => handleSelectInstanceConnection(value)} value={listQuery.data?.instanceId ?? undefined}>
           <SelectTrigger >
             <SelectValue placeholder="Escolha uma conexão" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="flex-1">
             <SelectGroup>
               <SelectLabel>Conexões</SelectLabel>
               {instancesQuery.data.map((instance: any) => {
@@ -268,6 +272,11 @@ export default function Page() {
             </SelectGroup>
           </SelectContent>
         </Select>
+        <Button onClick={handleFindInstanceGroups} variant={"primary-action"}>
+          Encontrar grupos
+        </Button>
+      </div>
+      <form>
         <div className="grid grid-cols-2 gap-x-2 my-4">
           <div className="bg-slate-50 min-h-full w-full border rounded-sm p-4">
             <span className="text-sm">

@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prismaClient from "@/lib/prisma";
 import { RemoteWappGroup } from "@/@types";
 import { auth } from "@clerk/nextjs";
-import { AxiosError } from "axios";
 
 export async function PUT(request: NextRequest) {
   const { userId } = auth();

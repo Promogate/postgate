@@ -40,6 +40,7 @@ export default function Page() {
   }
 
   const chatQuery = useQuery<WappGroup[]>({
+    enabled: false,
     staleTime: 1000 * 60 * 24,
     queryKey: ["groups_info_data", id],
     queryFn: async () => {
