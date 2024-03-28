@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { S3_ACCESS_KEY, S3_BUCKET_NAME, S3_SECRET_KEY } from "@/config";
+import { v4 } from "uuid";
 
 const s3Client = new S3Client({
   region: "sa-east-1",
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
     const blob = file.slice();
     const arrayBuffer = await new Response(blob).arrayBuffer();
-    const url = await uploadFileToS3(arrayBuffer, userId + "_" + file.name);
+    const url = await uploadFileToS3(arrayBuffer, userId + "_image");
 
     return new NextResponse(JSON.stringify({ success: true, url }), { status: 200 });
   } catch (error: any) {

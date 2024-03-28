@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SendingList } from "@/@types";
+import { DateTimePicker } from "@/components/date-time-picker";
 
 type PublishInput = {
   start_date: string;
@@ -32,16 +33,6 @@ export function FlowCalendar() {
     nodes,
     scheduleTime
   } = useFlowStore()
-
-  function isPastDate(date: Date) {
-    return differenceInCalendarDays(date, new Date()) < 0;
-  }
-
-  function OnlyFutureRow(props: RowProps) {
-    const isPastRow = props.dates.every(isPastDate);
-    if (isPastRow) return <></>;
-    return <Row {...props} />;
-  }
 
   const listsQuery = useQuery({
     queryKey: ["schedule_sending_lists", userId],
@@ -68,8 +59,8 @@ export function FlowCalendar() {
       sending_list: JSON.parse(list),
       whatsapp_instance: instanceId
     }
-    
-    await axios.post("https://primary-production-18bf.up.railway.app/webhook-test/schedule", data, {
+
+    await axios.post("https://primary-production-18bf.up.railway.app/webhook/schedule", data, {
       headers: {
         Authorization: "W0CDwQvZcONecU43QBBw6I5fnrd1w5TD"
       }
@@ -94,39 +85,30 @@ export function FlowCalendar() {
               Data e hora em que será iniciado o fluxo
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col justify-center gap-4">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className=""
-              components={{ Row: OnlyFutureRow }}
-              hidden={isPastDate}
-            />
-            <input type="time" onChange={e => {
-              setHour(e.target.value)
-              handleSchedule()
-            }} step="3600000" className="max-w-20" />
-            <Select onValueChange={(value) => setChosenList(value)}>
-              <SelectTrigger >
-                <SelectValue placeholder="Escolha uma lista de disparo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Listas de disparo</SelectLabel>
-                  {listsQuery.data?.map((sendingList) => {
-                    return (
-                      <SelectItem key={sendingList.id} value={`${sendingList.instanceId}_${sendingList.list}`}>
-                        <div className="flex items-center gap-x-2">
-                          <p>{sendingList.name}</p>
-                        </div>
-                      </SelectItem>
-                    )
-                  })}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+          <Select onValueChange={(value) => setChosenList(value)}>
+            <SelectTrigger >
+              <SelectValue placeholder="Escolha uma lista de disparo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Listas de disparo</SelectLabel>
+                {listsQuery.data?.map((sendingList) => {
+                  return (
+                    <SelectItem key={sendingList.id} value={`${sendingList.instanceId}_${sendingList.list}`}>
+                      <div className="flex items-center gap-x-2">
+                        <p>{sendingList.name}</p>
+                      </div>
+                    </SelectItem>
+                  )
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <div className="flex flex-col gap-y-2">
+            <span className="text-xs text-gray-400">* Caso escolha o mesmo dia, atente-se para que o horário de início não seja antes do horário atual</span>
+            <span className="text-xs text-gray-400">** A data de agendamento somente será contabilizada após a escolha do horário</span>
           </div>
+          <DateTimePicker setDate={setDate} date={date as Date} />
           <DialogFooter>
             <Button variant="primary-action" onClick={handlePublish}>
               Confirmar agendamento

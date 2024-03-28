@@ -70,7 +70,13 @@ export default function Page() {
   const listQuery = useQuery({
     queryKey: ["sending_list", userId],
     queryFn: async () => {
-      const { data } = await axios.get<SendingList>(`/api/wapp/sending_list/${params.id}`)
+      const { data } = await axios.get<SendingList>(`/api/wapp/sending_list/${params.id}`);
+      if (data.groupsInfo) {
+        setGroupsInfo(JSON.parse(data.groupsInfo));
+      }
+      if (data.list) {
+        setList(JSON.parse(data.list));
+      }
       return data;
     },
     staleTime: 1000 * 60 * 60,
@@ -89,19 +95,6 @@ export default function Page() {
     },
     staleTime: 1000 * 60 * 60,
   })
-
-  // useEffect(() => {
-  //   if (listQuery.isSuccess) {
-  //     setInstanceId(listQuery.data.instanceId);
-  //     chatsQuery.refetch();
-  //   }
-  // }, [chatsQuery, listQuery.data?.instanceId, listQuery.isSuccess])
-
-  // useEffect(() => {
-  //   if (listQuery.data?.groupsInfo) {
-  //     setGroupsInfo(JSON.parse(listQuery.data?.groupsInfo))
-  //   }
-  // }, [listQuery.data?.groupsInfo])
 
   const nameForm = useForm({
     defaultValues: {
@@ -182,6 +175,12 @@ export default function Page() {
     const updatedGrousInfo = groupsInfo.filter(group => group.id !== id);
     setGroupsInfo(updatedGrousInfo);
   }
+  
+  useEffect(() => {
+    if (listQuery.data?.instanceId) {
+      setInstanceId(listQuery.data?.instanceId)
+    }
+  }, [chatsQuery, listQuery.data?.instanceId])
 
   if (instancesQuery.isLoading || listQuery.isLoading) {
     return (
@@ -252,7 +251,7 @@ export default function Page() {
         </form>
       </Form>
       <div className="flex items-center gap-x-4">
-        <Select onValueChange={(value) => handleSelectInstanceConnection(value)} value={listQuery.data?.instanceId ?? undefined}>
+        <Select onValueChange={(value) => handleSelectInstanceConnection(value)} defaultValue={listQuery.data?.instanceId ?? undefined}>
           <SelectTrigger >
             <SelectValue placeholder="Escolha uma conexão" />
           </SelectTrigger>
