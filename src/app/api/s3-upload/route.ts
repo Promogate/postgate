@@ -19,12 +19,13 @@ async function uploadFileToS3(file: any, filename: string) {
     Bucket: S3_BUCKET_NAME,
     Key: key,
     Body: fileBuffer,
-    ContentType: "image/*"
+    ContentType: "image/jpg"
   }
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
   
-  return `https://${S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
+  // return `https://${S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
+  return `https://d4yfqrpu425xz.cloudfront.net/${key}`;
 }
 
 export async function POST(request: NextRequest) {
