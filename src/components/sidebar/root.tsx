@@ -58,16 +58,16 @@ export function Root() {
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-gray-100">
       <div className="px-3 py-2 flex-1">
-        <Link href={"/dashboard"} className="flex items-center pl-3 mb-14">
-          <div className="relative w-32 h-8 mr-4 ">
+        <Link href={"/dashboard"} className="flex items-center pl-3 mb-14 md:mb-7">
+          <div className="relative w-32 h-8 mr-4 md:w-24">
             <Image fill src="/logo.svg" alt="zapgate" />
           </div>
         </Link>
-        <div className="space-y-3">
+        <div className="space-y-3 md:space-y-1">
           {routes.map((route) => (
             <Link href={route.href} key={route.href} className={cn("text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-[#5528ff] hover:bg-black/5 rounded-lg transition", pathname === route.href ? "text-[#5528ff] bg-black/5" : "text-zinc-500")}>
               <div className="flex items-center flex-1">
-              <route.icon className={cn("h-5 w-5 mr-3", route.color)}/>
+              <route.icon className={cn("h-5 w-5 mr-3 md:h-3 md:w-3", route.color)}/>
               {route.label}
               </div>
             </Link>
