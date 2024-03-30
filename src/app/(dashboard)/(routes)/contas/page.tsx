@@ -11,6 +11,8 @@ import { XCircle } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
 import { useToast } from "@/components/ui/use-toast";
 import { Instance } from "@/components/instance";
+import { useInstances } from "@/hooks/instances/use-instances";
+import { addYears } from "date-fns";
 
 export default function Page() {
   const { userId } = useAuth();
@@ -30,17 +32,14 @@ export default function Page() {
     }
   });
 
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["instances", userId],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/wapp/instance/my_instances");
-      return data;
-    },
-    staleTime: 1000 * 10
-  })
+  const { data, isLoading, isError, refetch } = useInstances(userId);
 
   const handleInstance = async () => {
     await mutation.mutateAsync()
+  }
+
+  const handleRefetchInstances = () => {
+    refetch();
   }
 
   if (isLoading) {
@@ -86,17 +85,30 @@ export default function Page() {
         <PageHeader>
           Contas
         </PageHeader>
-        <Button variant="primary-action" onClick={handleInstance}>
-          {mutation.isPending && <RotatingLines
-            visible={true}
-            width="12"
-            strokeWidth="4"
-            strokeColor="#FFFFFF"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />}
-          Adicionar conta
-        </Button >
+        <div className="flex items-center gap-x-2">
+          <Button variant="primary-action" onClick={handleInstance}>
+            {mutation.isPending && <RotatingLines
+              visible={true}
+              width="12"
+              strokeWidth="4"
+              strokeColor="#FFFFFF"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />}
+            Adicionar conta
+          </Button >
+          <Button variant="primary-outline" onClick={handleRefetchInstances}>
+            {isLoading && <RotatingLines
+              visible={true}
+              width="12"
+              strokeWidth="4"
+              strokeColor="#FFFFFF"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />}
+            Atualizar
+          </Button >
+        </div>
       </div>
       <section className="py-4">
         {
@@ -104,7 +116,7 @@ export default function Page() {
             (
               <p>Você ainda não possui contas whatsapp conectadas.</p>
             ) : (
-              <Instance.Root data={data}/>
+              <Instance.Root data={data} />
             )
         }
       </section>

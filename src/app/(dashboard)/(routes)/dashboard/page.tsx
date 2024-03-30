@@ -40,7 +40,7 @@ export default function Page() {
     Intl.NumberFormat('us').format(number).toString();
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 md:p-4">
       <PageHeader>
         Dashboard
       </PageHeader>
