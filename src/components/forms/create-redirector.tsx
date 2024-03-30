@@ -12,11 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-
-type CreateRedirectorInput = {
-  title: string;
-  descriptiont?: string;
-}
+import { CreateRedirectorInput } from "@/@types";
+import { useCreateRedirector } from "@/hooks/use-redirectors";
 
 const schema = z.object({
   title: z.string().min(1, "O título não pode estar vazio."),
@@ -30,35 +27,15 @@ type CreateRedirectorFormProps = {
 }
 
 export function CreateRedirectorForm({ onClose }: CreateRedirectorFormProps) {
-  const { toast } = useToast();
   const { userId } = useAuth();
-  const query = useQueryClient();
   const form = useForm<createRedirectorSchema>({
     resolver: zodResolver(schema)
   });
 
-  const mutation = useMutation({
-    mutationFn: async (values: CreateRedirectorInput) => {
-      await axios.post(`/api/redirector`, { ...values, userId });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Redirecionador criado com sucesso!",
-        variant: "default",
-      });
-      query.invalidateQueries({ queryKey: ["redirectors", userId] });
-      onClose();
-    },
-    onError: (error: any) => {
-      toast({
-        title: error.message,
-        variant: "destructive",
-      });
-    }
-  });
+  const mutation = useCreateRedirector(userId, onClose, form.getValues())
 
   const handleCreateRedirector: SubmitHandler<CreateRedirectorInput> = async (values) => {
-    await mutation.mutateAsync(values);
+    await mutation.mutateAsync();
   };
 
   return (

@@ -1,7 +1,9 @@
 export default function Page() {
   return (
-    <h2>
-      Agendamentos
-    </h2>
+    <section className="p-4">
+      <h2>
+        Agendamentos
+      </h2>
+    </section>
   )
 }

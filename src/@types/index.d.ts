@@ -404,3 +404,8 @@ export type SendingList = {
   list: string | null;
   groupsInfo: string | null;
 }
+
+export type CreateRedirectorInput = {
+  title: string;
+  descriptiont?: string;
+}

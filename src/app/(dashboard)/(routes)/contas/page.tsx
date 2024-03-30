@@ -97,7 +97,7 @@ export default function Page() {
               <section className="p-4">
                 <div className="w-full flex flex-col items-center justify-center my-8 gap-y-4">
                   <span>Você ainda não possui uma conta instância criada</span>
-                  <Button variant="outline" onClick={() => refetch()}>
+                  <Button variant="outline" onClick={handleInstance}>
                     Adicionar primeira instância
                   </Button>
                 </div>

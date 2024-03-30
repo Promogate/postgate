@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     const redirectors = await prismaClient.redirector.findMany({
       where: { userId: userId }
     });
-    return NextResponse.json({ status: "success", data: redirectors })
+    return new NextResponse(JSON.stringify(redirectors), { status: 200 });
   } catch (error: any) {
     return new NextResponse( JSON.stringify({ status: "error" }) , { status: 500 });
   }

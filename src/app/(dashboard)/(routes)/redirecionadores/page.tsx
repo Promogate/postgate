@@ -16,20 +16,14 @@ import { copyToClipboard } from "@/utils/copy-to-clipboard";
 import { Sheet } from "@/components/sheet";
 import { CreateRedirectorForm } from "@/components/forms/create-redirector";
 import { useSheet } from "@/hooks/use-sheet";
+import { useRedirectors } from "@/hooks/use-redirectors";
 
 export default function Page() {
   const ref = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { userId } = useAuth();
   const { onClose, onOpen } = useSheet();
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["redirectors", userId],
-    queryFn: async () => {
-      const response = await axios.get("/api/redirector");
-      return response.data.data;
-    },
-    staleTime: 1000 * 60 * 5
-  });
+  const { data, isLoading, isError, refetch } = useRedirectors(userId);
 
   const handleCopyShortlink = () => {
     if (ref.current) {
@@ -92,43 +86,55 @@ export default function Page() {
         </Sheet.Root>
       </div>
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-4">
-        {data?.map((redirector: any) => {
-          return (
-            <Card key={redirector.id}>
-              <CardHeader>
-                <Link href={`/redirecionadores/${redirector.id}`}>
-                  <CardTitle>
-                    {redirector.title}
-                  </CardTitle>
-                </Link>
-
-                <CardDescription>
-                  {redirector.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-y-4 md:flex-row md:items-center md:justify-between">
-                <div className="">
-                  <Tooltip.Root icon={<Group className="h-4 w-4" />} data={redirector.currentGroup}>
-                    <span>
-                      Grupos
-                    </span>
-                  </Tooltip.Root>
-                  <Tooltip.Root icon={<MousePointerClick className="h-4 w-4" />} data={redirector.timesClicked}>
-                    <span>
-                      Cliques
-                    </span>
-                  </Tooltip.Root>
-                </div>
-                <div className="flex items-center gap-x-1">
-                  <Input type="text" value={redirector.redirectorLink} readOnly ref={ref} />
-                  <Button variant="clipboard" onClick={handleCopyShortlink}>
-                    <Copy />
+        {
+          data.length === 0 ?
+            (
+              <section className="p-4">
+                <div className="w-full flex flex-col items-center justify-center my-8 gap-y-4">
+                  <span>Você ainda não possui redirecionadores</span>
+                  <Button variant="outline" onClick={onOpen}>
+                    Adicionar primeiro redirecionador
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          )
-        })}
+              </section>
+            ) :
+            data?.map((redirector: any) => {
+              return (
+                <Card key={redirector.id}>
+                  <CardHeader>
+                    <Link href={`/redirecionadores/${redirector.id}`}>
+                      <CardTitle>
+                        {redirector.title}
+                      </CardTitle>
+                    </Link>
+
+                    <CardDescription>
+                      {redirector.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-y-4 md:flex-row md:items-center md:justify-between">
+                    <div className="">
+                      <Tooltip.Root icon={<Group className="h-4 w-4" />} data={redirector.currentGroup}>
+                        <span>
+                          Grupos
+                        </span>
+                      </Tooltip.Root>
+                      <Tooltip.Root icon={<MousePointerClick className="h-4 w-4" />} data={redirector.timesClicked}>
+                        <span>
+                          Cliques
+                        </span>
+                      </Tooltip.Root>
+                    </div>
+                    <div className="flex items-center gap-x-1">
+                      <Input type="text" value={redirector.redirectorLink} readOnly ref={ref} />
+                      <Button variant="clipboard" onClick={handleCopyShortlink}>
+                        <Copy />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
       </div>
     </section>
   )
