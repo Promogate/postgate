@@ -1,43 +1,23 @@
 "use client";
 
-import axios from "axios";
-import { v4 as uuid } from "uuid";
 import { useAuth } from "@clerk/nextjs";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
-import { useToast } from "@/components/ui/use-toast";
 import { Instance } from "@/components/instance";
-import { useInstances } from "@/hooks/instances/use-instances";
-import { addYears } from "date-fns";
+import { useCreateInstance, useInstances } from "@/hooks/instances/use-instances";
 
 export default function Page() {
   const { userId } = useAuth();
-  const query = useQueryClient();
-  const { toast } = useToast();
-
-  const mutation = useMutation({
-    mutationKey: ["instance", userId],
-    mutationFn: async () => {
-      const instanceId = uuid();
-      const { data } = await axios.post("/api/wapp/instance", { instanceName: instanceId, description: userId });
-      return data;
-    },
-    onSuccess: () => {
-      toast({ title: "Instância adicionada com sucesso, leio o QR code com seu aplicativo" })
-      query.invalidateQueries({ queryKey: ["instances", userId] })
-    }
-  });
-
+  const mutation = useCreateInstance(userId);
   const { data, isLoading, isError, refetch } = useInstances(userId);
 
   const handleInstance = async () => {
     await mutation.mutateAsync()
   }
-
+  
   const handleRefetchInstances = () => {
     refetch();
   }
@@ -114,7 +94,14 @@ export default function Page() {
         {
           data.length === 0 ?
             (
-              <p>Você ainda não possui contas whatsapp conectadas.</p>
+              <section className="p-4">
+                <div className="w-full flex flex-col items-center justify-center my-8 gap-y-4">
+                  <span>Você ainda não possui uma conta instância criada</span>
+                  <Button variant="outline" onClick={() => refetch()}>
+                    Adicionar primeira instância
+                  </Button>
+                </div>
+              </section>
             ) : (
               <Instance.Root data={data} />
             )
