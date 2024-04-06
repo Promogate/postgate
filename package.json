@@ -41,6 +41,7 @@
     "react-hook-form": "^7.50.1",
     "react-loader-spinner": "^6.1.6",
     "reactflow": "^11.10.4",
+    "sharp": "^0.33.3",
     "stripe": "^14.16.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",

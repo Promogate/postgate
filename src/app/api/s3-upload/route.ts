@@ -1,7 +1,7 @@
+import sharp from "sharp";
 import { NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { S3_ACCESS_KEY, S3_BUCKET_NAME, S3_SECRET_KEY } from "@/config";
-import { v4 } from "uuid";
 
 const s3Client = new S3Client({
   region: "sa-east-1",
@@ -11,20 +11,22 @@ const s3Client = new S3Client({
   }
 })
 
-async function uploadFileToS3(file: any, filename: string) {
+async function uploadFileToS3(file: any, filename: string): Promise<string> {
   const fileBuffer = file;
+  const image = await sharp(fileBuffer)
+  .resize({ width: 800 })
+  .jpeg()
+  .toBuffer()
   const [user, id, originalFileName] = filename.split("_");
-  const key = `${user}_${id}/${Date.now()}_${originalFileName}`;
+  const key = `${user}_${id}/${Date.now()}_${originalFileName}.jpg`;
   const params: PutObjectCommandInput = {
     Bucket: S3_BUCKET_NAME,
     Key: key,
-    Body: fileBuffer,
+    Body: image,
     ContentType: "image/jpg"
   }
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
-  
-  // return `https://${S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
   return `https://d4yfqrpu425xz.cloudfront.net/${key}`;
 }
 
