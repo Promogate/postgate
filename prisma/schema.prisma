@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model UserApiLimit {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid())
   userId       String   @unique
   count        Int      @default(0)
   accountLevel String?  @default("FREE")
@@ -20,7 +20,7 @@ model UserApiLimit {
 }
 
 model UserSubscription {
-  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                     String    @id @default(uuid())
   userId                 String    @unique
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -29,7 +29,7 @@ model UserSubscription {
 }
 
 model Redirector {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  id               String  @id @default(uuid())
   title            String
   description      String?
   userId           String?
@@ -42,18 +42,18 @@ model Redirector {
 }
 
 model Group {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  id              String  @id @default(uuid())
   title           String?
   destinationLink String
   members         Int
   limit           Int     @default(1024)
 
   redirector   Redirector @relation(fields: [redirectorId], references: [id], onDelete: Cascade)
-  redirectorId String     @db.ObjectId
+  redirectorId String
 }
 
 model WhatstappSession {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(uuid())
   hash          String?  @unique
   userId        String?
   ownerJid      String?
@@ -65,7 +65,7 @@ model WhatstappSession {
 }
 
 model Workflow {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  id           String  @id @default(uuid())
   title        String
   description  String?
   isPublished  Boolean @default(false)
@@ -76,7 +76,7 @@ model Workflow {
 }
 
 model WhatsappChat {
-  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String   @id @default(uuid())
   remoteJid           String   @unique
   instanceId          String
   subject             String?
@@ -89,7 +89,7 @@ model WhatsappChat {
 }
 
 model SendingList {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(uuid())
   userId     String
   name       String?
   instanceId String?
