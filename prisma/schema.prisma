@@ -58,6 +58,8 @@ model WhatstappSession {
   userId        String?
   ownerJid      String?
   profilePicUrl String?
+  instanceName  String?
+  description   String?
   instance      String   @unique
   isConnected   Boolean  @default(false)
   createdAt     DateTime @default(now())

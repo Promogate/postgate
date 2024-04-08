@@ -4,19 +4,32 @@ import { wappClient } from "@/lib/wapp";
 import prismaClient from "@/lib/prisma";
 import { auth } from "@clerk/nextjs";
 
+type Body = {
+  instanceName: string;
+  instanceId: string;
+  description: string;
+  userId: string;
+}
+
 export async function POST(request: NextRequest) {
-  const { userId } = auth();
-  const body = await request.json();
+  const body = await request.json() as Body;
   const apiKey = process.env.CODE_CHAT_API_KEY as string;
   try {
-    const { data } = await wappClient.post("/instance/create", body, { headers: { apikey: apiKey } });
-    await prismaClient.whatstappSession.create({
-      data: {
-        userId: userId,
-        hash: data.Auth.token,
-        instance: data.name
-      }
-    })
+    const { data, status } = await wappClient.post("/instance/create", {
+      instanceName: body.instanceId,
+      description: body.userId
+    }, { headers: { apikey: apiKey } });
+    if (status === 201) {
+      await prismaClient.whatstappSession.create({
+        data: {
+          instance: data.name,
+          description: body.description,
+          userId: data.description,
+          instanceName: body.instanceName,
+          hash: data.Auth.token
+        }
+      })
+    }
     return new NextResponse(null, { status: 200 });
   } catch (error: any) {
     return new NextResponse(JSON.stringify({ message: error.message }), { status: 500 });

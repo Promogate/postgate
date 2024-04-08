@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Zapgate - Desbloquei o potencial do seu Whastapp",
+  title: "Postgate - Desbloquei o potencial do seu Whastapp",
   description: "Desbloquei o potencial do seu Whastapp",
 };
 

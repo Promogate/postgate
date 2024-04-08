@@ -8,40 +8,80 @@ import { v4 as uuid } from "uuid";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
+import { useCreateInstance } from "@/hooks/instances/use-instances";
+import { Dispatch, SetStateAction } from "react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Input } from "../ui/input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export function CreateInstanceModal() {
-  const { userId } = useAuth();
+type CreateInstanceModalProps = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-  const { isLoading, isError, data, refetch } = useQuery({
-    queryKey: ["instance", userId],
-    queryFn: async () => {
-      const instanceId = uuid();
-      const { data } = await axios.post("/api/wapp/instance", { instanceName: instanceId });
-      return data;
-    },
-    staleTime: 1000 * 60 * 60,
-    enabled: false 
+type FormInput = {
+  name: string;
+  description: string;
+}
+
+const schema = z.object({
+  name: z.string({ required_error: "Nome para instância é obrigatório" }),
+  description: z.string({ required_error: "Descrição para instância é obrigatório" })
+})
+
+export function CreateInstanceModal(props: CreateInstanceModalProps) {
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      description: ""
+    }
   });
+  const mutation = useCreateInstance()
+
+  const handleCreateInstance: SubmitHandler<FormInput> = async (values) => {
+    const { name, description } = form.getValues();
+    await mutation.mutateAsync({ name, description })
+  }
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button variant="primary-action" onClick={() => refetch()}>
-          <Plus />
-          Adicionar conta
-        </Button >
-      </DialogTrigger>
-      <DialogContent className="xl:min-w-[960px]">
-        {
-          isLoading ? (
-            <p>...carregando</p>
-          ) :
-          isError ? (
-            <p>Error...</p>
-          ) : (
-            <div dangerouslySetInnerHTML={{ __html: data }} />
-          )
-        }
+    <Dialog open={props.open} onOpenChange={props.setOpen}>
+      <DialogContent>
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(handleCreateInstance)}>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome da instância</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descrição</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button variant="primary-action" className="float-end" type="submit">
+              Criar instância
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
