@@ -17,7 +17,7 @@ export function Root() {
         </p>
       </div>
       <Link href={"/sign-up"} className="2xl:mt-20">
-        <Button className="bg-[#5528ff] hover:bg-[#4822D9] transition-all ease-in-out flex gap-x-2 items-center" size="xl">
+        <Button className="bg-[#5528ff] hover:bg-[#4822D9] transition-all ease-in-out flex gap-x-2 items-center" size="lg">
           Começar grátis
           <ChevronRight />
         </Button>
