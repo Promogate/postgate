@@ -67,7 +67,7 @@ export function Root() {
                 100.000 mensagens
               </div>
             </div>
-            <Button variant="primary" size="lg" onClick={() => onSubscribe("beginner")}>
+            <Button variant="default" size="lg" onClick={() => onSubscribe("beginner")}>
               Assinar
             </Button>
           </div>
@@ -112,7 +112,7 @@ export function Root() {
                 500.000 mensagens
               </div>
             </div>
-            <Button variant="primary" size="lg" onClick={() => onSubscribe("professional")}>
+            <Button variant="default" size="lg" onClick={() => onSubscribe("professional")}>
               Assinar
             </Button>
           </div>
@@ -161,7 +161,7 @@ export function Root() {
                 1.000.000 mensagens
               </div>
             </div>
-            <Button variant="primary" size="lg" onClick={() => onSubscribe("business")}>
+            <Button variant="default" size="lg" onClick={() => onSubscribe("business")}>
               Assinar
             </Button>
           </div>

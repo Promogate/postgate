@@ -37,7 +37,7 @@ export function Root() {
             </p>
             <Progress className="h-3" value={(apiCount / MAX_FREE_MESSAGES) * 100} />
           </div>
-          <Button className="w-full text-gray-900 border-0" variant="upgrade" onClick={() => onOpen("upgrade")}>
+          <Button className="w-full text-gray-900 border-0" variant="default" onClick={() => onOpen("upgrade")}>
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-gray-900"/>
           </Button>
