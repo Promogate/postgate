@@ -1,27 +1,13 @@
 import React from "react";
-import { InstanceCard } from "./card";
+import { Instance } from "@/@types";
+import { InstancesDataTable } from "./data-table";
+import { columns } from "./columns";
+import { QRCodeModal } from "../modals/qr-code-modal";
 
 export type InstanceProps = {
-  id: string,
-  hash:string,
-  userId: string,
-  instance: string,
-  isConnected: boolean,
-  createdAt: string,
-  updatedAt: string
+  data: Instance[]
 }
 
-export function Root({ data }: { data: InstanceProps[] }) {
-  return (
-    <div className="grid grid-cols-2 gap-4">
-      {data.map((instance) => {
-        return (
-          <InstanceCard
-            key={instance.id}
-            props={instance}
-          />
-        )
-      })}
-    </div>
-  )
+export function Root({ data }: InstanceProps) {  
+  return <InstancesDataTable columns={columns} data={data}/>
 }

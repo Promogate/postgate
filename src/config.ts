@@ -8,3 +8,4 @@ export const S3_SECRET_KEY= process.env.S3_SECRET_KEY as string
 export const S3_BUCKET_NAME="postgate-web-storage"
 
 export const ADD_WORKFLOW_MODAL = "add_workflow"
+export const GET_QRCODE_MODAL = "get_qrcode"

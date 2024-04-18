@@ -3,12 +3,11 @@ import { Button } from "../ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { InstanceProps } from "./root";
 import Link from "next/link";
+import { Instance } from "@/@types";
 
-type InstanceCardProps = {
-  props: InstanceProps
-}
+type InstanceCardProps = Instance
 
-export function InstanceCard({ props }: InstanceCardProps) {
+export function InstanceCard(props: Instance) {
   return (
     <Card>
       <CardHeader>

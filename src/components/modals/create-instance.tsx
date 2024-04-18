@@ -1,20 +1,15 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { v4 as uuid } from "uuid";
-
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@clerk/nextjs";
-import { useCreateInstance } from "@/hooks/instances/use-instances";
-import { Dispatch, SetStateAction } from "react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Dispatch, SetStateAction } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useCreateInstance } from "@/hooks/instances/use-instances";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
 
 type CreateInstanceModalProps = {
   open: boolean;

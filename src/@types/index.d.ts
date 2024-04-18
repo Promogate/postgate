@@ -409,3 +409,17 @@ export type CreateRedirectorInput = {
   title: string;
   descriptiont?: string;
 }
+
+export type Instance = {
+  id: string;
+  hash: string | null;
+  userId: string | null;
+  ownerJid: string | null;
+  profilePicUrl: string | null,
+  instanceName: string | null,
+  description: string | null,
+  instance: string,
+  isConnected: boolean,
+  createdAt: string,
+  updatedAt: string
+}
