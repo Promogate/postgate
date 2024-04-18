@@ -17,7 +17,7 @@ export function InstanceCard(props: Instance) {
       </CardHeader>
       <CardFooter className="flex items-center gap-x-4 justify-end">
         <Link href={`/qr-code/${props.instance}`} target="_blank">
-          <Button size="icon" variant="primary-outline">
+          <Button size="icon" variant="outline">
             <Wifi size={16} />
           </Button>
         </Link>

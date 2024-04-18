@@ -331,7 +331,7 @@ export default function Page() {
                       draggable
                       onDragStart={(event) => handleOnDrag(event, chat)}
                     >
-                      <Button size="icon" variant="primary-outline" className="absolute rounded-full h-5 w-5 right-2"
+                      <Button size="icon" variant="outline" className="absolute rounded-full h-5 w-5 right-2"
                         onClick={() => handleDeleteGroup(chat.id, chat.remoteJid)}>
                         <X size={12} />
                       </Button>

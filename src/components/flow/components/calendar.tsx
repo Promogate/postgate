@@ -71,7 +71,7 @@ export function FlowCalendar() {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="primary-outline" className="rounded-full flex items-center justify-center gap-4">
+          <Button variant="outline" className="rounded-full flex items-center justify-center gap-4">
             <CalendarDays size={16} />
             Agendar
           </Button>
