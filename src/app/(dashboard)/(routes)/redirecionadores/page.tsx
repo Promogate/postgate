@@ -127,7 +127,7 @@ export default function Page() {
                     </div>
                     <div className="flex items-center gap-x-1">
                       <Input type="text" value={redirector.redirectorLink} readOnly ref={ref} />
-                      <Button variant="clipboard" onClick={handleCopyShortlink}>
+                      <Button variant="outline" onClick={handleCopyShortlink}>
                         <Copy />
                       </Button>
                     </div>
