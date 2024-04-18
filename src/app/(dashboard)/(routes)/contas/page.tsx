@@ -69,10 +69,10 @@ export default function Page() {
             Contas
           </PageHeader>
           <div className="flex items-center gap-x-2">
-            <Button variant="primary-action" onClick={handleCreateInstanceModal}>
+            <Button variant="default" onClick={handleCreateInstanceModal}>
               Adicionar instância
             </Button >
-            <Button variant="primary-outline" onClick={handleRefetchInstances}>
+            <Button variant="default" onClick={handleRefetchInstances}>
               {isLoading && <RotatingLines
                 visible={true}
                 width="12"

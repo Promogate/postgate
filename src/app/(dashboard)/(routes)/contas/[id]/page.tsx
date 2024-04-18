@@ -122,10 +122,10 @@ export default function Page() {
           Grupos
         </h1>
         <div className="flex w-full items-center justify-end gap-x-4">
-          <Button onClick={() => chatQuery.refetch()} variant={"primary-outline"}>
+          <Button onClick={() => chatQuery.refetch()} variant="default">
             Atualizar
           </Button>
-          <Button onClick={fetchData} variant={"primary-action"}>
+          <Button onClick={fetchData} variant="default">
             Encontrar grupos
           </Button>
         </div>
@@ -137,12 +137,12 @@ export default function Page() {
               <p>{chat.subject ? chat.subject : chat.remoteJid}</p>
               <div className=" flex justify-end">
                 {chat.subject ? (
-                  <Button size="sm" variant="primary-outline" className="flex items-center gap-x-2">
+                  <Button size="sm" variant="default" className="flex items-center gap-x-2">
                     <Check size={16} />
                     Sincronizado
                   </Button>
                 ) : (
-                  <Button size="sm" variant="primary-action" className="flex items-center gap-x-2" onClick={() => handleGroupSync(chat.remoteJid)}>
+                  <Button size="sm" variant="default" className="flex items-center gap-x-2" onClick={() => handleGroupSync(chat.remoteJid)}>
                     <RefreshCw size={16} />
                     Sincronizar
                   </Button>
