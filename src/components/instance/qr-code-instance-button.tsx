@@ -79,7 +79,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
                 </DialogHeader>
                 <Image src={data?.image as string} alt="qrCode" width={240} height={240} className="" />
                 <span className="text-sm text-gray-600 font-light">
-                  Após a sessão ser ativada no seu celular, basta clicar no "X" e você poderá utilizar os recursos da sessão
+                  Após a sessão ser ativada no seu celular, basta clicar no X e você poderá utilizar os recursos da sessão
                 </span>
                 <Button variant="outline" onClick={() => refetch()}>
                   Gerar outro QRCode
