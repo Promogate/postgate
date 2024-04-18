@@ -77,7 +77,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
           }
           <Popover onOpenChange={setOpen} open={open}>
             <PopoverTrigger>
-              <Button size={"xs"} variant="default" className="rounded-full" onClick={() => setOpen(true)}>
+              <Button size={"sm"} variant="default" className="rounded-full" onClick={() => setOpen(true)}>
                 <SquarePen size={12} />
               </Button>
             </PopoverTrigger>

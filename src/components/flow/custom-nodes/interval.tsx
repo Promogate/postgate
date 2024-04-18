@@ -61,7 +61,7 @@ export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
           }
           <Popover>
             <PopoverTrigger>
-              <Button size={"xs"} variant="default" className="rounded-full">
+              <Button size={"sm"} variant="default" className="rounded-full">
                 <SquarePen size={12} />
               </Button>
             </PopoverTrigger>
