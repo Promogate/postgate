@@ -22,7 +22,7 @@ export function InstanceCard(props: Instance) {
           </Button>
         </Link>
         <Link href={`/contas/${props.id}//?instanceId=${props.instance}`}>
-          <Button size="icon" variant="primary-action">
+          <Button size="icon" variant="default">
             <LogIn size={16} />
           </Button>
         </Link>

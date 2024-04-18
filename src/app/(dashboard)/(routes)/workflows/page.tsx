@@ -33,7 +33,7 @@ export default function Page() {
           <h1 className="text-xl font-bold text-gray-800">
             Workflows
           </h1>
-          <Button variant="primary-action" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
+          <Button variant="default" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
             <Plus />
             Adicionar workflow
           </Button >
@@ -60,7 +60,7 @@ export default function Page() {
                       </CardHeader>
                       <CardContent className="flex w-full justify-end">
                         <Link href={`/workflows/${workflow.id}`}>
-                          <Button variant="primary-action" size="icon">
+                          <Button variant="default" size="icon">
                             <Edit size={16} />
                           </Button>
                         </Link>

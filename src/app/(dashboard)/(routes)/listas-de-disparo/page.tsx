@@ -84,7 +84,7 @@ export default function Page() {
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo
         </h1>
-        <Button variant="primary-action" onClick={handleCreateAList} className="flex items-center gap-2">
+        <Button variant="default" onClick={handleCreateAList} className="flex items-center gap-2">
           <Plus />
           Criar lista de disparo
         </Button >
@@ -98,7 +98,7 @@ export default function Page() {
               </div>
               <div className="flex items-center justify-end">
                 <Link href={`/listas-de-disparo/${list.id}`}>
-                  <Button size="icon" variant="primary-action">
+                  <Button size="icon" variant="default">
                     <ArrowRight size={16} />
                   </Button>
                 </Link>

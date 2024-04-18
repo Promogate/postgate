@@ -140,7 +140,7 @@ export default function Page() {
             <Panel position="bottom-right">
               <div className="flex items-center gap-4">
                 <FlowCalendar />
-                <Button variant="primary-action" className="rounded-full flex items-center justify-center gap-4" onClick={handleSave}>
+                <Button variant="default" className="rounded-full flex items-center justify-center gap-4" onClick={handleSave}>
                   {mutation.isPending ? <RotatingLines
                     visible={true}
                     width="12"

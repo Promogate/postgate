@@ -78,7 +78,7 @@ export default function Page() {
         <h1 className="text-xl font-bold text-gray-800">
           Redirecionadores
         </h1>
-        <Button variant="primary-action" size="icon" onClick={onOpen}>
+        <Button variant="default" size="icon" onClick={onOpen}>
           <Plus />
         </Button >
         <Sheet.Root>

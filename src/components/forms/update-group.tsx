@@ -130,7 +130,7 @@ export function UpdateGroupForm({ setOpen, group }: UpdateGroupFormProps) {
             )}
           />
         </div>
-        <Button variant="primary-action" type="submit" className="bg-[#5528FF] text-white">
+        <Button variant="default" type="submit" className="bg-[#5528FF] text-white">
           {mutation.isPending && <RotatingLines
             visible={true}
             width="16"

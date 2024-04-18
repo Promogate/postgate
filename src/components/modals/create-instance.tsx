@@ -72,7 +72,7 @@ export function CreateInstanceModal(props: CreateInstanceModalProps) {
                 </FormItem>
               )}
             />
-            <Button variant="primary-action" className="float-end" type="submit">
+            <Button variant="default" className="float-end" type="submit">
               Criar instância
             </Button>
           </form>

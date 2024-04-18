@@ -60,7 +60,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2" onDoubleClick={() => setOpen(true)}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 text-sm">
-            <Button type="button" variant={"primary-action"} size="icon" className="rounded-full bg-[#5528ff] text-white">
+            <Button type="button" variant={"default"} size="icon" className="rounded-full bg-[#5528ff] text-white">
               <MessageSquareText size={16} />
             </Button>
             <span className="font-semibold text-slate-700">Mensagem de Texto</span>
@@ -77,7 +77,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
           }
           <Popover onOpenChange={setOpen} open={open}>
             <PopoverTrigger>
-              <Button size={"xs"} variant="primary-action" className="rounded-full" onClick={() => setOpen(true)}>
+              <Button size={"xs"} variant="default" className="rounded-full" onClick={() => setOpen(true)}>
                 <SquarePen size={12} />
               </Button>
             </PopoverTrigger>
@@ -110,7 +110,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" variant="primary-action">
+                  <Button type="submit" variant="default">
                     Salvar mensagem
                   </Button>
                 </form>

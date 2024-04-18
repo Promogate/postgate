@@ -66,7 +66,7 @@ export const NavigationNodes = () => {
       <Button
         size="icon"
         onClick={() => setIsOpen(!isOpen)}
-        variant="primary-action"
+        variant="default"
         className="transition ease-in-out rounded-full flex items-center justify-center"
       >
         {isOpen ? <X size={16} /> : <Menu size={16} />}

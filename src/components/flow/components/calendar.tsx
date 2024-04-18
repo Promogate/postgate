@@ -110,7 +110,7 @@ export function FlowCalendar() {
           </div>
           <DateTimePicker setDate={setDate} date={date as Date} />
           <DialogFooter>
-            <Button variant="primary-action" onClick={handlePublish}>
+            <Button variant="default" onClick={handlePublish}>
               Confirmar agendamento
             </Button>
           </DialogFooter>

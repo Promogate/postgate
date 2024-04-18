@@ -67,7 +67,7 @@ export function CreateRedirectorForm({ onClose }: CreateRedirectorFormProps) {
             </FormItem>
           )}
         />
-        <Button variant="primary-action" type="submit" className="bg-[#5528FF] text-white flex items-center gap-x-2">
+        <Button variant="default" type="submit" className="bg-[#5528FF] text-white flex items-center gap-x-2">
           {mutation.isPending && <RotatingLines
             visible={true}
             width="12"

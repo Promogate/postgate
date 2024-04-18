@@ -91,7 +91,7 @@ export function EditInstanceButton(props: EditInstanceButtonProps) {
                   </FormItem>
                 )}
               />
-              <Button variant="primary-action" className="float-end" type="submit">
+              <Button variant="default" className="float-end" type="submit">
                 Confirmar edição
               </Button>
             </form>

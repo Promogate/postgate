@@ -271,7 +271,7 @@ export default function Page() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button onClick={handleFindInstanceGroups} variant={"primary-action"}>
+        <Button onClick={handleFindInstanceGroups} variant={"default"}>
           Encontrar grupos
         </Button>
       </div>
@@ -347,7 +347,7 @@ export default function Page() {
         </div>
       </form>
       <div className="mt-4 flex justify-end">
-        <Button variant="primary-action" onClick={handleSaveList}>
+        <Button variant="default" onClick={handleSaveList}>
           Salvar lista
         </Button>
       </div>

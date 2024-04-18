@@ -70,7 +70,7 @@ export default function Page() {
             {data.title}
           </h1>
         </div>
-        <Button variant="primary-action" size="icon" onClick={onOpen}>
+        <Button variant="default" size="icon" onClick={onOpen}>
           <Plus />
         </Button >
         <Sheet.Root>

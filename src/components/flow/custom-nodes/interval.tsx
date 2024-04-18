@@ -44,7 +44,7 @@ export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 text-sm">
-            <Button type="button" variant={"primary-action"} size="icon" className="rounded-full bg-amber-500 text-white">
+            <Button type="button" variant={"default"} size="icon" className="rounded-full bg-amber-500 text-white">
               <Clock size={16} />
             </Button>
             <span className="font-semibold text-slate-700">Intervalo</span>
@@ -61,7 +61,7 @@ export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
           }
           <Popover>
             <PopoverTrigger>
-              <Button size={"xs"} variant="primary-action" className="rounded-full">
+              <Button size={"xs"} variant="default" className="rounded-full">
                 <SquarePen size={12} />
               </Button>
             </PopoverTrigger>
@@ -108,7 +108,7 @@ export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
                       )}
                     />
                   </div>
-                  <Button type="submit" variant="primary-action" className="flex-1">
+                  <Button type="submit" variant="default" className="flex-1">
                     Salvar mensagem
                   </Button>
                 </form>
