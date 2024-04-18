@@ -20,7 +20,7 @@ export function EraseInstanceButton(props: EraseInstanceButtonProps) {
 
   return (
     <>
-      <Button size="xs" className="bg-red-500 hover:bg-red-600 transition-all ease-in-out" onClick={handleOpen}>
+      <Button size="sm" className="bg-red-500 hover:bg-red-600 transition-all ease-in-out" onClick={handleOpen}>
         <Trash size={12} />
       </Button>
       <Dialog open={open} onOpenChange={handleClose}>

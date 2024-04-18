@@ -103,7 +103,7 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                   <>
                     <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">Imagem</p>
                     <div className="relative w-full min-h-40 border mb-4">
-                      <Button size="xs" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={() => setImagePreview(null)}>
+                      <Button size="sm" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={() => setImagePreview(null)}>
                         <X size={12} />
                       </Button>
                       <Image src={imagePreview as string} alt="preview" fill objectFit="contain" />

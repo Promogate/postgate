@@ -39,7 +39,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
 
   return (
     <>
-      <Button size="xs" variant="ghost" onClick={handleOpen}>
+      <Button size="sm" variant="ghost" onClick={handleOpen}>
         <QrCode size={16} className="cursor-pointer" />
       </Button>
       <Dialog open={open} onOpenChange={handleClose}>

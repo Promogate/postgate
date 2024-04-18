@@ -58,7 +58,7 @@ export function EditInstanceButton(props: EditInstanceButtonProps) {
 
   return (
     <>
-      <Button size="xs" className="bg-[#5528ff] hover:bg-purple-800 transition-all ease-in-out" onClick={handleOpen}>
+      <Button size="sm" className="bg-[#5528ff] hover:bg-purple-800 transition-all ease-in-out" onClick={handleOpen}>
         <Pencil size={12} />
       </Button>
       <Dialog open={open} onOpenChange={handleClose}>
