@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { EditInstanceButton } from "./edit-instance-button";
 import { EraseInstanceButton } from "./erase-instance-button";
 import { QRCodeInstanceButton } from "./qr-code-instance-button";
+import { ManageInstanceButton } from "./manage-instance-button";
 
 export const columns: ColumnDef<Instance>[] = [
   {
@@ -53,7 +54,7 @@ export const columns: ColumnDef<Instance>[] = [
         <>
           <div className="w-full flex">
             <Tooltip content="Mostrar QRCode">
-              <QRCodeInstanceButton instanceId={row.original.instance} isAlreadyConnected={row.original.isConnected}/>
+              <QRCodeInstanceButton instanceId={row.original.instance} isAlreadyConnected={row.original.isConnected} />
             </Tooltip>
           </div>
         </>
@@ -66,8 +67,9 @@ export const columns: ColumnDef<Instance>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-2 justify-end">
-          <EditInstanceButton instanceId={row.original.instance}/>
-          <EraseInstanceButton instanceId={row.original.instance}/>
+          <ManageInstanceButton instanceId={row.original.instance} />
+          <EditInstanceButton instanceId={row.original.instance} />
+          <EraseInstanceButton instanceId={row.original.instance} />
         </div>
       )
     }

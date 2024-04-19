@@ -3,20 +3,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Check, RefreshCw, XCircle } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { RotatingLines } from "react-loader-spinner";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { WappChat, WappGroup } from "@/@types";
-
-type State = {
-  instanceId: string | null
-}
+import { WappGroup } from "@/@types";
 
 export default function Page() {
   const { id } = useParams() as { id: string };
-  const search = useSearchParams()
   const { toast } = useToast();
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -26,7 +21,7 @@ export default function Page() {
     queryFn: async () => {
       const { data } = await axios.get(`/api/wapp/groups`, {
         params: {
-          instanceId: search.get("instanceId")
+          instanceId: id
         }
       });
       return data;
@@ -37,6 +32,7 @@ export default function Page() {
 
   const fetchData = () => {
     refetch();
+    chatQuery.refetch();
   }
 
   const chatQuery = useQuery<WappGroup[]>({
@@ -46,7 +42,7 @@ export default function Page() {
     queryFn: async () => {
       const { data } = await axios.get(`/api/wapp/groups/get`, {
         params: {
-          instanceId: search.get("instanceId")
+          instanceId: id
         }
       });
       return data;
@@ -60,7 +56,7 @@ export default function Page() {
     mutationFn: async (groupId: string) => {
       await axios.put(`/api/wapp/groups/sync`, {
         groupId: groupId,
-        instanceId: search.get("instanceId")
+        instanceId: id
       });
     },
     onSuccess: () => {
@@ -69,7 +65,11 @@ export default function Page() {
         title: "Grupo sincronizado"
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Grupo indisponível"
+      });
       chatQuery.refetch()
     }
   })
@@ -122,7 +122,7 @@ export default function Page() {
           Grupos
         </h1>
         <div className="flex w-full items-center justify-end gap-x-4">
-          <Button onClick={() => chatQuery.refetch()} variant="default">
+          <Button onClick={() => chatQuery.refetch()} variant="outline">
             Atualizar
           </Button>
           <Button onClick={fetchData} variant="default">
@@ -137,7 +137,7 @@ export default function Page() {
               <p>{chat.subject ? chat.subject : chat.remoteJid}</p>
               <div className=" flex justify-end">
                 {chat.subject ? (
-                  <Button size="sm" variant="default" className="flex items-center gap-x-2">
+                  <Button size="sm" variant="outline" className="flex items-center gap-x-2">
                     <Check size={16} />
                     Sincronizado
                   </Button>

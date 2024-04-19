@@ -4,11 +4,6 @@ import prismaClient from "@/lib/prisma";
 import { auth } from "@clerk/nextjs";
 import { WappChat } from "@/@types";
 
-type Participant = {
-  id: string,
-  admin: null | string
-}
-
 export async function GET(req: NextRequest, route: { params: { id: string } }) {
   const { userId } = auth();
   const search = req.nextUrl.searchParams;

@@ -15,6 +15,7 @@ import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SendingList } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
+import { SCHEDULE_URL } from "@/config";
 
 type PublishInput = {
   start_date: string;
@@ -60,11 +61,7 @@ export function FlowCalendar() {
       whatsapp_instance: instanceId
     }
 
-    await axios.post("https://primary-production-18bf.up.railway.app/webhook/schedule", data, {
-      headers: {
-        Authorization: "W0CDwQvZcONecU43QBBw6I5fnrd1w5TD"
-      }
-    })
+    await axios.post(SCHEDULE_URL, data);
   }
 
   return (
