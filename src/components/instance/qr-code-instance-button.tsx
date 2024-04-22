@@ -7,6 +7,7 @@ import axios from "axios";
 import Image from "next/image";
 import { RotatingLines } from "react-loader-spinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Skeleton } from "../ui/skeleton";
 
 type QRCodeInstanceButtonProps = {
   instanceId: string;
@@ -25,7 +26,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
     setOpen(false);
   }
 
-  const { data, isLoading, isError, refetch } = useQuery<{ image: string }>({
+  const { data, isLoading, isError, refetch, isStale } = useQuery<{ image: string }>({
     enabled: false,
     queryKey: ["get_qr_code", props.instanceId],
     queryFn: async () => {
@@ -36,7 +37,6 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
     },
     staleTime: 1000 * 30
   })
-
   return (
     <>
       <Button size="sm" variant="ghost" onClick={handleOpen}>
@@ -69,7 +69,15 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
                 <DialogHeader>
                   <DialogTitle className="text-lg">Leia o QRCode para inicar a sessão</DialogTitle>
                 </DialogHeader>
-                <Image src={data?.image as string} alt="qrCode" width={240} height={240} className="" />
+                {
+                  isStale ? (
+                    <div className="w-[240px] h-[240px] bg-gray border rounded-md flex justify-center items-center">
+                      <span>QRCode expirado</span>
+                    </div>
+                  ) : (
+                    <Image src={data?.image as string} alt="qrCode" width={240} height={240} />
+                  )
+                }
                 <span className="text-sm text-gray-600 font-light">
                   Após a sessão ser ativada no seu celular, basta clicar no X e você poderá utilizar os recursos da sessão
                 </span>

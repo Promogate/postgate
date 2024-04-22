@@ -38,8 +38,6 @@ export function EditInstanceButton(props: EditInstanceButtonProps) {
     }
   }
 
-  console.log(query.data);
-
   const handleClose = () => {
     setOpen(false);
   }

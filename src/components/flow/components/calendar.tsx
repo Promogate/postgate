@@ -21,7 +21,8 @@ type PublishInput = {
   start_date: string;
   sending_list: string[];
   whatsapp_instance: string;
-  messages: any[]
+  messages: any[];
+  token: string;
 }
 
 export function FlowCalendar() {
@@ -51,16 +52,18 @@ export function FlowCalendar() {
     setScheduleTime(dateTime);
   }
 
+  
+
   const handlePublish = async () => {
     const [instanceId, list] = chosenList.split("_");
-
+    const queryResult = await axios.get("/api/wapp/session", { params: { instanceId: instanceId } });
     const data: PublishInput = {
       start_date: scheduleTime as string,
       messages: nodes,
       sending_list: JSON.parse(list),
-      whatsapp_instance: instanceId
+      whatsapp_instance: instanceId,
+      token: queryResult.data.hash
     }
-
     await axios.post(SCHEDULE_URL, data);
   }
 

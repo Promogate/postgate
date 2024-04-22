@@ -91,10 +91,10 @@ model WhatsappChat {
 }
 
 model SendingList {
-  id         String  @id @default(uuid())
-  userId     String
-  name       String?
-  instanceId String?
-  list       String?
-  groupsInfo String?
+  id            String  @id @default(uuid())
+  userId        String
+  name          String?
+  instanceId    String?
+  list          String?
+  groupsInfo    String?
 }
