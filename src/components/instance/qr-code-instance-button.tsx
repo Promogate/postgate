@@ -18,7 +18,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
 
   const handleOpen = () => {
     setOpen(true);
-    if (!props.isAlreadyConnected) return  refetch()
+    if (!props.isAlreadyConnected) return refetch()
   }
 
   const handleClose = () => {
@@ -45,15 +45,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="flex justify-center items-center">
           {
-            props.isAlreadyConnected ? (
-              <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
-                <BadgeCheck />
-                <span>Você já está conectado</span>
-                <Button variant="outline" onClick={handleClose}>
-                  Fechar
-                </Button>
-              </div>
-            ) : isLoading ? (
+            isLoading ? (
               <div className="w-full h-96 flex items-center justify-center my-8 ">
                 <RotatingLines
                   visible={true}
