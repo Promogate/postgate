@@ -2,7 +2,7 @@ import { wappClient } from "@/lib/wapp";
 import { NextRequest, NextResponse } from "next/server";
 import prismaClient from "@/lib/prisma";
 import { RemoteWappGroup } from "@/@types";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 export async function PUT(request: NextRequest) {
   const { userId } = auth();

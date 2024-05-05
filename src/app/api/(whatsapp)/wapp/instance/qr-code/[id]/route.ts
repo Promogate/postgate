@@ -1,5 +1,5 @@
 import { wappClient } from "@/lib/wapp";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, route: { params: { id: string } }) {

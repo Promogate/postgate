@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 import prismaClient from "@/lib/prisma";
 import { MAX_BEGINNER_MESSAGES, MAX_BUSINESS_MESSAGES, MAX_FREE_MESSAGES, MAX_PRO_MESSAGES } from "@/config";

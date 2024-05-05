@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { wappClient } from "@/lib/wapp";
 import prismaClient from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 type Body = {
   instanceName: string;

@@ -1,6 +1,6 @@
 import prismaClient from "@/lib/prisma";
 import { wappClient } from "@/lib/wapp";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { WhatstappSession } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
