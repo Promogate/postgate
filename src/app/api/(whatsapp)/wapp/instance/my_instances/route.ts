@@ -1,6 +1,7 @@
 import prismaClient from "@/lib/prisma";
 import { wappClient } from "@/lib/wapp";
 import { auth } from "@clerk/nextjs";
+import { WhatstappSession } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, route: { params: { id: string } }) {
@@ -10,15 +11,11 @@ export async function GET(req: NextRequest, route: { params: { id: string } }) {
       userId: userId
     }
   })
-  const apiKey = process.env.CODE_CHAT_API_KEY as string;
-  instances.map(async (instance) => {
+  instances.map(async (instance: WhatstappSession) => {
     if (!instance.profilePicUrl || !instance.ownerJid) {
       const { data } = await wappClient.get("/instance/fetchInstances", {
         params: {
           instanceName: instance.instance
-        },
-        headers: {
-          "apiKey": apiKey
         }
       })
       await prismaClient.whatstappSession.update({

@@ -12,9 +12,6 @@ export async function PUT(request: NextRequest) {
     const groupInfo = await wappClient.get<RemoteWappGroup>(`/group/findGroupInfos/${body.instanceId}`, {
       params: {
         groupJid: body.groupId
-      },
-      headers: {
-        "apiKey": apiKey
       }
     });
     if (groupInfo.status === 400) {

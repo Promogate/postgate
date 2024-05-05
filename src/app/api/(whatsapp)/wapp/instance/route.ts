@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const { data, status } = await wappClient.post("/instance/create", {
       instanceName: body.instanceId,
       description: body.userId
-    }, { headers: { apikey: apiKey } });
+    });
     if (status === 201) {
       await prismaClient.whatstappSession.create({
         data: {

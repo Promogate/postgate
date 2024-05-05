@@ -1,20 +1,13 @@
 import { wappClient } from "@/lib/wapp";
 import { NextRequest, NextResponse } from "next/server";
 import prismaClient from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
 import { WappChat } from "@/@types";
 
 export async function GET(req: NextRequest, route: { params: { id: string } }) {
-  const { userId } = auth();
   const search = req.nextUrl.searchParams;
   const instanceId = search.get("instanceId")
   if (!instanceId) throw new Error("Missing Instance Id");
-  const apiKey = process.env.CODE_CHAT_API_KEY as string;
-  const allChats = await wappClient.get<WappChat[]>(`/chat/findChats/${instanceId}`, {
-    headers: {
-      "apiKey": apiKey
-    }
-  });
+  const allChats = await wappClient.get<WappChat[]>(`/chat/findChats/${instanceId}`);
   const onlyGroupChats = allChats.data.filter((chat: WappChat) => chat.remoteJid.includes("@g.us"));
   const promise = new Promise((resolve) => {
     onlyGroupChats.forEach(async (chat) => {

@@ -1,9 +1,10 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   console.log(request);
 }
 
 export async function POST(request: NextRequest) {
-  console.log(request);
+  console.log(await request.json());
+  return new NextResponse(null, {status: 200 });
 }
