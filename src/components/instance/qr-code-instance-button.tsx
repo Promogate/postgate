@@ -1,13 +1,12 @@
-import { BadgeCheck, Pencil, QrCode, XCircle } from "lucide-react";
+import { QrCode, XCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { RotatingLines } from "react-loader-spinner";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Skeleton } from "../ui/skeleton";
 
 type QRCodeInstanceButtonProps = {
   instanceId: string;

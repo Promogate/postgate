@@ -52,8 +52,6 @@ export function FlowCalendar() {
     setScheduleTime(dateTime);
   }
 
-  
-
   const handlePublish = async () => {
     const [instanceId, list] = chosenList.split("_");
     const queryResult = await axios.get("/api/wapp/session", { params: { instanceId: instanceId } });

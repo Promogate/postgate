@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { useFlowContext } from "@/contexts/flow";
 import { ImageNodeProps } from "@/@types";
 import { characterLimiter } from "@/utils/character-limiter";
 import { useAuth } from "@clerk/nextjs";

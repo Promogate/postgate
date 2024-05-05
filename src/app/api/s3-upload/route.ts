@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import Jimp from "jimp";
 import { NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { S3_ACCESS_KEY, S3_BUCKET_NAME, S3_SECRET_KEY } from "@/config";
@@ -13,10 +13,14 @@ const s3Client = new S3Client({
 
 async function uploadFileToS3(file: any, filename: string): Promise<string> {
   const fileBuffer = file;
-  const image = await sharp(fileBuffer)
-  .resize({ width: 800 })
-  .jpeg()
-  .toBuffer()
+  // const image = await sharp(fileBuffer)
+  // .resize({ width: 800 })
+  // .jpeg()
+  // .toBuffer()
+  const image = await Jimp.read(fileBuffer).then((image) => {
+    image.resize(800, 800);
+    return image.getBufferAsync("image/jpeg");
+  })
   const [user, id, originalFileName] = filename.split("_");
   const key = `${user}_${id}/${Date.now()}_${originalFileName}.jpg`;
   const params: PutObjectCommandInput = {
