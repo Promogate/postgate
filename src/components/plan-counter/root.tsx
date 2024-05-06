@@ -18,7 +18,7 @@ export function Root() {
   const { data, isLoading } = useQuery({
     queryKey: ["account_info", userId],
     queryFn: async () => {
-      const response = await axios.get("/api/account/" + "userId");
+      const response = await axios.get("/api/account/" + userId);
       return response.data;
     },
     staleTime: 1000 * 60 * 5

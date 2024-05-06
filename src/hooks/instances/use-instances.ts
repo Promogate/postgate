@@ -51,13 +51,13 @@ export const useCreateInstance = () => {
   const query = useQueryClient();
   const userId = useUser(state => state.user);
   return useMutation({
-    mutationKey: ["instance", "userId"],
+    mutationKey: ["instance", userId],
     mutationFn: async (input: CreateInstanceInput) => {
       const instanceId = v4();
       const { data } = await axios.post("/api/wapp/instance", {
         instanceName: input.name,
         instanceId: instanceId,
-        userId: "userId",
+        userId,
         description: input.description,
       });
       return data;

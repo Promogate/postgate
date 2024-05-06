@@ -40,7 +40,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
 
   const mutation = useMutation({
     mutationFn: async (values: CreateWorkflowInput) => {
-     const { data } = await axios.post(`/api/workflow`, { ...values, userId: "userId" });
+     const { data } = await axios.post(`/api/workflow`, { ...values, userId });
      return data;
     },
     onSuccess: (data) => {
