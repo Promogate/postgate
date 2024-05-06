@@ -19,7 +19,7 @@ export default function Page() {
   const ref = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { onClose, onOpen } = useSheet();
-  const { data, isLoading, isError, refetch } = useRedirectors("");
+  const { data, isLoading, isError, refetch } = useRedirectors();
 
   const handleCopyShortlink = () => {
     if (ref.current) {
@@ -33,7 +33,7 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <section>
+      <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800 p-4">
           Redirecionadores
         </h1>
@@ -53,7 +53,7 @@ export default function Page() {
 
   if (isError) {
     return (
-      <section>
+      <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800 p-4">
           Redirecionadores
         </h1>
@@ -69,7 +69,7 @@ export default function Page() {
   }
 
   return (
-    <section className="p-4">
+    <section className="space-y-4 md:p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800">
           Redirecionadores

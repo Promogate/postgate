@@ -43,7 +43,7 @@ export default function Page() {
 
   if (sendingListQuery.isLoading) {
     return (
-      <section className="p-4">
+      <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo
         </h1>
@@ -63,7 +63,7 @@ export default function Page() {
 
   if (sendingListQuery.isError) {
     return (
-      <section className="p-4">
+      <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800">
           Contas
         </h1>
@@ -79,7 +79,7 @@ export default function Page() {
   }
 
   return (
-    <section className="p-4">
+    <section className="space-y-4 md:p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo

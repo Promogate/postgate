@@ -27,7 +27,7 @@ export function CreateRedirectorForm({ onClose }: CreateRedirectorFormProps) {
     resolver: zodResolver(schema)
   });
 
-  const mutation = useCreateRedirector("_", onClose, form.getValues())
+  const mutation = useCreateRedirector(onClose, form.getValues())
 
   const handleCreateRedirector: SubmitHandler<CreateRedirectorInput> = async (values) => {
     await mutation.mutateAsync();

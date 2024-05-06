@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: "d4yfqrpu425xz.cloudfront.net",
         port: ""
       },
+      {
+        protocol: "https",
+        hostname: "**.googleusercontent.com",
+        port: ""
+      },
     ]
   },
   output: "standalone"

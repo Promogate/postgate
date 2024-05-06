@@ -1,5 +1,6 @@
 import { onGetUserAction } from "@/actions/on-get-user-action";
 import WhoAmIServerAction from "@/components/auth/who-am-i-server-action";
+import { Topbar } from "@/components/navigation/dashboard/top-bar";
 import { Sidebar } from "@/components/sidebar";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -19,10 +20,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <Sidebar.Root />
         </div>
         <main className="md:pl-72">
-          <div className="space-y-4">
-            <div className="space-y-4">
-              {children}
-            </div>
+          <div>
+            <Topbar.Root>
+              <Topbar.CurrentUser />
+            </Topbar.Root>
+            {children}
           </div>
         </main>
       </div>

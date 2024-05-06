@@ -80,7 +80,7 @@ export default function Page() {
 
   if (chatQuery.isLoading || isLoading) {
     return (
-      <section className="p-4">
+      <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800">
           Grupos
         </h1>

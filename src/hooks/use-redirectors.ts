@@ -2,9 +2,10 @@ import { CreateRedirectorInput } from "@/@types";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useUser } from "./use-user";
 
-export const useRedirectors = (userId: string | null | undefined) => {
-  if (!userId) throw new Error("Unauthorized");
+export const useRedirectors = () => {
+  const userId = useUser(state => state.user);
   return useQuery({
     queryKey: ["redirectors", userId],
     queryFn: async () => {
@@ -15,8 +16,9 @@ export const useRedirectors = (userId: string | null | undefined) => {
   })
 }
 
-export const useCreateRedirector = (userId: string | null | undefined, onClose: () => void, values: CreateRedirectorInput) => {
+export const useCreateRedirector = (onClose: () => void, values: CreateRedirectorInput) => {
   const query = useQueryClient();
+  const userId = useUser(state => state.user);
   return useMutation({
     mutationFn: async () => {
       await axios.post(`/api/redirector`, { ...values, userId });

@@ -184,7 +184,7 @@ export default function Page() {
 
   if (instancesQuery.isLoading || listQuery.isLoading) {
     return (
-      <section className="p-4">
+      <section className="space-y-4 md:p-8">
         <div className="w-full h-96 flex items-center justify-center my-8 ">
           <RotatingLines
             visible={true}
