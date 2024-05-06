@@ -1,21 +1,31 @@
-import { Navbar } from "@/components/navbar";
+import { onGetUserAction } from "@/actions/on-get-user-action";
+import WhoAmIServerAction from "@/components/auth/who-am-i-server-action";
 import { Sidebar } from "@/components/sidebar";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+
+  if (!session) {
+    return redirect("/");
+  }
+
   return (
-    <div className="h-full relative">
-      <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0">
-        <Sidebar.Root />
-      </div>
-      <main className="md:pl-72">
-        <Navbar.Root />
-        <div className="space-y-4">
-          <div className="space-y-4">
-            {children}
-          </div>
+    <WhoAmIServerAction onGetUserAction={onGetUserAction}>
+      <div className="h-full relative">
+        <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0">
+          <Sidebar.Root />
         </div>
-      </main>
-    </div>
+        <main className="md:pl-72">
+          <div className="space-y-4">
+            <div className="space-y-4">
+              {children}
+            </div>
+          </div>
+        </main>
+      </div>
+    </WhoAmIServerAction>
   )
 }

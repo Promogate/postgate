@@ -8,19 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ADD_WORKFLOW_MODAL } from "@/config";
 import { useModal } from "@/hooks/use-modal";
-import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { useUser } from "@/hooks/use-user";
 
 export default function Page() {
-  const { userId } = useAuth();
   const { isOpen, onOpen, onClose } = useModal()
+  const userId = useUser(state => state.user);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["workflows", userId],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/workflow/?userId=${userId}`)
+      const { data } = await axios.get(`/api/workflow/?userId=abc`)
       return data.workflows;
     },
     staleTime: 1000 * 60 * 5,

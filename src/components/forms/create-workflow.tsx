@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@clerk/nextjs";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 
@@ -13,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ADD_WORKFLOW_MODAL } from "@/config";
+import { useUser } from "@/hooks/use-user";
 
 type CreateWorkflowInput = {
   title: string;
@@ -32,15 +32,15 @@ type CreateWorkflowFormProps = {
 
 export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
   const { toast } = useToast();
-  const { userId } = useAuth();
   const query = useQueryClient();
   const form = useForm<createRedirectorSchema>({
     resolver: zodResolver(schema)
   });
+  const userId = useUser(state => state.user);
 
   const mutation = useMutation({
     mutationFn: async (values: CreateWorkflowInput) => {
-     const { data } = await axios.post(`/api/workflow`, { ...values, userId });
+     const { data } = await axios.post(`/api/workflow`, { ...values, userId: "userId" });
      return data;
     },
     onSuccess: (data) => {

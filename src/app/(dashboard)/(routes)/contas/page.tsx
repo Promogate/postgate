@@ -1,20 +1,19 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useState } from "react";
+import { XCircle } from "lucide-react";
+import { RotatingLines } from "react-loader-spinner";
 
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
-import { XCircle } from "lucide-react";
-import { RotatingLines } from "react-loader-spinner";
 import { Instance } from "@/components/instance";
 import { useInstances } from "@/hooks/instances/use-instances";
-import { useState } from "react";
 import { CreateInstanceModal } from "@/components/modals/create-instance";
+import { useUser } from "@/hooks/use-user";
 
 export default function Page() {
-  const { userId } = useAuth();
   const [open, setOpen] = useState(false);
-  const { data, isLoading, isError, refetch } = useInstances(userId);
+  const { data, isLoading, isError, refetch } = useInstances();
 
   const handleRefetchInstances = () => {
     refetch();

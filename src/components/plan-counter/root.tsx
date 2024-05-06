@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,15 +9,16 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { handleMaxMessagesNumber, handlePlanTypeName } from "@/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUser } from "@/hooks/use-user";
 
 export function Root() {
   const [isMounted, setIsMounted] = useState(false);
-  const { userId } = useAuth();
+  const userId = useUser(state => state.user);
 
   const { data, isLoading } = useQuery({
     queryKey: ["account_info", userId],
     queryFn: async () => {
-      const response = await axios.get("/api/account/" + userId);
+      const response = await axios.get("/api/account/" + "userId");
       return response.data;
     },
     staleTime: 1000 * 60 * 5

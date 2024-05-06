@@ -3,14 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@clerk/nextjs";
 import { RotatingLines } from "react-loader-spinner";
-import axios from "axios";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { CreateRedirectorInput } from "@/@types";
 import { useCreateRedirector } from "@/hooks/use-redirectors";
@@ -27,12 +23,11 @@ type CreateRedirectorFormProps = {
 }
 
 export function CreateRedirectorForm({ onClose }: CreateRedirectorFormProps) {
-  const { userId } = useAuth();
   const form = useForm<createRedirectorSchema>({
     resolver: zodResolver(schema)
   });
 
-  const mutation = useCreateRedirector(userId, onClose, form.getValues())
+  const mutation = useCreateRedirector("_", onClose, form.getValues())
 
   const handleCreateRedirector: SubmitHandler<CreateRedirectorInput> = async (values) => {
     await mutation.mutateAsync();

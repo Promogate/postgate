@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { wappClient } from "@/lib/wapp";
 import prismaClient from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 
 type Body = {
   instanceName: string;
@@ -13,7 +12,6 @@ type Body = {
 
 export async function POST(request: NextRequest) {
   const body = await request.json() as Body;
-  const apiKey = process.env.CODE_CHAT_API_KEY as string;
   try {
     const { data, status } = await wappClient.post("/instance/create", {
       instanceName: body.instanceId,

@@ -8,7 +8,6 @@ import { MAX_FREE_MESSAGES } from "@/config";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal";
-import { useAuth } from "@clerk/nextjs";
 
 type RootProps = {
   limitCount: number;
@@ -19,7 +18,6 @@ const apiCount = 125;
 export function Root() {
   const { onOpen } = useModal();
   const [isMounted, setIsMounted] = useState(false);
-  const { userId } = useAuth();
 
   useEffect(() => {
     setIsMounted(true)

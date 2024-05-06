@@ -4,16 +4,16 @@ import { ArrowRight, Plus, XCircle } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { RotatingLines } from "react-loader-spinner";
 import { SendingList } from "@/@types";
 import Link from "next/link";
+import { useUser } from "@/hooks/use-user";
 
 export default function Page() {
-  const { userId } = useAuth();
   const { toast } = useToast();
+  const userId = useUser(state => state.user);
 
   const sendingListQuery = useQuery<SendingList[]>({
     queryKey: ["sending_list_data", userId],

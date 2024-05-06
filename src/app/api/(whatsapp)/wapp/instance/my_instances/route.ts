@@ -1,14 +1,14 @@
 import prismaClient from "@/lib/prisma";
 import { wappClient } from "@/lib/wapp";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { WhatstappSession } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, route: { params: { id: string } }) {
-  const { userId } = auth();
+  const session = await auth();
   const instances = await prismaClient.whatstappSession.findMany({
     where: {
-      userId: userId
+      userId: session?.user?.id
     }
   })
   instances.map(async (instance: WhatstappSession) => {
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest, route: { params: { id: string } }) {
 
   const result = await prismaClient.whatstappSession.findMany({
     where: {
-      userId: userId
+      userId: session?.user?.id
     }
   })
 

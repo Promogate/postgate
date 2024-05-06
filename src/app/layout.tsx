@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import Providers from "./providers";
 import { ModalsProvider } from "@/components/modals/provider";
@@ -20,7 +19,6 @@ export default function RootLayout({
 }>) {
   return (
     <Providers> 
-      <ClerkProvider>
         <html lang="pt-br">
           <body className={inter.className}>
             <ModalsProvider />
@@ -28,7 +26,6 @@ export default function RootLayout({
             {children}
           </body>
         </html>
-      </ClerkProvider>
     </Providers>
   );
 }

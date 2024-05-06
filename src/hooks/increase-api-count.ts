@@ -1,34 +1,34 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 
 import prismaClient from "@/lib/prisma";
 import { MAX_BEGINNER_MESSAGES, MAX_BUSINESS_MESSAGES, MAX_FREE_MESSAGES, MAX_PRO_MESSAGES } from "@/config";
 
 export const increaseApiCount = async () => {
-  const { userId } = auth();
-  if (!userId) return;
+  const session = await auth();
+  if (!session?.user?.id) return;
   const apiLimit = await prismaClient.userApiLimit.findUnique({
     where: {
-      userId: userId
+      userId: session.user.id
     }
   })
   if (apiLimit) {
     await prismaClient.userApiLimit.update({
-      where: { userId: userId },
+      where: { userId: session.user.id },
       data: { count: apiLimit.count + 1 }
     })
   } else {
     await prismaClient.userApiLimit.create({
-      data: { userId: userId, count: 1 }
+      data: { userId: session.user.id, count: 1 }
     })
   }
 };
 
 export const checkApiLimit = async () => {
-  const { userId } = auth();
-  if (!userId) return false;
+  const session = await auth();
+  if (!session?.user?.id) return false;
   const apiLimit = await prismaClient.userApiLimit.findUnique({
     where: {
-      userId: userId
+      userId: session.user.id
     }
   })
   if (!apiLimit || (apiLimit.count < MAX_FREE_MESSAGES || MAX_BEGINNER_MESSAGES || MAX_PRO_MESSAGES || MAX_BUSINESS_MESSAGES)) {
@@ -39,10 +39,10 @@ export const checkApiLimit = async () => {
 }
 
 export const getApiLimitCount = async () => {
-  const { userId } = auth();
-  if(!userId) return 0;
+  const session = await auth();
+  if(!session?.user?.id) return 0;
   const apiLimit = await prismaClient.userApiLimit.findUnique({
-    where: { userId: userId }
+    where: { userId: session.user.id }
   })
   if(!apiLimit) return 0;
   return apiLimit.count;

@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { ImageNodeProps } from "@/@types";
 import { characterLimiter } from "@/utils/character-limiter";
-import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { useFlowStore } from "@/hooks/use-flow-store";
@@ -31,7 +30,6 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
   const deleteNode = useFlowStore(state => state.deleteNode);
   const editImageNode = useFlowStore(state => state.editImageNode);
   const [open, setOpen] = useState(false);
-  const { userId } = useAuth();
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(data.data.image as string);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -43,7 +41,7 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
   });
 
   const editData: SubmitHandler<FormInput> = (values) => {
-    editImageNode(data.id, { userId: userId as string, image: imageFile as File, message: values.message?.replace(/\n/g, '\\r\\n') as string })
+    editImageNode(data.id, { userId: "_", image: imageFile as File, message: values.message?.replace(/\n/g, '\\r\\n') as string })
   }
 
   const handleDeleteNode = () => {

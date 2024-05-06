@@ -1,4 +1,4 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 import prismaClient from "@/lib/prisma";
@@ -10,13 +10,12 @@ const settingsUrl = absoluteUrl("/configuracoes");
 export async function GET(req: NextRequest) {
   const planType = req.nextUrl.searchParams.get("plan_type");
   try {
-    const { userId } = auth();
-    const user = await currentUser();
-    if (!userId || !user) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const userSubscription = await prismaClient.userSubscription.findUnique({
-      where: { userId: userId }
+      where: { userId: session.user.id }
     })
     if (userSubscription && userSubscription.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
@@ -32,7 +31,7 @@ export async function GET(req: NextRequest) {
         payment_method_types: ["card"],
         mode: "subscription",
         billing_address_collection: "auto",
-        customer_email: user.emailAddresses[0].emailAddress,
+        customer_email: session.user.email as string,
         line_items: [
           {
             price_data: {
@@ -50,7 +49,7 @@ export async function GET(req: NextRequest) {
           }
         ],
         metadata: {
-          userId,
+          userId: session.user.id,
           level: "BEGINNER"
         }
       })
@@ -63,7 +62,7 @@ export async function GET(req: NextRequest) {
         payment_method_types: ["card"],
         mode: "subscription",
         billing_address_collection: "auto",
-        customer_email: user.emailAddresses[0].emailAddress,
+        customer_email: session.user.email as string,
         line_items: [
           {
             price_data: {
@@ -81,7 +80,7 @@ export async function GET(req: NextRequest) {
           }
         ],
         metadata: {
-          userId,
+          userId: session.user.id,
           level: "PROFESSIONAL"
         }
       })
@@ -94,7 +93,7 @@ export async function GET(req: NextRequest) {
         payment_method_types: ["card"],
         mode: "subscription",
         billing_address_collection: "auto",
-        customer_email: user.emailAddresses[0].emailAddress,
+        customer_email: session.user.email as string,
         line_items: [
           {
             price_data: {
@@ -112,7 +111,7 @@ export async function GET(req: NextRequest) {
           }
         ],
         metadata: {
-          userId,
+          userId: session.user.id,
           level: "BUSINESS"
         }
       })

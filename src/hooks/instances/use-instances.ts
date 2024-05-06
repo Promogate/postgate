@@ -1,9 +1,9 @@
 import { Instance } from "@/@types";
 import { toast } from "@/components/ui/use-toast";
-import { useAuth } from "@clerk/nextjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { v4 } from "uuid";
+import { useUser } from "../use-user";
 
 type CreateInstanceInput = {
   name: string;
@@ -20,8 +20,8 @@ const fetchInstances = async () => {
   return data;
 }
 
-export const useInstances = (userId: string | null | undefined) => {
-  if (!userId) throw new Error("Unauthorized");
+export const useInstances = () => {
+  const userId = useUser(state => state.user);
   return useQuery({
     queryKey: ["instances", userId],
     queryFn: fetchInstances,
@@ -48,16 +48,16 @@ export const useInstanceData = (instanceId: string) => {
 }
 
 export const useCreateInstance = () => {
-  const { userId } = useAuth();
   const query = useQueryClient();
+  const userId = useUser(state => state.user);
   return useMutation({
-    mutationKey: ["instance", userId],
+    mutationKey: ["instance", "userId"],
     mutationFn: async (input: CreateInstanceInput) => {
       const instanceId = v4();
       const { data } = await axios.post("/api/wapp/instance", {
         instanceName: input.name,
         instanceId: instanceId,
-        userId: userId,
+        userId: "userId",
         description: input.description,
       });
       return data;
@@ -74,7 +74,7 @@ export const useCreateInstance = () => {
 
 export const useEditInstance = (instanceId: string) => {
   const query = useQueryClient();
-  const { userId } = useAuth();
+  const userId = useUser(state => state.user);
   return useMutation({
     mutationKey: ["edit_instance", instanceId],
     mutationFn: async (input: EditInstanceInput) => {

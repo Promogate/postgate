@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useFlowStore } from "@/hooks/use-flow-store";
-import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SendingList } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { SCHEDULE_URL } from "@/config";
+import { useUser } from "@/hooks/use-user";
 
 type PublishInput = {
   start_date: string;
@@ -26,7 +26,6 @@ type PublishInput = {
 }
 
 export function FlowCalendar() {
-  const { userId } = useAuth();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [hour, setHour] = useState<any | undefined | null>(null);
   const [chosenList, setChosenList] = useState<string>("");
@@ -35,6 +34,7 @@ export function FlowCalendar() {
     nodes,
     scheduleTime
   } = useFlowStore()
+  const userId = useUser(state => state.user);
 
   const listsQuery = useQuery({
     queryKey: ["schedule_sending_lists", userId],

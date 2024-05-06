@@ -1,11 +1,8 @@
 "use client";
 
 import { Copy, Group, MousePointerClick, Plus, XCircle } from "lucide-react";
-import axios from "axios";
 import Link from "next/link";
 import { useRef } from "react";
-import { useAuth } from "@clerk/nextjs";
-import { useQuery } from "@tanstack/react-query";
 import { RotatingLines } from "react-loader-spinner";
 import { Tooltip } from "@/components/tooltip";
 import { Button } from "@/components/ui/button";
@@ -21,9 +18,8 @@ import { useRedirectors } from "@/hooks/use-redirectors";
 export default function Page() {
   const ref = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const { userId } = useAuth();
   const { onClose, onOpen } = useSheet();
-  const { data, isLoading, isError, refetch } = useRedirectors(userId);
+  const { data, isLoading, isError, refetch } = useRedirectors("");
 
   const handleCopyShortlink = () => {
     if (ref.current) {

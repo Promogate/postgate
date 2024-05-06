@@ -2,10 +2,10 @@ import { wappClient } from "@/lib/wapp";
 import { NextRequest, NextResponse } from "next/server";
 import prismaClient from "@/lib/prisma";
 import { RemoteWappGroup } from "@/@types";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 
 export async function PUT(request: NextRequest) {
-  const { userId } = auth();
+  const session = await auth();
   const body = await request.json() as { groupId: string, instanceId: string };
   const apiKey = process.env.CODE_CHAT_API_KEY as string;
   try {
@@ -27,7 +27,7 @@ export async function PUT(request: NextRequest) {
         isCommunityAnnounce: groupInfo.data.isCommunityAnnounce,
         description: groupInfo.data.desc,
         isRaw: false,
-        owner: userId,
+        owner: session?.user?.id,
         isRestrict: groupInfo.data.restrict,
       }
     })

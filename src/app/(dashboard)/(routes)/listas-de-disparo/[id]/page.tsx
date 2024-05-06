@@ -13,7 +13,6 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -25,15 +24,16 @@ import { RotatingLines } from "react-loader-spinner";
 import { maskOwnerJid } from "@/utils/maskOwnerJid";
 import { SendingList, WappGroup } from "@/@types";
 import { useToast } from "@/components/ui/use-toast";
+import { useUser } from "@/hooks/use-user";
 
 export default function Page() {
   const params = useParams() as { id: string };
   const { toast } = useToast();
-  const { userId } = useAuth();
   const [isInput, setIsInput] = useState(false);
   const [instanceId, setInstanceId] = useState<null | string>(null);
   const [groupsInfo, setGroupsInfo] = useState<WappGroup[]>([]);
   const [list, setList] = useState<string[]>([]);
+  const userId = useUser(state => state.user);
 
   function handleOnDrag(event: React.DragEvent, group: WappGroup) {
     const data = JSON.stringify(group);
