@@ -14,7 +14,7 @@ import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SendingList } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
-import { SCHEDULE_URL } from "@/config";
+import { N8N_API_KEY, SCHEDULE_URL } from "@/config";
 import { useUser } from "@/hooks/use-user";
 
 type PublishInput = {
@@ -22,7 +22,6 @@ type PublishInput = {
   sending_list: string[];
   whatsapp_instance: string;
   messages: any[];
-  token: string;
 }
 
 export function FlowCalendar() {
@@ -45,22 +44,13 @@ export function FlowCalendar() {
     staleTime: 1000 * 60 * 60
   });
 
-  const handleSchedule = () => {
-    const formattedDate = format(new Date(date as Date), 'yyyy-MM-dd');
-    const formattedTime = format(new Date(`2000-01-01 ${hour}`), 'HH:mm:ss');
-    const dateTime = `${formattedDate}T${formattedTime}`;
-    setScheduleTime(dateTime);
-  }
-
   const handlePublish = async () => {
     const [instanceId, list] = chosenList.split("_");
-    const queryResult = await axios.get("/api/wapp/session", { params: { instanceId: instanceId } });
     const data: PublishInput = {
       start_date: scheduleTime as string,
       messages: nodes,
       sending_list: JSON.parse(list),
       whatsapp_instance: instanceId,
-      token: queryResult.data.hash
     }
     await axios.post(SCHEDULE_URL, data);
   }

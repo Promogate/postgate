@@ -20,7 +20,7 @@ export default function Page() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["workflows", userId],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/workflow/?userId=abc`)
+      const { data } = await axios.get(`/api/workflow/?userId=${userId}`);
       return data.workflows;
     },
     staleTime: 1000 * 60 * 5,
