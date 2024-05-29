@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { v4 } from "uuid";
 import { useUser } from "../use-user";
+import { api } from "@/lib/axios";
 
 type CreateInstanceInput = {
   name: string;
@@ -16,7 +17,7 @@ type EditInstanceInput = {
 }
 
 const fetchInstances = async () => {
-  const { data } = await axios.get("/api/wapp/instance/my_instances");
+  const { data } = await api.get("/whatsapp/sessions", { authorization: true });
   return data;
 }
 

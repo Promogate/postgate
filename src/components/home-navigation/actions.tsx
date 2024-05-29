@@ -11,7 +11,7 @@ export function Actions() {
   }
 
   const handleRegister = (): void => {
-    return router.push("/cadastro")
+    return router.push("/cadastrar-se")
   }
 
   return (
