@@ -15,9 +15,9 @@ const routes = [
     color: "text-[#5528ff]"
   },
   {
-    label: "Contas Whastapp",
+    label: "Whastapp",
     icon: Smartphone,
-    href: "/contas",
+    href: "/whatsapp",
     color: "text-[#5528ff]"
   },
   {

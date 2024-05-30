@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Instance } from "@/components/instance";
 import { useInstances } from "@/hooks/instances/use-instances";
 import { CreateInstanceModal } from "@/components/modals/create-instance";
-import { useUser } from "@/hooks/use-user";
 
 export default function Page() {
   const [open, setOpen] = useState(false);

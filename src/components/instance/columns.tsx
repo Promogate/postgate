@@ -15,32 +15,20 @@ export const columns: ColumnDef<Instance>[] = [
     accessorKey: "instanceName",
     header: "Instância",
     cell: ({ row }) => {
-      return <p>{
-        row.original.instanceName
-          ? row.original.instanceName
-          : row.original.instance
-      }</p>
+      const session = JSON.parse(row.original.session);
+
+      return <p>
+        {session.info.pushname ? session.info.pushname + " (" + session.info.wid.user + ")" : row.original.id}
+      </p>
     }
-  },
-  {
-    accessorKey: "description",
-    header: "Descrição",
-    cell: ({ row }) => {
-      return <p>{
-        row.original.description
-          ? row.original.description
-          : null
-      }</p>
-    }
-  },
-  {
+  }, {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
       return (
         <div className="w-full flex">
-          <Tooltip content={row.original.isConnected ? "ONLINE" : "OFFLINE"}>
-            <SignalHigh size={16} className={cn("cursor-pointer", row.original.isConnected ? "text-green-400" : "text-red-400")} />
+          <Tooltip content={row.original.status === "CONNECTED" ? "ONLINE" : "OFFLINE"}>
+            <SignalHigh size={16} className={cn("cursor-pointer", row.original.status === "CONNECTED" ? "text-green-400" : "text-red-400")} />
           </Tooltip>
         </div>
       )
@@ -54,7 +42,7 @@ export const columns: ColumnDef<Instance>[] = [
         <>
           <div className="w-full flex">
             <Tooltip content="Mostrar QRCode">
-              <QRCodeInstanceButton instanceId={row.original.instance} isAlreadyConnected={row.original.isConnected} />
+              <QRCodeInstanceButton instanceId={row.original.id} isAlreadyConnected={row.original.status === "CONNECTED" ? true : false} />
             </Tooltip>
           </div>
         </>
@@ -67,9 +55,9 @@ export const columns: ColumnDef<Instance>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-2 justify-end">
-          <ManageInstanceButton instanceId={row.original.instance} />
-          <EditInstanceButton instanceId={row.original.instance} />
-          <EraseInstanceButton instanceId={row.original.instance} />
+          <ManageInstanceButton instanceId={row.original.id} />
+          <EditInstanceButton instanceId={row.original.id} />
+          <EraseInstanceButton instanceId={row.original.id} />
         </div>
       )
     }
