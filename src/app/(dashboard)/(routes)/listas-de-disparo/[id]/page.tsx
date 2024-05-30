@@ -132,7 +132,7 @@ export default function Page() {
   const mutation = useMutation({
     mutationKey: ["save_sending_list", params.id],
     mutationFn: async () => {
-      await api.put(`/resources/sending-list/${params.id}`, { list: JSON.stringify(groupsInfo) }, { authorization: true });
+      await api.put(`/resources/sending-lists/${params.id}`, { list: JSON.stringify(groupsInfo) }, { authorization: true });
     },
     onSuccess: () => {
       toast({

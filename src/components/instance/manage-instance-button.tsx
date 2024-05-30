@@ -25,13 +25,13 @@ export function ManageInstanceButton(props: ManageInstanceButtonProps) {
   }
 
   useEffect(() => {
-    if (syncQuery.status === "pending") {
+    if (syncQuery.isFetching) {
       toast({
         title: "Estamos sincronizando os seus contatos ativos no whatsapp",
         description: "Permaneça na página até finalizarmos o processo."
       });
     }
-    if (syncQuery.status === "success") {
+    if (syncQuery.isSuccess) {
       toast({
         title: "Estamos sincronizados.",
         description: "Comece a criar suas listas de disparo"

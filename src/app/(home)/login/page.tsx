@@ -14,6 +14,7 @@ import { api } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/use-user";
 
 const schema = z.object({
   email: z.string({ required_error: "Email é obrigatório" }).email("Insira um email válido"),

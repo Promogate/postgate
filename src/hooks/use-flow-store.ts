@@ -1,4 +1,5 @@
 import { ImageNodeProps, TextNodeProps } from "@/@types";
+import { api } from "@/lib/axios";
 import axios from "axios";
 import {
   Connection,
@@ -102,7 +103,7 @@ export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
   },
   saveFlow: async (id: string) => {
     const { nodes, edges } = get();
-    await axios.put(`/api/workflow/${id}`, { nodes, edges });
+    await api.put(`/resources/workflows/${id}`, { nodes, edges });
   },
   editTextNode: (id: string, values: TextNodeProps) => {
     const { nodes } = get();

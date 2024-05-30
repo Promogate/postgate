@@ -16,6 +16,7 @@ import { SendingList } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { N8N_API_KEY, SCHEDULE_URL } from "@/config";
 import { useUser } from "@/hooks/use-user";
+import { api } from "@/lib/axios";
 
 type PublishInput = {
   start_date: string;
@@ -38,7 +39,7 @@ export function FlowCalendar() {
   const listsQuery = useQuery({
     queryKey: ["schedule_sending_lists", userId],
     queryFn: async () => {
-      const { data } = await axios.get<SendingList[]>("/api/wapp/sending_list");
+      const { data } = await api.get<SendingList[]>("/resources/sending-lists", { authorization: true });
       return data;
     },
     staleTime: 1000 * 60 * 60
@@ -82,7 +83,7 @@ export function FlowCalendar() {
                 <SelectLabel>Listas de disparo</SelectLabel>
                 {listsQuery.data?.map((sendingList) => {
                   return (
-                    <SelectItem key={sendingList.id} value={`${sendingList.instanceId}_${sendingList.list}`}>
+                    <SelectItem key={sendingList.id} value={`${sendingList.whatsappSessionId}_${sendingList.list}`}>
                       <div className="flex items-center gap-x-2">
                         <p>{sendingList.name}</p>
                       </div>

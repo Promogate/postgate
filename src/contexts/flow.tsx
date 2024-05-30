@@ -18,8 +18,10 @@ import { v4 } from "uuid";
 import { useToast } from "@/components/ui/use-toast";
 import {
   ImageNodeProps,
-  TextNodeProps
+  TextNodeProps,
+  Workflow
 } from "@/@types";
+import { api } from "@/lib/axios";
 
 type FlowContextProps = {
   nodes: any;
@@ -131,13 +133,13 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
 
   const handleGetWorkflow = async (id: string) => {
     try {
-      const { data } = await axios.get(`/api/workflow/${id}`);
-      const flow = data.data;
-      setNodes(JSON.parse(flow.nodes));
-      setEdges(JSON.parse(flow.edges));
+      const { data } = await api.get<Workflow>(`/resources/workflows/${id}`, { authorization: true });
+      const flow = data;
+      setNodes(flow.nodes ? JSON.parse(flow.nodes) : null);
+      setEdges(flow.edges ? JSON.parse(flow.edges) : null);
       return {
-        nodes: JSON.parse(flow.nodes),
-        edges: JSON.parse(flow.edges)
+        nodes: flow.nodes ? JSON.parse(flow.nodes) : null,
+        edges: flow.edges ? JSON.parse(flow.edges) : null
       };
     } catch (error: any) {
       toast({

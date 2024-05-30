@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ADD_WORKFLOW_MODAL } from "@/config";
 import { useUser } from "@/hooks/use-user";
+import { api } from "@/lib/axios";
 
 type CreateWorkflowInput = {
   title: string;
@@ -40,7 +41,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
 
   const mutation = useMutation({
     mutationFn: async (values: CreateWorkflowInput) => {
-     const { data } = await axios.post(`/api/workflow`, { ...values, userId });
+     const { data } = await api.post("/resources/workflows", values, { authorization: true });
      return data;
     },
     onSuccess: (data) => {
@@ -48,7 +49,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
         title: "Workflow criado com sucesso!",
         variant: "default",
       });
-      query.invalidateQueries({ queryKey: ["workflows", userId] });
+      query.invalidateQueries({ queryKey: ["workflows"] });
       onClose(ADD_WORKFLOW_MODAL);
     },
     onError: (error: any) => {

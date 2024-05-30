@@ -433,3 +433,12 @@ export type UserInfo = {
   };
   platform: string;
 }
+
+export type Workflow = {
+  id: string;
+  title: string;
+  userId: string;
+  description?: string;
+  nodes?: string;
+  edges?: string;
+}
