@@ -10,6 +10,7 @@ import { RotatingLines } from "react-loader-spinner";
 import { SendingList } from "@/@types";
 import Link from "next/link";
 import { useUser } from "@/hooks/use-user";
+import { api } from "@/lib/axios";
 
 export default function Page() {
   const { toast } = useToast();
@@ -18,7 +19,7 @@ export default function Page() {
   const sendingListQuery = useQuery<SendingList[]>({
     queryKey: ["sending_list_data", userId],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/wapp/sending_list`)
+      const { data } = await api.get("/resources/sending-lists", { authorization: true });
       return data;
     },
     staleTime: 1000 * 60 * 5

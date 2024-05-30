@@ -32,10 +32,10 @@ export function EditInstanceButton(props: EditInstanceButtonProps) {
   const handleOpen = () => {
     setOpen(true);
     query.refetch()
-    if (!query.isError) {
-      form.setValue("name", query.data?.instanceName ? query.data.instanceName as string : query.data?.instance as string);
-      form.setValue("description", query.data?.description ? query.data.description : "");
-    }
+    // if (!query.isError) {
+    //   form.setValue("name", query.data?.id ? query.data.instanceName as string : query.data?.instance as string);
+    //   form.setValue("description", query.data?.description ? query.data.description : "");
+    // }
   }
 
   const handleClose = () => {
@@ -56,7 +56,7 @@ export function EditInstanceButton(props: EditInstanceButtonProps) {
 
   return (
     <>
-      <Button size="sm" className="bg-[#5528ff] hover:bg-purple-800 transition-all ease-in-out" onClick={handleOpen}>
+      <Button size="sm" onClick={handleOpen} variant="outline">
         <Pencil size={12} />
       </Button>
       <Dialog open={open} onOpenChange={handleClose}>

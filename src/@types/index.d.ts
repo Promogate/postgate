@@ -378,14 +378,10 @@ export type RemoteWappGroup = {
 
 export type WappGroup = {
   id: string;
-  remoteJid: string;
-  subject?: string;
-  description?: string;
-  isRestrict?: boolean;
-  isCommunity?: boolean;
-  isCommunityAnnounce?: boolean;
-  owner?: string;
-  isRaw?: boolean;
+  whatsappId: string;
+  whatsappName: string;
+  isGroup: boolean;
+  whatsappSessionId: string;
 }
 
 export type WappChat = {
@@ -399,10 +395,9 @@ export type WappChat = {
 export type SendingList = {
   id: string;
   userId: string;
+  whatsappSessionId: string;
   name: string | null;
-  instanceId: string | null;
   list: string | null;
-  groupsInfo: string | null;
 }
 
 export type CreateRedirectorInput = {
@@ -417,4 +412,24 @@ export type Instance = {
   status: string;
   qr: string;
   retires: number;
+}
+
+export type Session = {
+  id: string;
+  userId: string;
+  session?: string;
+  status?: string;
+  qr?: string;
+  retries?: number;
+  user?: UserInfo;
+}
+
+export type UserInfo = {
+  pushname: string;
+  wid: {
+    server: string;
+    user: string;
+    _serialized: string;
+  };
+  platform: string;
 }

@@ -21,10 +21,12 @@ import { Pencil, X, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RotatingLines } from "react-loader-spinner";
-import { maskOwnerJid } from "@/utils/maskOwnerJid";
-import { SendingList, WappGroup } from "@/@types";
+import { SendingList, Session, UserInfo, WappGroup } from "@/@types";
 import { useToast } from "@/components/ui/use-toast";
 import { useUser } from "@/hooks/use-user";
+import { api } from "@/lib/axios";
+import { Badge } from "@/components/ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export default function Page() {
   const params = useParams() as { id: string };
@@ -32,7 +34,8 @@ export default function Page() {
   const [isInput, setIsInput] = useState(false);
   const [instanceId, setInstanceId] = useState<null | string>(null);
   const [groupsInfo, setGroupsInfo] = useState<WappGroup[]>([]);
-  const [list, setList] = useState<string[]>([]);
+  const [list, setList] = useState<WappGroup[]>([]);
+  const [filteredChats, setFilteredChats] = useState<WappGroup[]>([]);
   const userId = useUser(state => state.user);
 
   function handleOnDrag(event: React.DragEvent, group: WappGroup) {
@@ -43,14 +46,14 @@ export default function Page() {
   function handleOnDrop(event: React.DragEvent) {
     const data = event.dataTransfer.getData("group") as string;
     const group = JSON.parse(data) as WappGroup;
-    if (groupsInfo.some(groupInfo => groupInfo.id === group.id) && list.includes(group.remoteJid)) {
+    if (groupsInfo.some(groupInfo => groupInfo.id === group.id) && list.includes(group)) {
       toast({
         title: "Grupo já adicionado"
       });
       return;
     }
 
-    setList([...list, group.remoteJid]);
+    setList([...list, group]);
     setGroupsInfo([...groupsInfo, group]);
   }
 
@@ -61,7 +64,12 @@ export default function Page() {
   const instancesQuery = useQuery({
     queryKey: ["sending_lists_instances", userId],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/wapp/instance/my_instances`);
+      const { data } = await api.get<Session[]>("/whatsapp/sessions", { authorization: true });
+      data.forEach((session) => {
+        const sessionData = JSON.parse(session.session as string);
+        const user = sessionData.info as UserInfo;
+        session.user = user;
+      });
       return data;
     },
     staleTime: 1000 * 60 * 60
@@ -70,12 +78,9 @@ export default function Page() {
   const listQuery = useQuery({
     queryKey: ["sending_list", userId],
     queryFn: async () => {
-      const { data } = await axios.get<SendingList>(`/api/wapp/sending_list/${params.id}`);
-      if (data.groupsInfo) {
-        setGroupsInfo(JSON.parse(data.groupsInfo));
-      }
+      const { data } = await api.get<SendingList>(`/resources/sending-lists/${params.id}`);
       if (data.list) {
-        setList(JSON.parse(data.list));
+        setGroupsInfo(JSON.parse(data.list));
       }
       return data;
     },
@@ -86,11 +91,7 @@ export default function Page() {
     enabled: false,
     queryKey: ["chats", userId],
     queryFn: async () => {
-      const { data } = await axios.get("/api/wapp/chats", {
-        params: {
-          instanceId: instanceId
-        }
-      })
+      const { data } = await api.get(`/resources/chats/${instanceId}`, { authorization: true });
       return data;
     },
     staleTime: 1000 * 60 * 60,
@@ -131,15 +132,7 @@ export default function Page() {
   const mutation = useMutation({
     mutationKey: ["save_sending_list", params.id],
     mutationFn: async () => {
-      await axios.put(`/api/wapp/sending_list`, {
-        instanceId: instanceId,
-        list: JSON.stringify(list),
-        groupsInfo: JSON.stringify(groupsInfo)
-      }, {
-        params: {
-          listId: params.id
-        }
-      })
+      await api.put(`/resources/sending-list/${params.id}`, { list: JSON.stringify(groupsInfo) }, { authorization: true });
     },
     onSuccess: () => {
       toast({
@@ -165,22 +158,41 @@ export default function Page() {
     setInstanceId(value);
   }
 
-  const handleFindInstanceGroups = () => {
-    chatsQuery.refetch();
+  const handleFindInstanceChats = async () => {
+    await chatsQuery.refetch().then((data) => {
+      setFilteredChats(data.data as WappGroup[]);
+    });
   }
 
-  const handleDeleteGroup = (id: string, jid: string) => {
-    const updatedList = list.filter(item => item !== jid);
+  const handleDeleteGroup = (id: string) => {
+    const updatedList = list.filter(item => item.id !== id);
     setList(updatedList);
     const updatedGrousInfo = groupsInfo.filter(group => group.id !== id);
     setGroupsInfo(updatedGrousInfo);
   }
-  
+
   useEffect(() => {
-    if (listQuery.data?.instanceId) {
-      setInstanceId(listQuery.data?.instanceId)
+    if (listQuery.data?.id) {
+      setInstanceId(listQuery.data?.whatsappSessionId)
     }
-  }, [chatsQuery, listQuery.data?.instanceId])
+  }, [chatsQuery, listQuery.data?.whatsappSessionId]);
+
+  useEffect(() => {
+    setGroupsInfo([]);
+    setList([]);
+  }, [setInstanceId])
+
+  const handleChatsFiltering = (filter: string) => {
+    if (filter === "all") {
+      setFilteredChats(chatsQuery.data as WappGroup[]);
+    }
+    if (filter === "chats") {
+      setFilteredChats(chatsQuery.data?.filter(chats => chats.isGroup !== true) as WappGroup[]);
+    }
+    if (filter === "groups") {
+      setFilteredChats(chatsQuery.data?.filter(chats => chats.isGroup === true) as WappGroup[]);
+    }
+  };
 
   if (instancesQuery.isLoading || listQuery.isLoading) {
     return (
@@ -251,19 +263,18 @@ export default function Page() {
         </form>
       </Form>
       <div className="flex items-center gap-x-4">
-        <Select onValueChange={(value) => handleSelectInstanceConnection(value)} defaultValue={listQuery.data?.instanceId ?? undefined}>
+        <Select onValueChange={(value) => handleSelectInstanceConnection(value)} defaultValue={listQuery.data?.whatsappSessionId ?? undefined}>
           <SelectTrigger >
             <SelectValue placeholder="Escolha uma conexão" />
           </SelectTrigger>
           <SelectContent className="flex-1">
             <SelectGroup>
               <SelectLabel>Conexões</SelectLabel>
-              {instancesQuery.data.map((instance: any) => {
+              {instancesQuery.data?.map((instance: Session) => {
                 return (
-                  <SelectItem key={instance.id} value={instance.instance}>
+                  <SelectItem key={instance.id} value={instance.id}>
                     <div className="flex items-center gap-x-2">
-                      <img src={instance.profilePicUrl} alt={instance.id} className="w-6 h-6 rounded-full overflow-hidden" />
-                      <p>{maskOwnerJid(instance.ownerJid)}</p>
+                      <p>{instance.user?.pushname}</p>
                     </div>
                   </SelectItem>
                 )
@@ -271,16 +282,24 @@ export default function Page() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button onClick={handleFindInstanceGroups} variant={"default"}>
-          Encontrar grupos
+        <Button onClick={handleFindInstanceChats} variant={"default"}>
+          Encontrar chats
         </Button>
       </div>
       <form>
         <div className="grid grid-cols-2 gap-x-2 my-4">
-          <div className="bg-slate-50 min-h-full w-full border rounded-sm p-4">
-            <span className="text-sm">
-              Grupos da instância/conexão
-            </span>
+          <div className="min-h-full w-full border rounded-sm p-4 space-y-4">
+            <ToggleGroup type="single">
+              <ToggleGroupItem value="bold" aria-label="Toggle bold" onClick={() => handleChatsFiltering("all")}>
+                Todos
+              </ToggleGroupItem>
+              <ToggleGroupItem value="italic" aria-label="Toggle italic" onClick={() => handleChatsFiltering("chats")}>
+                Chats
+              </ToggleGroupItem>
+              <ToggleGroupItem value="strikethrough" aria-label="Toggle strikethrough" onClick={() => handleChatsFiltering("groups")}>
+                Grupos
+              </ToggleGroupItem>
+            </ToggleGroup>
             <div className="my-4">
               {
                 chatsQuery.isLoading ? (
@@ -297,7 +316,7 @@ export default function Page() {
                 ) : (
                   <div className="grid gap-y-2">
                     {
-                      chatsQuery.data?.map((chat) => {
+                      filteredChats.map((chat) => {
                         return (
                           <div
                             key={chat.id}
@@ -305,8 +324,9 @@ export default function Page() {
                             draggable
                             onDragStart={(event) => handleOnDrag(event, chat)}
                           >
-                            <h3 className="text-sm">
-                              {chat.subject}
+                            <h3 className="text-sm flex items-center gap-x-2">
+                              {chat.whatsappName}
+                              {chat.isGroup && <Badge variant="secondary">Grupo</Badge>}
                             </h3>
                           </div>
                         )
@@ -332,11 +352,12 @@ export default function Page() {
                       onDragStart={(event) => handleOnDrag(event, chat)}
                     >
                       <Button size="icon" variant="outline" className="absolute rounded-full h-5 w-5 right-2"
-                        onClick={() => handleDeleteGroup(chat.id, chat.remoteJid)}>
+                        onClick={() => handleDeleteGroup(chat.id)}>
                         <X size={12} />
                       </Button>
-                      <h3 className="text-sm">
-                        {chat.subject}
+                      <h3 className="text-sm flex items-center gap-x-2">
+                        {chat.whatsappName}
+                        {chat.isGroup && <Badge variant="secondary">Grupo</Badge>}
                       </h3>
                     </div>
                   )
