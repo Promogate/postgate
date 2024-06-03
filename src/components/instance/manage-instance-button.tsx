@@ -8,6 +8,7 @@ import { Tooltip } from "../common/tooltip";
 
 type ManageInstanceButtonProps = {
   instanceId: string;
+  hasSession: boolean;
 }
 
 export function ManageInstanceButton(props: ManageInstanceButtonProps) {
@@ -41,7 +42,7 @@ export function ManageInstanceButton(props: ManageInstanceButtonProps) {
 
   return (
     <Tooltip content="Sincronizar">
-      <Button size="sm" variant="default" onClick={handleSync}>
+      <Button size="sm" variant="default" onClick={handleSync} disabled={!props.hasSession}>
         <RefreshCcw size={12} />
       </Button>
     </Tooltip>

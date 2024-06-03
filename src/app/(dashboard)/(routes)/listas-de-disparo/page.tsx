@@ -9,24 +9,25 @@ import { useToast } from "@/components/ui/use-toast";
 import { RotatingLines } from "react-loader-spinner";
 import { SendingList } from "@/@types";
 import Link from "next/link";
-import { useUser } from "@/hooks/use-user";
 import { api } from "@/lib/axios";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
 
 export default function Page() {
   const { toast } = useToast();
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
 
   const sendingListQuery = useQuery<SendingList[]>({
-    queryKey: ["sending_list_data", userId],
+    queryKey: ["sending_list_data", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get("/resources/sending-lists", { authorization: true });
       return data;
     },
     staleTime: 1000 * 60 * 5
-  })
+  });
 
   const mutation = useMutation({
-    mutationKey: ["sending_list_mutation", userId],
+    mutationKey: ["sending_list_mutation", store?.user?.id],
     mutationFn: async () => {
       await axios.post("/api/wapp/sending_list");
     },

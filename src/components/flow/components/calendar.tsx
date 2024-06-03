@@ -9,14 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useFlowStore } from "@/hooks/use-flow-store";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SendingList } from "@/@types";
+import { SendingList, Workflow } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
-import { N8N_API_KEY, SCHEDULE_URL } from "@/config";
-import { useUser } from "@/hooks/use-user";
 import { api } from "@/lib/axios";
+import { toast } from "@/components/ui/use-toast";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
 
 type PublishInput = {
   start_date: string;
@@ -29,15 +30,32 @@ export function FlowCalendar() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [hour, setHour] = useState<any | undefined | null>(null);
   const [chosenList, setChosenList] = useState<string>("");
+  const [chosenWorkflow, setChosenWorkflow] = useState<string>("");
   const setScheduleTime = useFlowStore(state => state.setScheduleTime);
   const {
     nodes,
     scheduleTime
   } = useFlowStore()
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
+
+  const mutation = useMutation({
+    mutationKey: ["scheduler"],
+    mutationFn: async () => {
+      await api.post("/scheduler/workflows", {
+        scheduleTime,
+        chosenList,
+        chosenWorkflow
+      }, { authorization: true });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Agendamento criado com sucesso!"
+      });
+    }
+  });
 
   const listsQuery = useQuery({
-    queryKey: ["schedule_sending_lists", userId],
+    queryKey: ["schedule_sending_lists", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get<SendingList[]>("/resources/sending-lists", { authorization: true });
       return data;
@@ -45,15 +63,17 @@ export function FlowCalendar() {
     staleTime: 1000 * 60 * 60
   });
 
+  const workflowsQuery = useQuery({
+    queryKey: ["workflows_lists", store?.user?.id],
+    queryFn: async () => {
+      const { data } = await api.get<Workflow[]>("/resources/workflows", { authorization: true });
+      return data;
+    },
+    staleTime: 1000 * 60 * 60
+  })
+
   const handlePublish = async () => {
-    const [instanceId, list] = chosenList.split("_");
-    const data: PublishInput = {
-      start_date: scheduleTime as string,
-      messages: nodes,
-      sending_list: JSON.parse(list),
-      whatsapp_instance: instanceId,
-    }
-    await axios.post(SCHEDULE_URL, data);
+    await mutation.mutateAsync();
   }
 
   return (
@@ -62,7 +82,7 @@ export function FlowCalendar() {
         <DialogTrigger asChild>
           <Button variant="outline" className="rounded-full flex items-center justify-center gap-4">
             <CalendarDays size={16} />
-            Agendar
+            Criar Agendamento
           </Button>
         </DialogTrigger>
         <DialogContent className="bg-white md:max-w-[400px]">
@@ -74,6 +94,7 @@ export function FlowCalendar() {
               Data e hora em que será iniciado o fluxo
             </DialogDescription>
           </DialogHeader>
+          <span className="text-sm">Lista de disparo</span>
           <Select onValueChange={(value) => setChosenList(value)}>
             <SelectTrigger >
               <SelectValue placeholder="Escolha uma lista de disparo" />
@@ -83,9 +104,29 @@ export function FlowCalendar() {
                 <SelectLabel>Listas de disparo</SelectLabel>
                 {listsQuery.data?.map((sendingList) => {
                   return (
-                    <SelectItem key={sendingList.id} value={`${sendingList.whatsappSessionId}_${sendingList.list}`}>
+                    <SelectItem key={sendingList.id} value={`${sendingList.id}_${sendingList.whatsappSessionId}`}>
                       <div className="flex items-center gap-x-2">
                         <p>{sendingList.name}</p>
+                      </div>
+                    </SelectItem>
+                  )
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <span className="text-sm">Fluxo de mensagens</span>
+          <Select onValueChange={(value) => setChosenWorkflow(value)}>
+            <SelectTrigger >
+              <SelectValue placeholder="Escolha um fluxo de mensagens" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Fluxo de mensages</SelectLabel>
+                {workflowsQuery.data?.map((workflow) => {
+                  return (
+                    <SelectItem key={workflow.id} value={workflow.id}>
+                      <div className="flex items-center gap-x-2">
+                        <p>{workflow.title}</p>
                       </div>
                     </SelectItem>
                   )

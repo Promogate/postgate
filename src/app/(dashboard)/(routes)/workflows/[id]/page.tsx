@@ -23,9 +23,7 @@ import { useFlowContext } from "@/contexts/flow";
 import { RFState, useFlowStore } from "@/hooks/use-flow-store";
 
 import "reactflow/dist/style.css";
-import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
-import { FlowCalendar } from "@/components/flow/components/calendar";
 
 const nodeTypes = {
   text: TextNode,
@@ -102,13 +100,6 @@ export default function Page() {
     staleTime: 1000 * 60 * 60 * 24,
   })
 
-  useEffect(() => {
-    const savingInterval = setInterval(async () => {
-      await mutation.mutateAsync();
-    }, 15000)
-    return () => clearInterval(savingInterval);
-  })
-
   return (
     <div className="xl:w-[calc(100vw-288px)] xl:h-[calc(100vh-65px)] flex flex-col h-full flex-1">
       <ReactFlowProvider>
@@ -139,7 +130,6 @@ export default function Page() {
             </Panel>
             <Panel position="bottom-right">
               <div className="flex items-center gap-4">
-                <FlowCalendar />
                 <Button variant="default" className="rounded-full flex items-center justify-center gap-4" onClick={handleSave}>
                   {mutation.isPending ? <RotatingLines
                     visible={true}

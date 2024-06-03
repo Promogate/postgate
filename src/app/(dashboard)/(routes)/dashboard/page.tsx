@@ -37,7 +37,7 @@ const chartdata = [
 
 export default function Page() {
   const dataFormatter = (number: number) => Intl.NumberFormat('us').format(number).toString();
-
+  
   return (
     <section className="space-y-4 md:p-8">
       <PageHeader>

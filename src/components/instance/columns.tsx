@@ -18,7 +18,11 @@ export const columns: ColumnDef<Instance>[] = [
       const session = JSON.parse(row.original.session);
 
       return <p>
-        {session.info.pushname ? session.info.pushname + " (" + session.info.wid.user + ")" : row.original.id}
+        {row.original.session ?
+          `${session.info.pushname} - ${session.info.wid.user}` :
+          row.original.name ?
+            `${row.original.name} - ${row.original.description}` :
+            row.original.id}
       </p>
     }
   }, {
@@ -53,9 +57,10 @@ export const columns: ColumnDef<Instance>[] = [
     accessorKey: "actions",
     header: "",
     cell: ({ row }) => {
+      const hasSession = row.original.session ? true : false;
       return (
         <div className="flex items-center gap-2 justify-end">
-          <ManageInstanceButton instanceId={row.original.id} />
+          <ManageInstanceButton instanceId={row.original.id} hasSession={hasSession}/>
           <EditInstanceButton instanceId={row.original.id} />
           <EraseInstanceButton instanceId={row.original.id} />
         </div>

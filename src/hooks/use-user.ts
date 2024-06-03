@@ -1,13 +1,40 @@
-import { createWithEqualityFn } from "zustand/traditional"
+import { User } from "@/@types";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export type State = {
-  user: string | null;
-  setUser: (id: string) => void;
+interface AuthState {
+  isAuthenticated: boolean;
+  user: null | User;
+  token: null | string;
+  setUser: (input: { user: User, token: string }) => void;
+  logout: () => void;
 }
 
-export const useUser = createWithEqualityFn<State>((set, get) => ({
-  user: null,
-  setUser: (id: string) => {
-    set({ user: id });
-  }
-}))
+const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      setUser: (input) => {
+        set({
+          token: input.token,
+          user: input.user,
+          isAuthenticated: true
+        });
+      },
+      logout: () => {
+        set({
+          token: null,
+          user: null,
+          isAuthenticated: false
+        });
+      }
+    }),
+    {
+      name: "authentication",
+    }
+  )
+);
+
+export default useAuthStore;

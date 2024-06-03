@@ -297,25 +297,9 @@ export type SignInFormOutput = {
 }
 
 export type User = {
-  id: string,
-  name: string,
-  email: string,
-  created_at: string,
-  user_profile: {
-    id: string,
-    store_image: string,
-    store_name: string,
-    store_name_display: string,
-    lomadee_source_id: string,
-    admitad_verification?: string,
-    payment_customer_id?: string,
-    role: string,
-    user_id: string,
-    resources: {
-      id: string
-    }
-  },
-  agree_with_policies: boolean
+  id: string;
+  email: string;
+  username: null | undefined | string;
 }
 
 export type SetShowcaseProductInput = {
@@ -412,6 +396,8 @@ export type Instance = {
   status: string;
   qr: string;
   retires: number;
+  name: null | string;
+  description: null | string;
 }
 
 export type Session = {

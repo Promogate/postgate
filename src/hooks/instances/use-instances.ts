@@ -3,8 +3,9 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { v4 } from "uuid";
-import { useUser } from "../use-user";
+import useAuthStore from "../use-user";
 import { api } from "@/lib/axios";
+import useStore from "../useStore";
 
 type CreateInstanceInput = {
   name: string;
@@ -22,9 +23,9 @@ const fetchInstances = async () => {
 }
 
 export const useInstances = () => {
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
   return useQuery({
-    queryKey: ["instances", userId],
+    queryKey: ["instances", store?.user?.id],
     queryFn: fetchInstances,
     staleTime: 1000 * 10 * 5
   })
@@ -50,22 +51,19 @@ export const useInstanceData = (instanceId: string) => {
 
 export const useCreateInstance = () => {
   const query = useQueryClient();
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
   return useMutation({
-    mutationKey: ["instance", userId],
+    mutationKey: ["instance", store?.user?.id],
     mutationFn: async (input: CreateInstanceInput) => {
-      const instanceId = v4();
-      const { data } = await axios.post("/api/wapp/instance", {
-        instanceName: input.name,
-        instanceId: instanceId,
-        userId,
+      const { data } = await api.post("/whatsapp/session/create", {
+        name: input.name,
         description: input.description,
-      });
+      }, { authorization: true });
       return data;
     },
     onSuccess: () => {
-      toast({ title: "Instância adicionada com sucesso, leio o QR code com seu aplicativo" })
-      query.invalidateQueries({ queryKey: ["instances", userId] })
+      toast({ title: "Instância adicionada com sucesso, leio o QR code com seu aplicativo" });
+      query.invalidateQueries({ queryKey: ["instances", store?.user?.id] });
     },
     onError: (error: AxiosError<any>) => {
       toast({ title: error.response?.data?.message })
@@ -75,7 +73,7 @@ export const useCreateInstance = () => {
 
 export const useEditInstance = (instanceId: string) => {
   const query = useQueryClient();
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
   return useMutation({
     mutationKey: ["edit_instance", instanceId],
     mutationFn: async (input: EditInstanceInput) => {
@@ -88,7 +86,26 @@ export const useEditInstance = (instanceId: string) => {
     },
     onSuccess: () => {
       toast({ title: "Instância adicionada com sucesso, leio o QR code com seu aplicativo" })
-      query.invalidateQueries({ queryKey: ["instances", userId] })
+      query.invalidateQueries({ queryKey: ["instances", store?.user?.id] })
+    },
+    onError: (error: AxiosError<any>) => {
+      toast({ title: "Error ao tentar editar a instância", variant: "destructive" })
+    }
+  })
+}
+
+export const useDeleteInstance = (instanceId: string) => {
+  const query = useQueryClient();
+  const store = useStore(useAuthStore, (state) => state);
+  return useMutation({
+    mutationKey: ["edit_instance", instanceId],
+    mutationFn: async () => {
+      const { data } = await api.delete(`/whatsapp/session/${instanceId}`, { authorization: true });
+      return data;
+    },
+    onSuccess: () => {
+      toast({ title: "Instância removida com sucesso." })
+      query.invalidateQueries({ queryKey: ["instances", store?.user?.id] })
     },
     onError: (error: AxiosError<any>) => {
       toast({ title: "Error ao tentar editar a instância", variant: "destructive" })

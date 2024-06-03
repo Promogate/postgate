@@ -14,7 +14,8 @@ import { api } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/use-user";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
 
 const schema = z.object({
   email: z.string({ required_error: "Email é obrigatório" }).email("Insira um email válido"),
@@ -24,6 +25,7 @@ const schema = z.object({
 export default function Page() {
   const router = useRouter();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const authStorage = useStore(useAuthStore, (state) => state);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema)
@@ -37,8 +39,16 @@ export default function Page() {
     },
     onSuccess: (data) => {
       setCookie("__postgate.session", data.token);
+      authStorage?.setUser({
+        token: data.token,
+        user: {
+          id: data.user.id,
+          email: data.user.email,
+          username: data.user.username
+        }
+      });
       toast({
-        title: "Cadastrado com sucesso!"
+        title: "Autenticado com sucesso!"
       });
       router.push("/dashboard");
     }
