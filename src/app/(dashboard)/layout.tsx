@@ -1,4 +1,3 @@
-import WhoAmIServerAction from "@/components/auth/who-am-i-server-action";
 import { Topbar } from "@/components/navigation/dashboard/top-bar";
 import { Sidebar } from "@/components/sidebar";
 import React from "react";
