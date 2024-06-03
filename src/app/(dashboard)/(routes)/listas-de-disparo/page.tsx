@@ -29,7 +29,7 @@ export default function Page() {
   const mutation = useMutation({
     mutationKey: ["sending_list_mutation", store?.user?.id],
     mutationFn: async () => {
-      await axios.post("/api/wapp/sending_list");
+      await api.post("/resources/sending-list/save", {}, { authorization: true });
     },
     onSuccess: () => {
       toast({

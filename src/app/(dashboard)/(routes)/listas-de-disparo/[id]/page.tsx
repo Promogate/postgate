@@ -23,10 +23,11 @@ import { Button } from "@/components/ui/button";
 import { RotatingLines } from "react-loader-spinner";
 import { SendingList, Session, UserInfo, WappGroup } from "@/@types";
 import { useToast } from "@/components/ui/use-toast";
-import { useUser } from "@/hooks/use-user";
 import { api } from "@/lib/axios";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
 
 export default function Page() {
   const params = useParams() as { id: string };
@@ -36,7 +37,7 @@ export default function Page() {
   const [groupsInfo, setGroupsInfo] = useState<WappGroup[]>([]);
   const [list, setList] = useState<WappGroup[]>([]);
   const [filteredChats, setFilteredChats] = useState<WappGroup[]>([]);
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
 
   function handleOnDrag(event: React.DragEvent, group: WappGroup) {
     const data = JSON.stringify(group);
@@ -62,7 +63,7 @@ export default function Page() {
   }
 
   const instancesQuery = useQuery({
-    queryKey: ["sending_lists_instances", userId],
+    queryKey: ["sending_lists_instances", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get<Session[]>("/whatsapp/sessions", { authorization: true });
       data.forEach((session) => {
@@ -76,7 +77,7 @@ export default function Page() {
   })
 
   const listQuery = useQuery({
-    queryKey: ["sending_list", userId],
+    queryKey: ["sending_list", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get<SendingList>(`/resources/sending-lists/${params.id}`);
       if (data.list) {
@@ -89,7 +90,7 @@ export default function Page() {
 
   const chatsQuery = useQuery<WappGroup[]>({
     enabled: false,
-    queryKey: ["chats", userId],
+    queryKey: ["chats", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get(`/resources/chats/${instanceId}`, { authorization: true });
       return data;
@@ -115,13 +116,9 @@ export default function Page() {
   const nameMutation = useMutation({
     mutationKey: ["update_name", params.id],
     mutationFn: async (values: { name: string | undefined }) => {
-      await axios.put(`/api/wapp/sending_list`, {
+      await api.put(`/resources/sending-lists/${params.id}`, {
         name: values.name
-      }, {
-        params: {
-          listId: params.id
-        }
-      })
+      }, { authorization: true });
     },
     onSuccess: () => {
       listQuery.refetch();

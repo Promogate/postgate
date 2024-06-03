@@ -46,7 +46,7 @@ export const columns: ColumnDef<Instance>[] = [
         <>
           <div className="w-full flex">
             <Tooltip content="Mostrar QRCode">
-              <QRCodeInstanceButton instanceId={row.original.id} isAlreadyConnected={row.original.status === "CONNECTED" ? true : false} />
+              <QRCodeInstanceButton instanceId={row.original.id} isAlreadyConnected={row.original.status === "CONNECTED" ? true : false} qrCode={row.original.qr} />
             </Tooltip>
           </div>
         </>
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Instance>[] = [
       const hasSession = row.original.session ? true : false;
       return (
         <div className="flex items-center gap-2 justify-end">
-          <ManageInstanceButton instanceId={row.original.id} hasSession={hasSession}/>
+          <ManageInstanceButton instanceId={row.original.id} hasSession={hasSession} />
           <EditInstanceButton instanceId={row.original.id} />
           <EraseInstanceButton instanceId={row.original.id} />
         </div>

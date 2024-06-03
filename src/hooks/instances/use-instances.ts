@@ -27,7 +27,7 @@ export const useInstances = () => {
   return useQuery({
     queryKey: ["instances", store?.user?.id],
     queryFn: fetchInstances,
-    staleTime: 1000 * 10 * 5
+    staleTime: 1000 * 10
   })
 }
 
@@ -53,7 +53,7 @@ export const useCreateInstance = () => {
   const query = useQueryClient();
   const store = useStore(useAuthStore, (state) => state);
   return useMutation({
-    mutationKey: ["instance", store?.user?.id],
+    mutationKey: ["instances", store?.user?.id],
     mutationFn: async (input: CreateInstanceInput) => {
       const { data } = await api.post("/whatsapp/session/create", {
         name: input.name,

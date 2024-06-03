@@ -12,8 +12,9 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ADD_WORKFLOW_MODAL } from "@/config";
-import { useUser } from "@/hooks/use-user";
+import useAuthStore from "@/hooks/use-user";
 import { api } from "@/lib/axios";
+import useStore from "@/hooks/useStore";
 
 type CreateWorkflowInput = {
   title: string;
@@ -37,7 +38,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
   const form = useForm<createRedirectorSchema>({
     resolver: zodResolver(schema)
   });
-  const userId = useUser(state => state.user);
+  const store = useStore(useAuthStore, (state) => state);
 
   const mutation = useMutation({
     mutationFn: async (values: CreateWorkflowInput) => {
@@ -49,7 +50,7 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
         title: "Workflow criado com sucesso!",
         variant: "default",
       });
-      query.invalidateQueries({ queryKey: ["workflows"] });
+      query.invalidateQueries({ queryKey: ["workflows", store?.user?.id] });
       onClose(ADD_WORKFLOW_MODAL);
     },
     onError: (error: any) => {

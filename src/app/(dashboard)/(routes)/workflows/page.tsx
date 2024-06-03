@@ -11,11 +11,14 @@ import { useModal } from "@/hooks/use-modal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { api } from "@/lib/axios";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
 
 export default function Page() {
   const { isOpen, onOpen, onClose } = useModal()
+  const store = useStore(useAuthStore, (state) => state);
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["workflows"],
+    queryKey: ["workflows", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get("/resources/workflows", { authorization: true });
       return data;
