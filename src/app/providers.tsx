@@ -7,7 +7,7 @@ import { io } from "socket.io-client";
 import { FlowProvider } from "@/contexts/flow";
 
 const queryClient = new QueryClient();
-const socket = io("http://localhost:8090")
+const socket = io(process.env.NEXT_PUBLIC_API_URL as string);
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [isConnected, setIsConnected] = useState(false);

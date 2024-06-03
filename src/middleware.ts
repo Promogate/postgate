@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const publicRoutes = [
   "/",
   "/login",
-  "/cadastre-se"
+  "/cadastrar-se"
 ]
 
 export function middleware(request: NextRequest) {
