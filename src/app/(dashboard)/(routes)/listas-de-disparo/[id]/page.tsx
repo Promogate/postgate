@@ -13,7 +13,6 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { SubmitHandler, useForm } from "react-hook-form";
 import React, { useEffect, useState } from "react";
@@ -74,7 +73,7 @@ export default function Page() {
       return data;
     },
     staleTime: 1000 * 60 * 60
-  })
+  });
 
   const listQuery = useQuery({
     queryKey: ["sending_list", store?.user?.id],
@@ -155,6 +154,9 @@ export default function Page() {
     setInstanceId(value);
   }
 
+  console.log(instanceId);
+  console.log(instancesQuery.data);
+
   const handleFindInstanceChats = async () => {
     await chatsQuery.refetch().then((data) => {
       setFilteredChats(data.data as WappGroup[]);
@@ -169,15 +171,10 @@ export default function Page() {
   }
 
   useEffect(() => {
-    if (listQuery.data?.id) {
-      setInstanceId(listQuery.data?.whatsappSessionId)
-    }
-  }, [chatsQuery, listQuery.data?.whatsappSessionId]);
-
-  useEffect(() => {
-    setGroupsInfo([]);
+    setFilteredChats([]);
     setList([]);
-  }, [setInstanceId])
+    setGroupsInfo([]);
+  }, [instanceId])
 
   const handleChatsFiltering = (filter: string) => {
     if (filter === "all") {
