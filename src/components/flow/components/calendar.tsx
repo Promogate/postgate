@@ -1,30 +1,35 @@
 "use client";
 
-import { differenceInCalendarDays, format } from "date-fns";
 import { CalendarDays } from "lucide-react";
 import { useState } from "react";
-import { Row, RowProps } from "react-day-picker";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
 import { useFlowStore } from "@/hooks/use-flow-store";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { SendingList, Workflow } from "@/@types";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { api } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import useStore from "@/hooks/useStore";
 import useAuthStore from "@/hooks/use-user";
-
-type PublishInput = {
-  start_date: string;
-  sending_list: string[];
-  whatsapp_instance: string;
-  messages: any[];
-}
 
 export function FlowCalendar() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -37,6 +42,8 @@ export function FlowCalendar() {
     scheduleTime
   } = useFlowStore()
   const store = useStore(useAuthStore, (state) => state);
+
+  console.log("Calendar schedule time: ", scheduleTime);
 
   const mutation = useMutation({
     mutationKey: ["scheduler"],

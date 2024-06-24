@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Row, RowProps, SelectSingleEventHandler } from "react-day-picker";
+import { SelectSingleEventHandler } from "react-day-picker";
 import { Label } from "./ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
@@ -23,7 +23,8 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     DateTime.fromJSDate(date)
   );
   const {
-    setScheduleTime
+    setScheduleTime,
+    scheduleTime
   } = useFlowStore();
 
   const handleSelect: SelectSingleEventHandler = (day, selected) => {

@@ -60,7 +60,7 @@ export const columns: ColumnDef<Instance>[] = [
       const hasSession = row.original.session ? true : false;
       return (
         <div className="flex items-center gap-2 justify-end">
-          <ManageInstanceButton instanceId={row.original.id} hasSession={hasSession} />
+          <ManageInstanceButton instanceId={row.original.id} hasSession={hasSession} isAlreadyConnected={row.original.status === "CONNECTED" ? true : false}/>
           <EditInstanceButton instanceId={row.original.id} />
           <EraseInstanceButton instanceId={row.original.id} />
         </div>

@@ -17,6 +17,7 @@ import { characterLimiter } from "@/utils/character-limiter";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { useFlowStore } from "@/hooks/use-flow-store";
+import { RotatingLines } from "react-loader-spinner";
 
 type FormInput = {
   message?: string;
@@ -32,6 +33,7 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
   const [open, setOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(data.data.image as string);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -41,7 +43,13 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
   });
 
   const editData: SubmitHandler<FormInput> = (values) => {
-    editImageNode(data.id, { userId: "_", image: imageFile as File, message: values.message?.replace(/\n/g, '\\r\\n') as string })
+    setLoading(true);
+    editImageNode(data.id, {
+      userId: "_",
+      image: imageFile as File,
+      message: values.message?.replace(/\n/g, '\\r\\n') as string
+    });
+    setLoading(false);
   }
 
   const handleDeleteNode = () => {
@@ -128,7 +136,18 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" variant="default">
+                  <Button type="submit" variant="default" className="flex justify-center items-center gap-x-4">
+                    {
+                      loading &&
+                      <RotatingLines
+                        visible={true}
+                        width="12"
+                        strokeWidth="4"
+                        strokeColor="#5528ff"
+                        animationDuration="0.75"
+                        ariaLabel="rotating-lines-loading"
+                      />
+                    }
                     Salvar mensagem
                   </Button>
                 </form>

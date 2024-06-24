@@ -9,6 +9,7 @@ import { Tooltip } from "../common/tooltip";
 type ManageInstanceButtonProps = {
   instanceId: string;
   hasSession: boolean;
+  isAlreadyConnected: boolean;
 }
 
 export function ManageInstanceButton(props: ManageInstanceButtonProps) {
@@ -16,7 +17,7 @@ export function ManageInstanceButton(props: ManageInstanceButtonProps) {
     enabled: false,
     queryKey: ["synchronize", props.instanceId],
     queryFn: async () => {
-      await api.get(`/whatsapp/sync/${props.instanceId}`);
+      await api.get(`/codechat/sync/${props.instanceId}`);
       return "Success";
     }
   });
@@ -42,7 +43,7 @@ export function ManageInstanceButton(props: ManageInstanceButtonProps) {
 
   return (
     <Tooltip content="Sincronizar">
-      <Button size="sm" variant="default" onClick={handleSync} disabled={!props.hasSession}>
+      <Button size="sm" variant="default" onClick={handleSync} disabled={!props.isAlreadyConnected}>
         <RefreshCcw size={12} />
       </Button>
     </Tooltip>

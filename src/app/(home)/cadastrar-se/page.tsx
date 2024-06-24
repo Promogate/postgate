@@ -12,6 +12,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   name: z.string().optional(),
@@ -25,6 +26,7 @@ const schema = z.object({
 
 export default function Page() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema)
@@ -40,6 +42,7 @@ export default function Page() {
       toast({
         title: "Cadastrado com sucesso!"
       })
+      router.push("/dashboard");
     }
   });
 

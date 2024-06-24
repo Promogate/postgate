@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, CreateAxiosDefaults, InternalAxiosRequestConfig, AxiosRequestConfig } from "axios";
+import axios, { CreateAxiosDefaults } from "axios";
 import { getCookie } from "cookies-next";
 
 declare module 'axios' {

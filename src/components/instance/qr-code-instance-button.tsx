@@ -3,6 +3,11 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { useState } from "react";
 import QRCode from "qrcode.react";
+import { useQuery } from "@tanstack/react-query";
+import useStore from "@/hooks/useStore";
+import useAuthStore from "@/hooks/use-user";
+import { api } from "@/lib/axios";
+import { RotatingLines } from "react-loader-spinner";
 
 type QRCodeInstanceButtonProps = {
   instanceId: string;
@@ -12,18 +17,30 @@ type QRCodeInstanceButtonProps = {
 
 export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
   const [open, setOpen] = useState(false)
+  const user = useStore(useAuthStore, (state) => state);
 
   const handleOpen = () => {
     setOpen(true);
+    query.refetch();
   }
 
   const handleClose = () => {
     setOpen(false);
   }
 
+  const query = useQuery({
+    enabled: false,
+    queryKey: ["qr-code", user?.user?.id, props.instanceId],
+    queryFn: async () => {
+      const { data } = await api.get(`/codechat/qrcode/${props.instanceId}`, { authorization: true });
+      return data;
+    },
+    staleTime: 1000 * 60 * 5
+  });
+
   return (
     <>
-      <Button size="sm" variant="ghost" onClick={handleOpen} disabled={!props.qrCode ? true : false}>
+      <Button size="sm" variant="ghost" onClick={handleOpen} disabled={props.isAlreadyConnected ? true : false}>
         <QrCode size={16} className="cursor-pointer" />
       </Button>
       <Dialog open={open} onOpenChange={handleClose}>
@@ -37,7 +54,18 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
             </span>
           </DialogHeader>
           <div className="w-full flex justify-center">
-            <QRCode value={props.qrCode as string} renderAs="canvas" size={160} />
+            {
+              query.isLoading ?
+                <RotatingLines
+                  visible={true}
+                  width="64"
+                  strokeWidth="4"
+                  strokeColor="#5528ff"
+                  animationDuration="0.75"
+                  ariaLabel="rotating-lines-loading"
+                /> :
+                <QRCode value={query.data?.code as string} renderAs="canvas" size={160} />
+            }
           </div>
         </DialogContent>
       </Dialog>

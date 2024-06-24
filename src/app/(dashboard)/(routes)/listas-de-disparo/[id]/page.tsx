@@ -65,18 +65,13 @@ export default function Page() {
     queryKey: ["sending_lists_instances", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get<Session[]>("/whatsapp/sessions", { authorization: true });
-      data.forEach((session) => {
-        const sessionData = JSON.parse(session.session as string);
-        const user = sessionData.info as UserInfo;
-        session.user = user;
-      });
       return data;
     },
     staleTime: 1000 * 60 * 60
   });
 
   const listQuery = useQuery({
-    queryKey: ["sending_list", store?.user?.id],
+    queryKey: ["sending_list", params.id],
     queryFn: async () => {
       const { data } = await api.get<SendingList>(`/resources/sending-lists/${params.id}`);
       if (data.list) {
@@ -102,7 +97,6 @@ export default function Page() {
       name: params.id,
     }
   });
-
 
   const handleShowInput = () => {
     setIsInput(true);
@@ -137,6 +131,17 @@ export default function Page() {
     }
   })
 
+  const updateWhatsappSessionIdMutation = useMutation({
+    mutationKey: ["update_sending_list_whatsapp_session_id", params.id],
+    mutationFn: async () => {
+      await api.put(`/resources/sending-lists/${params.id}`, {
+        whatsappSessionId: instanceId
+      }, {
+        authorization: true
+      });
+    }
+  })
+
   const handleNameSubmit: SubmitHandler<{ name: string | undefined }> = async (values) => {
     await nameMutation.mutateAsync(values);
   }
@@ -150,12 +155,11 @@ export default function Page() {
     listQuery.refetch()
   }
 
-  const handleSelectInstanceConnection = (value: string) => {
+  const handleSelectInstanceConnection = async (value: string) => {
+    // Atualizar o WhatsappSessionId da Lista
     setInstanceId(value);
+    await updateWhatsappSessionIdMutation.mutateAsync();
   }
-
-  console.log(instanceId);
-  console.log(instancesQuery.data);
 
   const handleFindInstanceChats = async () => {
     await chatsQuery.refetch().then((data) => {
@@ -209,7 +213,7 @@ export default function Page() {
     return (
       <section className="p-4">
         <h1 className="text-xl font-bold text-gray-800">
-          Contas
+          Listas de disparo
         </h1>
         <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
           <XCircle />
@@ -257,18 +261,18 @@ export default function Page() {
         </form>
       </Form>
       <div className="flex items-center gap-x-4">
-        <Select onValueChange={(value) => handleSelectInstanceConnection(value)} defaultValue={listQuery.data?.whatsappSessionId ?? undefined}>
+        <Select onValueChange={(value) => handleSelectInstanceConnection(value)}>
           <SelectTrigger >
             <SelectValue placeholder="Escolha uma conexão" />
           </SelectTrigger>
           <SelectContent className="flex-1">
             <SelectGroup>
               <SelectLabel>Conexões</SelectLabel>
-              {instancesQuery.data?.map((instance: Session) => {
+              {instancesQuery.data?.map((instance: any) => {
                 return (
                   <SelectItem key={instance.id} value={instance.id}>
                     <div className="flex items-center gap-x-2">
-                      <p>{instance.user?.pushname}</p>
+                      <p>{instance.name}</p>
                     </div>
                   </SelectItem>
                 )
