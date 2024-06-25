@@ -19,18 +19,14 @@ import { useFlowStore } from "@/hooks/use-flow-store";
 
 type Input = {
   message: string
-  previewLink: string;
 }
 
 const schema = z.object({
   message: z.string({ required_error: "É obrigatório" }),
-  previewLink: z.string({ required_error: "É obrigatório" }).url("Precisa ser uma url válida."),
 });
 
 export function TextNode(data: NodeProps<TextNodeProps>) {
-  const {
-    handleEditNodeData
-  } = useFlowContext();
+  const editTextNode = useFlowStore(state => state.editTextNode);
   const deleteNode = useFlowStore(state => state.deleteNode);
   const [open, setOpen] = useState(false);
 
@@ -38,12 +34,12 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
     resolver: zodResolver(schema),
     defaultValues: {
       message: data.data.message,
-      previewLink: data.data.previewLink
     }
   });
 
   const editData: SubmitHandler<Input> = (values) => {
-    handleEditNodeData(data.id, { previewLink: values.previewLink, message: values.message.replace(/\n/g, '\\r\\n') })
+    editTextNode(data.id, { message: values.message.replace(/\n/g, '\\r\\n') });
+    setOpen(false);
   }
 
   const handleDeleteNode = () => {
@@ -84,19 +80,6 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
             <PopoverContent className="ml-6 w-[320px] -mt-[70px]" side="right" align="start" sideOffset={16}>
               <Form {...form}>
                 <form className="w-full flex flex-col gap-4" onSubmit={form.handleSubmit(editData)}>
-                  <FormField
-                    control={form.control}
-                    name="previewLink"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Link para preview</FormLabel>
-                        <FormControl>
-                          <Input placeholder="https://shope.ee/3ffl8cxyz" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="message"

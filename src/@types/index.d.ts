@@ -327,7 +327,6 @@ export type Group = {
 }
 
 export type TextNodeProps = {
-  previewLink: string;
   message: string;
 }
 

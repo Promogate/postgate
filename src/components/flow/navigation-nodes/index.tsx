@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const IconList = ({ isOpen }: { isOpen: boolean }) => {
   const [isGrabbing, setIsGrabbing] = useState(false);
-  
+
   const onDragStart = (event: any, nodeType: any) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -22,7 +22,7 @@ const IconList = ({ isOpen }: { isOpen: boolean }) => {
     },
     {
       icon: Image,
-      tip: "Imagem",
+      tip: "Imagem e Texto",
       type: "image",
       background: "bg-red-500"
     },
@@ -43,14 +43,16 @@ const IconList = ({ isOpen }: { isOpen: boolean }) => {
     >
       {icons.map((icon, index) => (
         <motion.li key={index}>
-        <div className={cn(`flex items-center py-1 p-4 ${icon.background} text-white rounded-full`, isGrabbing ? "cursor-grabbing" : "cursor-grab")} draggable onDragStart={(event) => onDragStart(event, icon.type)}>
+          <div className={cn(`flex items-center gap-x-2 text-sm py-1 p-4 min-w-[220px] ${icon.background} text-white rounded-full`, isGrabbing ? "cursor-grabbing" : "cursor-grab")} draggable onDragStart={(event) => onDragStart(event, icon.type)}>
             <Tooltip content={icon.tip}>
               <icon.icon
+                size={16}
                 onMouseDown={() => setIsGrabbing(true)}
                 onMouseUp={() => setIsGrabbing(false)}
                 onMouseLeave={() => setIsGrabbing(false)}
               />
             </Tooltip>
+            <p>{icon.tip}</p>
           </div>
         </motion.li>
       ))}

@@ -22,7 +22,7 @@ const schema = z.object({
 });
 
 export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
-  const { handleNodeDelete, handleEditNodeData } = useFlowContext();
+  const { handleNodeDelete, handleEditTextNodeData } = useFlowContext();
 
   const form = useForm<z.infer<typeof schema>>();
 
@@ -31,7 +31,7 @@ export function IntervalNode(data: NodeProps<IntervalNodeProps>) {
   }
 
   const editData: SubmitHandler<Input> = (values) => {
-    handleEditNodeData(data.id, values);
+    handleEditTextNodeData(data.id, values);
   }
 
   return (

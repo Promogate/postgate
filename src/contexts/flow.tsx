@@ -38,7 +38,7 @@ type FlowContextProps = {
   handleSaveWorkflow: (id: string) => Promise<void>;
   handleGetWorkflow: (id: string) => Promise<{ nodes: any, edges: any }>
   handleNodeDelete: (id: string) => void,
-  handleEditNodeData: (id: string, values: any) => void
+  handleEditTextNodeData: (id: string, values: any) => void
   handleEditImageNodeData: (id: string, values: any) => void
 }
 
@@ -169,18 +169,18 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
     [setNodes, setEdges],
   )
 
-  const handleEditNodeData = useCallback((nodeId: string, values: TextNodeProps) => {
+  const handleEditTextNodeData = useCallback((nodeId: string, values: TextNodeProps) => {
     setNodes((prevNodes: any) => {
       return prevNodes.map((node: any) => {
         if (node.id === nodeId) {
           node.data = {
             ...node.data,
-            ...values
+            message: values.message
           }
         }
         return node;
       });
-    })
+    });
   }, [setNodes]);
 
   const handleEditImageNodeData = useCallback(async (nodeId: string, values: ImageNodeProps) => {
@@ -202,7 +202,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         }
         return node;
       });
-    })
+    });
   }, [setNodes]);
 
   const values = {
@@ -220,7 +220,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
     handleSaveWorkflow,
     handleGetWorkflow,
     handleNodeDelete,
-    handleEditNodeData,
+    handleEditTextNodeData,
     handleEditImageNodeData
   }
 

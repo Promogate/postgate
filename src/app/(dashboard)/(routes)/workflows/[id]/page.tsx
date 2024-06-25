@@ -24,10 +24,12 @@ import { RFState, useFlowStore } from "@/hooks/use-flow-store";
 
 import "reactflow/dist/style.css";
 import { Badge } from "@/components/ui/badge";
+import { IntervalNode } from "@/components/flow/custom-nodes/interval";
 
 const nodeTypes = {
   text: TextNode,
-  image: ImageNode
+  image: ImageNode,
+  interval: IntervalNode
 }
 
 const edgeTypes = {
