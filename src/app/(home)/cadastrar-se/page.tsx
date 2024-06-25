@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { setCookie } from "cookies-next";
 
 const schema = z.object({
   name: z.string().optional(),
@@ -38,7 +39,8 @@ export default function Page() {
       const { data } = await api.post("/user/create", input);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setCookie("__postgate.session", data.token);
       toast({
         title: "Cadastrado com sucesso!"
       })
