@@ -38,7 +38,10 @@ export function CreateInstanceModal(props: CreateInstanceModalProps) {
 
   const handleCreateInstance: SubmitHandler<FormInput> = async (values) => {
     const { name, description } = form.getValues();
-    await mutation.mutateAsync({ name, description })
+    await mutation.mutateAsync({ name, description });
+    if (mutation.isSuccess) {
+      props.setOpen(false);
+    }
   }
 
   return (

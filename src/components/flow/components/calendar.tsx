@@ -43,8 +43,6 @@ export function FlowCalendar() {
   } = useFlowStore()
   const store = useStore(useAuthStore, (state) => state);
 
-  console.log("Calendar schedule time: ", scheduleTime);
-
   const mutation = useMutation({
     mutationKey: ["scheduler"],
     mutationFn: async () => {
