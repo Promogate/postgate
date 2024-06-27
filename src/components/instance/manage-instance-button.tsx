@@ -17,7 +17,7 @@ export function ManageInstanceButton(props: ManageInstanceButtonProps) {
     enabled: false,
     queryKey: ["synchronize", props.instanceId],
     queryFn: async () => {
-      await api.get(`/codechat/sync/${props.instanceId}`);
+      await api.get(`/codechat/sync/${props.instanceId}`, { authorization: true });
       return "Success";
     }
   });

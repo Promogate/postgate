@@ -427,3 +427,13 @@ export type Workflow = {
   nodes?: string;
   edges?: string;
 }
+
+export type Scheduling = {
+  id: string;
+  startTime: string;
+  whatsappSessionId: string;
+  userId: string;
+  sendingListId: string;
+  workflowId: string;
+  status: string;
+}

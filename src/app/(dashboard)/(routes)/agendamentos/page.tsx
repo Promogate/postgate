@@ -1,6 +1,7 @@
 "use client";
 
 import { FlowCalendar } from "@/components/flow/components/calendar";
+import { Scheduling } from "@/components/scheduling";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/hooks/use-user";
 import useStore from "@/hooks/useStore";
@@ -69,9 +70,7 @@ export default function Page() {
         </h1>
         <FlowCalendar />
       </div>
-      <div>
-        {JSON.stringify(query.data)}
-      </div>
+      <Scheduling.Root data={query.data} />
     </section>
   )
 }

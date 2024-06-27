@@ -25,6 +25,7 @@ import { RFState, useFlowStore } from "@/hooks/use-flow-store";
 import "reactflow/dist/style.css";
 import { Badge } from "@/components/ui/badge";
 import { IntervalNode } from "@/components/flow/custom-nodes/interval";
+import { useEffect, useMemo } from "react";
 
 const nodeTypes = {
   text: TextNode,
@@ -58,6 +59,7 @@ export default function Page() {
     reactFlowWrapper,
     handleGetWorkflow
   } = useFlowContext();
+  
   const {
     nodes,
     edges,
@@ -71,6 +73,22 @@ export default function Page() {
     onDrop,
     onDragOver
   } = useFlowStore(selector, shallow);
+
+  const data = useMemo(() => {
+    setNodes([]);
+    setEdges([]);
+    handleGetWorkflow(id)
+      .then((response) => {
+        const { nodes, edges } = response;
+        if (nodes !== null) {
+          setNodes(nodes);
+        }
+        if (edges !== null) {
+          setEdges(edges);
+        }
+      });
+  }, [id]);
+
 
   const mutation = useMutation({
     mutationKey: ["saving_flow", id],
@@ -86,21 +104,6 @@ export default function Page() {
       title: "Salvo com sucesso!"
     })
   };
-
-  const query = useQuery({
-    queryKey: ["flow_data", id],
-    queryFn: async () => {
-      const { nodes, edges } = await handleGetWorkflow(id);
-      if (nodes !== null) {
-        setNodes(nodes);
-      }
-      if (edges !== null) {
-        setEdges(edges);
-      }
-      return { nodes, edges };
-    },
-    staleTime: 1000 * 60 * 60 * 24,
-  })
 
   return (
     <div className="xl:w-[calc(100vw-288px)] xl:h-[calc(100vh-65px)] flex flex-col h-full flex-1">
