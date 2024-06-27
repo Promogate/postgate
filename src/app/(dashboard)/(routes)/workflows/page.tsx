@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Plus } from "lucide-react";
+import { Edit, Plus, Trash } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CreateWorkflowForm } from "@/components/forms/create-workflow";
@@ -13,10 +13,13 @@ import Link from "next/link";
 import { api } from "@/lib/axios";
 import useStore from "@/hooks/useStore";
 import useAuthStore from "@/hooks/use-user";
+import { useDeleteWorkflow } from "@/hooks/useDeleteWorkflow";
 
 export default function Page() {
   const { isOpen, onOpen, onClose } = useModal()
   const store = useStore(useAuthStore, (state) => state);
+  const mutation = useDeleteWorkflow(store?.user?.id as string);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["workflows", store?.user?.id],
     queryFn: async () => {
@@ -25,6 +28,10 @@ export default function Page() {
     },
     staleTime: 1000 * 60 * 5,
   })
+
+  const handleDeleteWorkflow = async (id: string) => {
+    await mutation.mutateAsync(id);
+  }
 
   if (isLoading) {
     return (
@@ -129,12 +136,15 @@ export default function Page() {
                       <p>{workflow.description}</p>
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex w-full justify-end">
+                  <CardContent className="flex gap-x-2 w-full justify-end">
                     <Link href={`/workflows/${workflow.id}`}>
                       <Button variant="default" size="icon">
-                        <Edit size={16} />
+                        <Edit size={14} />
                       </Button>
                     </Link>
+                    <Button variant="destructive" size="icon" onClick={() => handleDeleteWorkflow(workflow.id)}>
+                      <Trash size={14} />
+                    </Button>
                   </CardContent>
                 </Card>
               )
