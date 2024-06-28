@@ -313,6 +313,9 @@ export default function Page() {
                   </div>
                 ) : (
                   <div className="grid gap-y-2">
+                    <span className="text-gray-400 text-xs mb-4">
+                      {filteredChats.length} Chats
+                    </span>
                     {
                       filteredChats.map((chat) => {
                         return (

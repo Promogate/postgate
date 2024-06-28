@@ -35,5 +35,6 @@ const setupAxiosClient = (input: SetupAxiosClientParams) => {
 export const api = setupAxiosClient({
   options: {
     baseURL: process.env.NEXT_PUBLIC_API_URL as string,
+    timeout: 600 * 1000
   }
 });
