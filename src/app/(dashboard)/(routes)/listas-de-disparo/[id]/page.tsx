@@ -156,7 +156,6 @@ export default function Page() {
   }
 
   const handleSelectInstanceConnection = async (value: string) => {
-    // Atualizar o WhatsappSessionId da Lista
     setInstanceId(value);
     await updateWhatsappSessionIdMutation.mutateAsync();
   }
