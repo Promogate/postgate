@@ -14,7 +14,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { useFlowStore } from "@/hooks/use-flow-store";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Select,
   SelectContent,
@@ -37,6 +37,7 @@ export function FlowCalendar() {
   const [chosenList, setChosenList] = useState<string>("");
   const [chosenWorkflow, setChosenWorkflow] = useState<string>("");
   const setScheduleTime = useFlowStore(state => state.setScheduleTime);
+  const query = useQueryClient();
   const {
     nodes,
     scheduleTime
@@ -53,6 +54,7 @@ export function FlowCalendar() {
       }, { authorization: true });
     },
     onSuccess: () => {
+      query.invalidateQueries({ queryKey: ["scheduled_agenda", store?.user?.id] })
       toast({
         title: "Agendamento criado com sucesso!"
       });
