@@ -40,23 +40,23 @@ export const columns: ColumnDef<Scheduling>[] = [
     }
   },
   {
-    accessorKey: "connect",
+    accessorKey: "sending_list",
     header: "Lista de Disparo",
     cell: ({ row }) => {
       return (
         <div className="w-full flex">
-
+          {row.original.sendingList.name}
         </div>
       )
     }
   },
   {
-    accessorKey: "connect",
+    accessorKey: "workflow",
     header: "Workflow",
     cell: ({ row }) => {
       return (
         <div className="w-full flex">
-
+          {row.original.workflow.title}
         </div>
       )
     }

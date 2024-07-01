@@ -436,4 +436,10 @@ export type Scheduling = {
   sendingListId: string;
   workflowId: string;
   status: string;
+  sendingList: {
+    name: string;
+  };
+  workflow: {
+    title: string;
+  }
 }
