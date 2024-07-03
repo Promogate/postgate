@@ -2,7 +2,7 @@
 
 import { Handle, NodeProps, Position } from "reactflow";
 import { ChevronDown, Image as LucideImage, SquarePen, Trash, X } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -77,18 +77,20 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
         type="target"
         position={Position.Top}
         style={{
-          marginTop: "-3px",
-          width: "16px",
-          height: "16px",
-          backgroundColor: "#84cc16",
+          width: "16%",
+          height: "16%",
+          backgroundColor: "#cbd5e1",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderBottomLeftRadius: "0px",
+          borderBottomRightRadius: "0px",
+          marginTop: "-12px"
         }}
       >
         <ChevronDown
           size={12}
-          className="text-white"
+          className="text-gray-800"
         />
       </Handle>
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2">
@@ -172,8 +174,24 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="bg-[#5528ff]"
-      />
+        style={{
+          width: "16%",
+          height: "16%",
+          backgroundColor: "#cbd5e1",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderTopLeftRadius: "0px",
+          borderTopRightRadius: "0px",
+          marginBottom: "-12px"
+        }}
+      >
+        <ChevronDown
+          size={12}
+          className="text-gray-800"
+          pointerEvents={"none"}
+        />
+      </Handle>
     </>
   )
 }

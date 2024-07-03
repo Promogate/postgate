@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useFlowContext } from "@/contexts/flow";
 import { TextNodeProps } from "@/@types";
 import { characterLimiter } from "@/utils/character-limiter";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useFlowStore } from "@/hooks/use-flow-store";
 
 type Input = {
@@ -29,6 +29,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
   const editTextNode = useFlowStore(state => state.editTextNode);
   const deleteNode = useFlowStore(state => state.deleteNode);
   const [open, setOpen] = useState(false);
+  const outputRef = useRef(null)
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -52,18 +53,20 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
         type="target"
         position={Position.Top}
         style={{
-          marginTop: "-3px",
-          width: "16px",
-          height: "16px",
-          backgroundColor: "#84cc16",
+          width: "16%",
+          height: "16%",
+          backgroundColor: "#cbd5e1",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          borderBottomLeftRadius: "0px",
+          borderBottomRightRadius: "0px",
+          marginTop: "-12px"
         }}
       >
         <ChevronDown
           size={12}
-          className="text-white"
+          className="text-gray-800"
         />
       </Handle>
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2" onDoubleClick={() => setOpen(true)}>
@@ -78,11 +81,11 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
         </div>
         <div className="text-sm bg-slate-100 p-2 rounded-md flex items-center justify-between">
           {
-            data.data.message ? 
-            <p className="text-xs">
-              {characterLimiter(data.data.message, 20)}...
-            </p> :
-            <p className="text-xs">Editar conteúdo</p>
+            data.data.message ?
+              <p className="text-xs">
+                {characterLimiter(data.data.message, 20)}...
+              </p> :
+              <p className="text-xs">Editar conteúdo</p>
           }
           <Popover onOpenChange={setOpen} open={open}>
             <PopoverTrigger>
@@ -119,17 +122,22 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
         type="source"
         position={Position.Bottom}
         style={{
-          width: "16px",
-          height: "16px",
-          backgroundColor: "#f97316",
+          width: "16%",
+          height: "16%",
+          backgroundColor: "#cbd5e1",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          borderTopLeftRadius: "0px",
+          borderTopRightRadius: "0px",
+          marginBottom: "-12px",
+          zIndex: 10
         }}
       >
         <ChevronDown
           size={12}
-          className="text-white"
+          className="text-gray-800"
+          pointerEvents={"none"}
         />
       </Handle>
     </>
