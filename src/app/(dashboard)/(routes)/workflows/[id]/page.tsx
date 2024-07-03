@@ -13,7 +13,6 @@ import {
 } from "reactflow";
 import { shallow } from 'zustand/shallow';
 
-import CustomEdge from "@/components/flow/custom-edge";
 import { ImageNode } from "@/components/flow/custom-nodes/image";
 import { TextNode } from "@/components/flow/custom-nodes/text";
 import { NavigationNodes } from "@/components/flow/navigation-nodes";
@@ -25,7 +24,9 @@ import { RFState, useFlowStore } from "@/hooks/use-flow-store";
 import "reactflow/dist/style.css";
 import { Badge } from "@/components/ui/badge";
 import { IntervalNode } from "@/components/flow/custom-nodes/interval";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
+import { ButtonEdge } from "@/components/flow/custom-edge/button-edge";
+import CustomEdge from "@/components/flow/custom-edge";
 
 const nodeTypes = {
   text: TextNode,
@@ -35,6 +36,7 @@ const nodeTypes = {
 
 const edgeTypes = {
   "custom-edge": CustomEdge,
+  buttonedge: ButtonEdge
 };
 
 const selector = (state: RFState) => ({

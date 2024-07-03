@@ -1,7 +1,7 @@
 "use client";
 
 import { Handle, NodeProps, Position } from "reactflow";
-import { MessageSquareText, SquarePen, Trash, X } from "lucide-react";
+import { ChevronDown, MessageSquareText, SquarePen, Trash, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -51,8 +51,21 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
       <Handle
         type="target"
         position={Position.Top}
-        className="bg-[#5528ff]"
-      />
+        style={{
+          marginTop: "-3px",
+          width: "16px",
+          height: "16px",
+          backgroundColor: "#84cc16",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <ChevronDown
+          size={12}
+          className="text-white"
+        />
+      </Handle>
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2" onDoubleClick={() => setOpen(true)}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 text-sm">
@@ -105,8 +118,20 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="bg-[#5528ff]"
-      />
+        style={{
+          width: "16px",
+          height: "16px",
+          backgroundColor: "#f97316",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <ChevronDown
+          size={12}
+          className="text-white"
+        />
+      </Handle>
     </>
   )
 }

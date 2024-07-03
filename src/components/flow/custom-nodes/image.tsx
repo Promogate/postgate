@@ -1,7 +1,7 @@
 "use client";
 
 import { Handle, NodeProps, Position } from "reactflow";
-import { Image as LucideImage, SquarePen, Trash, X } from "lucide-react";
+import { ChevronDown, Image as LucideImage, SquarePen, Trash, X } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -76,8 +76,21 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
       <Handle
         type="target"
         position={Position.Top}
-        className="bg-[#5528ff]"
-      />
+        style={{
+          marginTop: "-3px",
+          width: "16px",
+          height: "16px",
+          backgroundColor: "#84cc16",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ChevronDown
+          size={12}
+          className="text-white"
+        />
+      </Handle>
       <div className="xl:bg-white shadow-md w-64 rounded-md p-2 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 text-sm">
@@ -143,7 +156,7 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                         visible={true}
                         width="12"
                         strokeWidth="4"
-                        strokeColor="#5528ff"
+                        strokeColor="#FFFFFF"
                         animationDuration="0.75"
                         ariaLabel="rotating-lines-loading"
                       />

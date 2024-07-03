@@ -61,7 +61,7 @@ export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
   },
   onConnect: (connection: Connection) => {
     set({
-      edges: addEdge(connection, get().edges),
+      edges: addEdge({...connection, type: "buttonedge"}, get().edges),
     });
   },
   setNodes: (nodes: Node[]) => {

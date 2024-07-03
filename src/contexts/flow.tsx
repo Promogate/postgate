@@ -91,7 +91,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
   );
 
   const onConnect = useCallback(
-    (connection: any) => setEdges((eds: any) => addEdge(connection, eds)),
+    (connection: any) => setEdges((eds: any) => addEdge({...connection, type: "buttonedge"}, eds)),
     [setEdges]
   );
 
