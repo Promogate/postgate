@@ -32,7 +32,7 @@ export function QRCodeInstanceButton(props: QRCodeInstanceButtonProps) {
     enabled: false,
     queryKey: ["qr-code", user?.user?.id, props.instanceId],
     queryFn: async () => {
-      const { data } = await api.get(`/codechat/qrcode/${props.instanceId}`, { authorization: true });
+      const { data } = await api.get(`/whatsapp/qrcode/${props.instanceId}`, { authorization: true });
       return data;
     },
     staleTime: 1000 * 60 * 5

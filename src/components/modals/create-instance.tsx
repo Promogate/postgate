@@ -28,11 +28,7 @@ const schema = z.object({
 
 export function CreateInstanceModal(props: CreateInstanceModalProps) {
   const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      description: ""
-    }
+    resolver: zodResolver(schema)
   });
   const mutation = useCreateInstance()
 

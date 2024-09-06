@@ -55,7 +55,7 @@ export const useCreateInstance = () => {
   return useMutation({
     mutationKey: ["instances", store?.user?.id],
     mutationFn: async (input: CreateInstanceInput) => {
-      const { data } = await api.post("/codechat/create", {
+      const { data } = await api.post("/whatsapp/session/create", {
         name: input.name,
         description: input.description,
       }, { authorization: true });
