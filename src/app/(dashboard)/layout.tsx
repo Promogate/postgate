@@ -11,9 +11,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </div>
       <main className="md:pl-72">
         <div>
-          <Topbar.Root>
-            <Topbar.CurrentUser />
-          </Topbar.Root>
           {children}
         </div>
       </main>

@@ -1,10 +1,9 @@
 "use client";
 
-import { ArrowRight, Plus, XCircle } from "lucide-react";
+import { Plus, Trash2, XCircle } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { RotatingLines } from "react-loader-spinner";
 import { SendingList } from "@/@types";
@@ -12,6 +11,7 @@ import Link from "next/link";
 import { api } from "@/lib/axios";
 import useStore from "@/hooks/useStore";
 import useAuthStore from "@/hooks/use-user";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   const { toast } = useToast();
@@ -46,18 +46,23 @@ export default function Page() {
   if (sendingListQuery.isLoading) {
     return (
       <section className="space-y-4 md:p-8">
-        <h1 className="text-xl font-bold text-gray-800">
-          Listas de disparo
-        </h1>
-        <div className="w-full h-96 flex items-center justify-center my-8 ">
-          <RotatingLines
-            visible={true}
-            width="80"
-            strokeWidth="5"
-            strokeColor="#5528ff"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-gray-800">
+            Listas de disparo
+          </h1>
+        </div>
+        <div className="my-4 grid md:grid-cols-5 gap-4">
+          <div className="border-2 p-2 rounded-md flex flex-col gap-2 md:h-80 border-gray-400 border-dashed hover:cursor-pointer hover:bg-slate-100 transition-all ease-in-out" onClick={handleCreateAList}>
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="flex flex-col items-center">
+                <Plus />
+                <span>
+                  Criar lista de disparo
+                </span>
+              </div>
+            </div>
+          </div>
+          {Array.from({ length: 4 }).map((item, index) => (<Skeleton key={index} className="p-4 rounded-md md:h-80 bg-slate-200" />))}
         </div>
       </section>
     )
@@ -86,26 +91,29 @@ export default function Page() {
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo
         </h1>
-        <Button variant="default" onClick={handleCreateAList} className="flex items-center gap-2">
-          <Plus />
-          Criar lista de disparo
-        </Button >
       </div>
-      <div className="my-4 grid grid-cols-3 gap-4">
+      <div className="my-4 grid md:grid-cols-5 gap-4">
+        <div className="border-2 p-2 rounded-md flex flex-col gap-2 md:h-80 border-gray-400 border-dashed hover:cursor-pointer hover:bg-slate-100 transition-all ease-in-out" onClick={handleCreateAList}>
+          <div className="flex items-center justify-center h-full w-full">
+            <div className="flex flex-col items-center">
+              <Plus />
+              <span>
+                Criar lista de disparo
+              </span>
+            </div>
+          </div>
+        </div>
         {sendingListQuery.data?.map((list) => {
           return (
-            <div key={list.id} className="border p-2 rounded-md flex flex-col gap-2">
-              <div className="">
-                <p>{list.name ? list.name : list.id}</p>
+            <Link key={list.id} href={`/listas-de-disparo/${list.id}`}>
+              <div className="border p-4 rounded-md md:h-80 hover:bg-slate-50 transition-all ease-in-out">
+                <div className="text-center h-full place-content-center">
+                  <h2 className="text-xl font-medium">
+                    {list.name ? list.name : list.id}
+                  </h2>
+                </div>
               </div>
-              <div className="flex items-center justify-end">
-                <Link href={`/listas-de-disparo/${list.id}`}>
-                  <Button size="icon" variant="default">
-                    <ArrowRight size={16} />
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            </Link>
           )
         })}
       </div>
