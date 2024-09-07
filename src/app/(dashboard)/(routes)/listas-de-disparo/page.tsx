@@ -48,7 +48,7 @@ export default function Page() {
       <section className="space-y-4 md:p-8">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800">
-            Listas de disparo
+            Listas de Disparo
           </h1>
         </div>
         <div className="my-4 grid md:grid-cols-5 gap-4">
@@ -72,7 +72,7 @@ export default function Page() {
     return (
       <section className="space-y-4 md:p-8">
         <h1 className="text-xl font-bold text-gray-800">
-          Contas
+          Listas de Disparo
         </h1>
         <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
           <XCircle />
@@ -89,7 +89,7 @@ export default function Page() {
     <section className="space-y-4 md:p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-800">
-          Listas de disparo
+          Listas de Disparo
         </h1>
       </div>
       <div className="my-4 grid md:grid-cols-5 gap-4">

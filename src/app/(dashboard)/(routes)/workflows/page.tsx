@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Plus, Trash } from "lucide-react";
+import { Edit, Plus, Trash, XCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { CreateWorkflowForm } from "@/components/forms/create-workflow";
@@ -14,13 +14,14 @@ import { api } from "@/lib/axios";
 import useStore from "@/hooks/useStore";
 import useAuthStore from "@/hooks/use-user";
 import { useDeleteWorkflow } from "@/hooks/useDeleteWorkflow";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   const { isOpen, onOpen, onClose } = useModal()
   const store = useStore(useAuthStore, (state) => state);
   const mutation = useDeleteWorkflow(store?.user?.id as string);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["workflows", store?.user?.id],
     queryFn: async () => {
       const { data } = await api.get("/resources/workflows", { authorization: true });
@@ -35,53 +36,43 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <>
-        <section className="space-y-4 md:p-8">
-          <div className="flex items-center justify-between mt-8">
-            <h1 className="text-xl font-bold text-gray-800">
-              Workflows
-            </h1>
-            <Button variant="default" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
-              <Plus />
-              Adicionar workflow
-            </Button >
+      <section className="space-y-4 md:p-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-gray-800">
+            Workflows
+          </h1>
+        </div>
+        <div className="my-4 grid md:grid-cols-5 gap-4">
+          <div className="border-2 p-2 rounded-md flex flex-col gap-2 md:h-80 border-gray-400 border-dashed hover:cursor-pointer hover:bg-slate-100 transition-all ease-in-out" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
+            <div className="flex items-center justify-center h-full w-full">
+              <div className="flex flex-col items-center">
+                <Plus />
+                <span>
+                  Criar workflow
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="w-full flex justify-center">
-            <p>Carregando...</p>
-          </div>
-        </section>
-        <Dialog open={isOpen} onOpenChange={() => onClose(ADD_WORKFLOW_MODAL)}>
-          <DialogContent>
-            <CreateWorkflowForm onClose={onClose} />
-          </DialogContent>
-        </Dialog>
-      </>
+          {Array.from({ length: 4 }).map((item, index) => (<Skeleton key={index} className="p-4 rounded-md md:h-80 bg-slate-200" />))}
+        </div>
+      </section>
     )
   }
 
   if (isError) {
     return (
-      <>
-        <section className="space-y-4 md:p-8">
-          <div className="flex items-center justify-between mt-8">
-            <h1 className="text-xl font-bold text-gray-800">
-              Workflows
-            </h1>
-            <Button variant="default" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
-              <Plus />
-              Adicionar workflow
-            </Button >
-          </div>
-          <div className="w-full flex justify-center">
-            <p>Ocorreu um erro...</p>
-          </div>
-        </section>
-        <Dialog open={isOpen} onOpenChange={() => onClose(ADD_WORKFLOW_MODAL)}>
-          <DialogContent>
-            <CreateWorkflowForm onClose={onClose} />
-          </DialogContent>
-        </Dialog>
-      </>
+      <section className="space-y-4 md:p-8">
+        <h1 className="text-xl font-bold text-gray-800">
+          Workflows
+        </h1>
+        <div className="w-full h-96 flex flex-col items-center justify-center my-8 gap-y-4">
+          <XCircle />
+          <span>Ocorreu algum erro, tente novamente</span>
+          <Button variant="outline" onClick={() => refetch()}>
+            Recarregar página
+          </Button>
+        </div>
+      </section>
     )
   }
 
@@ -114,39 +105,34 @@ export default function Page() {
   return (
     <>
       <section className="space-y-4 md:p-8">
-        <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800">
             Workflows
           </h1>
-          <Button variant="default" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
-            <Plus />
-            Adicionar workflow
-          </Button >
         </div>
         <div>
-          <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 my-8">
+          <div className="grid gap-4 md:grid-cols-5">
+            <div className="border-2 p-2 rounded-md flex flex-col gap-2 md:h-80 border-gray-400 border-dashed hover:cursor-pointer hover:bg-slate-100 transition-all ease-in-out" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
+              <div className="flex items-center justify-center h-full w-full">
+                <div className="flex flex-col items-center">
+                  <Plus />
+                  <span>
+                    Criar workflow
+                  </span>
+                </div>
+              </div>
+            </div>
             {data.map((workflow: any) => {
               return (
-                <Card key={workflow.id}>
-                  <CardHeader>
-                    <CardTitle>
-                      <h2>{workflow.title}</h2>
-                    </CardTitle>
-                    <CardDescription>
-                      <p>{workflow.description}</p>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex gap-x-2 w-full justify-end">
-                    <Link href={`/workflows/${workflow.id}`}>
-                      <Button variant="default" size="icon">
-                        <Edit size={14} />
-                      </Button>
-                    </Link>
-                    <Button variant="destructive" size="icon" onClick={() => handleDeleteWorkflow(workflow.id)}>
-                      <Trash size={14} />
-                    </Button>
-                  </CardContent>
-                </Card>
+                <Link key={workflow.id} href={`/workflows/${workflow.id}`}>
+                  <div className="border p-4 rounded-md md:h-80 hover:bg-slate-50 transition-all ease-in-out">
+                    <div className="text-center h-full place-content-center">
+                      <h2 className="text-xl font-medium">
+                        {workflow.title}
+                      </h2>
+                    </div>
+                  </div>
+                </Link>
               )
             })}
           </div>

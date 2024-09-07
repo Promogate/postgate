@@ -69,7 +69,7 @@ export function InstancesDataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                Sem instâncias
               </TableCell>
             </TableRow>
           )}
