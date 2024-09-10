@@ -76,32 +76,6 @@ export default function Page() {
     )
   }
 
-  if (data.length === 0) {
-    return (
-      <>
-        <section className="space-y-4 md:p-8">
-          <div className="flex items-center justify-between mt-8">
-            <h1 className="text-xl font-bold text-gray-800">
-              Workflows
-            </h1>
-            <Button variant="default" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
-              <Plus />
-              Adicionar workflow
-            </Button >
-          </div>
-          <div className="w-full flex justify-center">
-            <p>Você não possui fluxos ativos</p>
-          </div>
-        </section>
-        <Dialog open={isOpen} onOpenChange={() => onClose(ADD_WORKFLOW_MODAL)}>
-          <DialogContent>
-            <CreateWorkflowForm onClose={onClose} />
-          </DialogContent>
-        </Dialog>
-      </>
-    )
-  }
-
   return (
     <>
       <section className="space-y-4 md:p-8">

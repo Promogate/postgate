@@ -14,6 +14,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { useFlowStore } from "@/hooks/use-flow-store";
+import { api } from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Select,
@@ -24,9 +25,9 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { SendingList, Workflow } from "@/@types";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DateTimePicker } from "@/components/date-time-picker";
-import { api } from "@/lib/axios";
+import { SendingList, Workflow } from "@/@types";
 import { toast } from "@/components/ui/use-toast";
 import useStore from "@/hooks/useStore";
 import useAuthStore from "@/hooks/use-user";

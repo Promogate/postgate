@@ -18,12 +18,12 @@ type CreateInstanceModalProps = {
 
 type FormInput = {
   name: string;
-  description: string;
+  description?: string;
 }
 
 const schema = z.object({
   name: z.string({ required_error: "Nome para instância é obrigatório" }),
-  description: z.string({ required_error: "Descrição para instância é obrigatório" })
+  description: z.string({ required_error: "Descrição para instância é obrigatório" }).optional()
 })
 
 export function CreateInstanceModal(props: CreateInstanceModalProps) {

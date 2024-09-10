@@ -13,7 +13,7 @@ export const columns: ColumnDef<Scheduling>[] = [
     header: "Agendado para",
     cell: ({ row }) => {
       return <p>
-        {formatDateToBrazilian(row.original.startTime)}
+        {formatDateToBrazilian(row.original.startTime) ?? "Início imediato"}
       </p>
     }
   }, {

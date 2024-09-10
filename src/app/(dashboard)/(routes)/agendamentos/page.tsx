@@ -6,6 +6,7 @@ import { Scheduling } from "@/components/scheduling";
 import { DisabledRoot } from "@/components/scheduling/disabled-root";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import useAuthStore from "@/hooks/use-user";
 import useStore from "@/hooks/useStore";
 import { api } from "@/lib/axios";

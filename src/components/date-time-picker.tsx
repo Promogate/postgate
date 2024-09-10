@@ -12,6 +12,8 @@ import { Input } from "./ui/input";
 import { differenceInCalendarDays, format } from "date-fns";
 import { useFlowStore } from "@/hooks/use-flow-store";
 import { ptBR } from "date-fns/locale";
+import { Checkbox } from "./ui/checkbox";
+import { Switch } from "./ui/switch";
 
 interface DateTimePickerProps {
   date: Date;
@@ -26,6 +28,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     setScheduleTime,
     scheduleTime
   } = useFlowStore();
+  const [startImmediately, setStartImmediately] = React.useState<boolean>(false);
 
   const handleSelect: SelectSingleEventHandler = (day, selected) => {
     const selectedDay = DateTime.fromJSDate(selected);
@@ -43,7 +46,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     const hours = Number.parseInt(value.split(':')[0] || '00', 10);
     const minutes = Number.parseInt(value.split(':')[1] || '00', 10);
     const modifiedDay = selectedDateTime.set({ hour: hours, minute: minutes });
-    const formattedTime = format(new Date(`2000-01-01 ${hours+":"+minutes}`), 'HH:mm:ss');
+    const formattedTime = format(new Date(`2000-01-01 ${hours + ":" + minutes}`), 'HH:mm:ss');
     const formattedDate = format(new Date(date as Date), 'yyyy-MM-dd');
     const dateTime = `${formattedDate}T${formattedTime}`;
     setScheduleTime(dateTime);
@@ -70,39 +73,47 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
   );
 
   return (
-    <Popover>
-      <PopoverTrigger asChild className="z-10">
-        <Button
-          variant={'outline'}
-          className={cn(
-            'w-[280px] justify-start text-left font-normal',
-            !date && 'text-muted-foreground'
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? (
-            selectedDateTime.toFormat('DDD HH:mm')
-          ) : (
-            <span>Pick a date</span>
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={selectedDateTime.toJSDate()}
-          onSelect={handleSelect}
-          initialFocus
-          today={new Date()}
-          modifiersClassNames={{
-            selected: "bg-[#5528ff] text-white font-bold rounded-full",
-            today: "rounded-full"
-          }}
-          disabled={isPastDate}
-          locale={ptBR}
-        />
-        {footer}
-      </PopoverContent>
-    </Popover>
+    <>
+      <div className="flex items-center space-x-2">
+        <Switch id="start-immediately" className="data-[state=checked]:bg-[#5025F0]" onCheckedChange={() => setStartImmediately(!startImmediately)}/>
+        <Label htmlFor="start-immediately">Início Imediato</Label>
+      </div>
+      <Popover>
+        <PopoverTrigger asChild className="z-10">
+          <Button
+            disabled={startImmediately}
+            variant={'outline'}
+            className={cn(
+              'w-[280px] justify-start text-left font-normal',
+              !date && 'text-muted-foreground'
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? (
+              selectedDateTime.toFormat('DDD HH:mm')
+            ) : (
+              <span>Pick a date</span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            mode="single"
+            selected={selectedDateTime.toJSDate()}
+            onSelect={handleSelect}
+            initialFocus
+            today={new Date()}
+            modifiersClassNames={{
+              selected: "bg-[#5528ff] text-white font-bold rounded-full",
+              today: "rounded-full"
+            }}
+            disabled={isPastDate}
+            locale={ptBR}
+          />
+          {footer}
+        </PopoverContent>
+      </Popover>
+    </>
+
   );
 }

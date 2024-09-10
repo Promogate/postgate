@@ -9,7 +9,7 @@ import useStore from "../useStore";
 
 type CreateInstanceInput = {
   name: string;
-  description: string;
+  description?: string;
 }
 
 type EditInstanceInput = {

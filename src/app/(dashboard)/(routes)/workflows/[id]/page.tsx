@@ -108,7 +108,7 @@ export default function Page() {
   };
 
   return (
-    <div className="xl:w-[calc(100vw-288px)] xl:h-[calc(100vh-65px)] flex flex-col h-full flex-1">
+    <div className="xl:w-[calc(100vw-288px)] xl:h-screen flex flex-col h-full flex-1">
       <ReactFlowProvider>
         <div ref={reactFlowWrapper} className="flex-1 h-full bg-slate-100">
           <ReactFlow
