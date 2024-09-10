@@ -125,7 +125,7 @@ export default function Page() {
           >
             <Controls />
             <Background gap={12} size={1} />
-            <Panel position="top-right">
+            <Panel position="top-left">
               <NavigationNodes />
             </Panel>
             <Panel position="top-center">

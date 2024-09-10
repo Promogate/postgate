@@ -18,6 +18,7 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { useFlowStore } from "@/hooks/use-flow-store";
 import { RotatingLines } from "react-loader-spinner";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type FormInput = {
   message?: string;
@@ -111,13 +112,13 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
               </p> :
               <p className="text-xs">Editar conteúdo</p>
           }
-          <Popover onOpenChange={setOpen} open={open}>
-            <PopoverTrigger>
+          <Sheet onOpenChange={setOpen} open={open}>
+            <SheetTrigger>
               <Button size={"sm"} variant="default" className="rounded-full" onClick={() => setOpen(true)}>
                 <SquarePen size={12} />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="ml-6 w-[320px] -mt-[70px]" side="right" align="start" sideOffset={16}>
+            </SheetTrigger>
+            <SheetContent className="ml-6 w-96">
               {
                 imagePreview ? (
                   <>
@@ -167,8 +168,8 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                   </Button>
                 </form>
               </Form>
-            </PopoverContent>
-          </Popover>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
       <Handle

@@ -4,18 +4,17 @@ import { Handle, NodeProps, Position } from "reactflow";
 import { ChevronDown, MessageSquareText, SquarePen, Trash, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { useFlowContext } from "@/contexts/flow";
 import { TextNodeProps } from "@/@types";
 import { characterLimiter } from "@/utils/character-limiter";
 import { useRef, useState } from "react";
 import { useFlowStore } from "@/hooks/use-flow-store";
+import { SheetContent, SheetTrigger, Sheet, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 type Input = {
   message: string
@@ -34,7 +33,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      message: data.data.message,
+      message: data.data.message.replace(/\\r\\n/g, '\n'),
     }
   });
 
@@ -87,15 +86,23 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
               </p> :
               <p className="text-xs">Editar conteúdo</p>
           }
-          <Popover onOpenChange={setOpen} open={open}>
-            <PopoverTrigger>
+          <Sheet onOpenChange={setOpen} open={open}>
+            <SheetTrigger>
               <Button size={"sm"} variant="default" className="rounded-full" onClick={() => setOpen(true)}>
                 <SquarePen size={12} />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="ml-6 w-[320px] -mt-[70px]" side="right" align="start" sideOffset={16}>
+            </SheetTrigger>
+            <SheetContent className="ml-6 md:w-96" side="right">
+              <SheetHeader>
+                <SheetTitle>
+                  Editor de Mensagem
+                </SheetTitle>
+                <SheetDescription>
+                  Edite a sua mensagem e ao final salve para que seja atualizada
+                </SheetDescription>
+              </SheetHeader>
               <Form {...form}>
-                <form className="w-full flex flex-col gap-4" onSubmit={form.handleSubmit(editData)}>
+                <form className="w-full flex flex-col gap-4 my-4" onSubmit={form.handleSubmit(editData)}>
                   <FormField
                     control={form.control}
                     name="message"
@@ -114,8 +121,8 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
                   </Button>
                 </form>
               </Form>
-            </PopoverContent>
-          </Popover>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
       <Handle
