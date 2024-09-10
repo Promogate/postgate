@@ -18,7 +18,8 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { useFlowStore } from "@/hooks/use-flow-store";
 import { RotatingLines } from "react-loader-spinner";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 type FormInput = {
   message?: string;
@@ -31,6 +32,7 @@ const schema = z.object({
 export function ImageNode(data: NodeProps<ImageNodeProps>) {
   const deleteNode = useFlowStore(state => state.deleteNode);
   const editImageNode = useFlowStore(state => state.editImageNode);
+  const isUploading = useFlowStore(state => state.isUploading);
   const [open, setOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(data.data.image as string);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -119,10 +121,18 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
               </Button>
             </SheetTrigger>
             <SheetContent className="ml-6 w-96">
+              <SheetHeader>
+                <SheetTitle>
+                  Editor de Imagem e Texto
+                </SheetTitle>
+                <SheetDescription>
+                  Edite a sua mensagem e ao final salve para que seja atualizada
+                </SheetDescription>
+              </SheetHeader>
               {
                 imagePreview ? (
                   <>
-                    <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">Imagem</p>
+                    <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 my-4">Imagem</p>
                     <div className="relative w-full min-h-40 border mb-4">
                       <Button size="sm" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={() => setImagePreview(null)}>
                         <X size={12} />
@@ -131,7 +141,7 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                     </div>
                   </>
                 ) : (
-                  <div className="grid w-full max-w-sm items-center gap-1.5 mb-4">
+                  <div className="grid w-full max-w-sm items-center gap-1.5 y-4 my-4">
                     <Label htmlFor="picture">Imagem</Label>
                     <Input id="picture" type="file" onChange={handleImageChange} />
                   </div>
@@ -152,19 +162,21 @@ export function ImageNode(data: NodeProps<ImageNodeProps>) {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" variant="default" className="flex justify-center items-center gap-x-4">
+                  <Button type="submit" variant="default" disabled={isUploading} className={cn("flex justify-center items-center gap-x-4", isUploading && "opacity-50 pointer-events-none")}>
                     {
-                      loading &&
-                      <RotatingLines
-                        visible={true}
-                        width="12"
-                        strokeWidth="4"
-                        strokeColor="#FFFFFF"
-                        animationDuration="0.75"
-                        ariaLabel="rotating-lines-loading"
-                      />
+                      isUploading ? (
+                        <svg fill="#FFFFFF" height="16px" width="16px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 489.645 489.645" className="animate-spin">
+                          <g>
+                            <path d="M460.656,132.911c-58.7-122.1-212.2-166.5-331.8-104.1c-9.4,5.2-13.5,16.6-8.3,27c5.2,9.4,16.6,13.5,27,8.3
+            c99.9-52,227.4-14.9,276.7,86.3c65.4,134.3-19,236.7-87.4,274.6c-93.1,51.7-211.2,17.4-267.6-70.7l69.3,14.5
+            c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-122.8-25c-20.6-2-25,16.6-23.9,22.9l15.6,123.8
+            c1,10.4,9.4,17.7,19.8,17.7c12.8,0,20.8-12.5,19.8-23.9l-6-50.5c57.4,70.8,170.3,131.2,307.4,68.2
+            C414.856,432.511,548.256,314.811,460.656,132.911z"/>
+                          </g>
+                        </svg>
+                      ) : "Salvar mensagem"
                     }
-                    Salvar mensagem
                   </Button>
                 </form>
               </Form>

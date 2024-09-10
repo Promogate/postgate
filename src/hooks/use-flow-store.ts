@@ -35,6 +35,8 @@ export type RFState = {
   saveFlow: (id: string) => Promise<void>;
   editTextNode: (id: string, values: TextNodeProps) => void;
   editImageNode: (id: string, values: ImageNodeProps) => Promise<void>;
+  isUploading: boolean;
+  setIsUploading: (values: boolean) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -42,6 +44,10 @@ export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
   nodes: [],
   edges: [],
   scheduleTime: null,
+  isUploading: false,
+  setIsUploading: (value: boolean) => {
+    set({ isUploading: value });
+  },
   setScheduleTime: (value: string) => {
     set({ scheduleTime: value });
   },
@@ -61,7 +67,7 @@ export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
   },
   onConnect: (connection: Connection) => {
     set({
-      edges: addEdge({...connection, type: "buttonedge"}, get().edges),
+      edges: addEdge({ ...connection, type: "buttonedge" }, get().edges),
     });
   },
   setNodes: (nodes: Node[]) => {
@@ -125,9 +131,11 @@ export const useFlowStore = createWithEqualityFn<RFState>((set, get) => ({
     bodyFormData.append("userId", values.userId);
     bodyFormData.append("image", values.image);
     bodyFormData.append("message", values.message);
+    set({ isUploading: true });
     const result = await axios.post("/api/s3-upload", bodyFormData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
+    set({ isUploading: false });
     set({
       nodes: nodes.map((node) => {
         if (node.id === id) {
