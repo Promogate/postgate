@@ -15,6 +15,7 @@ import { characterLimiter } from "@/utils/character-limiter";
 import { useRef, useState } from "react";
 import { useFlowStore } from "@/hooks/use-flow-store";
 import { SheetContent, SheetTrigger, Sheet, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import formatTextNodeMessage from "@/utils/formatTextNodeMessage";
 
 type Input = {
   message: string
@@ -33,7 +34,7 @@ export function TextNode(data: NodeProps<TextNodeProps>) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      message: data.data.message.replace(/\\r\\n/g, '\n'),
+      message: formatTextNodeMessage(data.data.message),
     }
   });
 
