@@ -44,12 +44,12 @@ const routes = [
     href: "/listas-de-disparo",
     color: "text-[#5528ff]"
   },
-  {
-    label: "Configurações",
-    icon: Settings,
-    href: "/configuracoes",
-    color: "text-[#5528ff]"
-  },
+  // {
+  //   label: "Configurações",
+  //   icon: Settings,
+  //   href: "/configuracoes",
+  //   color: "text-[#5528ff]"
+  // },
 ]
 
 export function Root() {
