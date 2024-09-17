@@ -8,7 +8,10 @@ export default function Custom500() {
       <div className="flex flex-col gap-4 justify-center text-center">
         <Image src="/undraw_maintenance.svg" width={512} height={512} alt="Página em Manutenção" />
         <span className="text-2xl font-semibold">
-          Estamos em manutenção. Não vai demorar.
+          Esta página está em manutenção.
+        </span>
+        <span className="">
+          Estamos trabalhando para que tudo seja normalizado.
         </span>
       </div>
     </section>
