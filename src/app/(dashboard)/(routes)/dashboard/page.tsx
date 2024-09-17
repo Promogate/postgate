@@ -12,7 +12,7 @@ import { API_URL } from "@/api.config";
 export default async function Page() {
   const cookiesStore = cookies();
   const authorization = cookiesStore.get("__postgate.session")
-  const { data } = await fetch(API_URL + "/dashboar", {
+  const { data } = await fetch(API_URL + "/dashboard", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${authorization?.value}`,
