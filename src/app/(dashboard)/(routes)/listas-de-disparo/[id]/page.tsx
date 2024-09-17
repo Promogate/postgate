@@ -193,7 +193,7 @@ export default function Page() {
 
   if (instancesQuery.isLoading || listQuery.isLoading) {
     return (
-      <section className="space-y-4 md:p-8">
+      <section className="space-y-4">
         <div className="w-full h-96 flex items-center justify-center my-8 ">
           <RotatingLines
             visible={true}
@@ -210,7 +210,7 @@ export default function Page() {
 
   if (instancesQuery.isError || listQuery.isError) {
     return (
-      <section className="p-4">
+      <section className="">
         <h1 className="text-xl font-bold text-gray-800">
           Listas de disparo
         </h1>
@@ -226,7 +226,7 @@ export default function Page() {
   }
 
   return (
-    <section className="p-4">
+    <section className="">
       <Form {...nameForm}>
         <form onSubmit={nameForm.handleSubmit(handleNameSubmit)}>
           {

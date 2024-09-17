@@ -34,7 +34,7 @@ const setupAxiosClient = (input: SetupAxiosClientParams) => {
 
 export const api = setupAxiosClient({
   options: {
-    baseURL: "https://api.postgate.app",
+    baseURL: "http://localhost:8090",
     timeout: 600 * 1000
   }
 });

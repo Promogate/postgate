@@ -1,87 +1,62 @@
-"use client";
-
+import { cookies } from "next/headers";
+import { DashboardResult } from "@/@types";
 import { PageHeader } from "@/components/common/page-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Card as TremorCard } from "@tremor/react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 
-const chartdata = [
-  {
-    name: 'Amphibians',
-    'Number of threatened species': 2488,
-  },
-  {
-    name: 'Birds',
-    'Number of threatened species': 1445,
-  },
-  {
-    name: 'Crustaceans',
-    'Number of threatened species': 743,
-  },
-  {
-    name: 'Ferns',
-    'Number of threatened species': 281,
-  },
-  {
-    name: 'Arachnids',
-    'Number of threatened species': 251,
-  },
-  {
-    name: 'Corals',
-    'Number of threatened species': 232,
-  },
-  {
-    name: 'Algae',
-    'Number of threatened species': 98,
-  },
-];
+export default async function Page() {
+  const cookiesStore = cookies();
+  const authorization = cookiesStore.get("__postgate.session")
+  const { data } = await fetch(process.env.API_URL + "/dashboard", {
+    headers: {
+      Authorization: `Bearer ${authorization?.value}`,
+    }
+  }).then(res => res.json()) as DashboardResult;
 
-export default function Page() {
-  const dataFormatter = (number: number) => Intl.NumberFormat('us').format(number).toString();
-  
   return (
-    <section className="space-y-4 md:p-8">
+    <section className="space-y-4">
       <PageHeader>
         Dashboard
       </PageHeader>
       <div className="grid grid-cols-12 gap-x-4 gap-y-4">
-        <Card className="md:col-span-12 2xl:col-span-6 w-full">
+        <Card className="md:col-span-4 2xl:col-span-6 w-full">
           <CardHeader>
             <CardTitle>
-              Cliques
+              Agendamentos Ativos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <BarChart
-              data={chartdata}
-              index="name"
-              categories={['Number of threatened species']}
-              colors={["violet"]}
-              valueFormatter={(number: number) =>
-                Intl.NumberFormat("us").format(number).toString()
-              }
-              yAxisWidth={48}
-              onValueChange={(v) => console.log(v)}
-            />
+            <span className="text-2xl font-semibold">
+              {data.pendingAppointments}
+            </span>
           </CardContent>
         </Card>
-        <Card className="col-span-6 w-full">
+        <Card className="md:col-span-4 w-full">
           <CardHeader>
             <CardTitle>
-              Dispositivos
+              Agendamentos Finalizados
             </CardTitle>
           </CardHeader>
           <CardContent>
-
+            <span className="text-2xl font-semibold">
+              {data.completedAppointments}
+            </span>
           </CardContent>
         </Card>
-        <Card className="col-span-6 w-full">
+        <Card className="md:col-span-4 w-full">
           <CardHeader>
             <CardTitle>
-              Canais
+              Grupos
             </CardTitle>
           </CardHeader>
           <CardContent>
-
+            <span className="text-2xl font-semibold">
+              {data.groupsCount}
+            </span>
           </CardContent>
         </Card>
       </div>

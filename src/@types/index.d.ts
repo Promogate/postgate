@@ -443,3 +443,23 @@ export type Scheduling = {
     title: string;
   }
 }
+
+export type Appointment = {
+  id: string;
+  startTime: string | null;
+  whatsappSessionId: string;
+  status: string;
+  userId: string | null;
+  sendingListId: string | null;
+  workflowId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type DashboardResult = {
+  data: {
+    pendingAppointments: number;
+    completedAppointments: number;
+    groupsCount: number;
+  }
+};

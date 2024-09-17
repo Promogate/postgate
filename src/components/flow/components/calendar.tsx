@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DateTimePicker } from "@/components/date-time-picker";
 import { SendingList, Workflow } from "@/@types";
 import { toast } from "@/components/ui/use-toast";

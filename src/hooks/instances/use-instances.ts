@@ -1,4 +1,4 @@
-import { Instance } from "@/@types";
+import { Instance, Session } from "@/@types";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
@@ -18,7 +18,7 @@ type EditInstanceInput = {
 }
 
 const fetchInstances = async () => {
-  const { data } = await api.get("/whatsapp/sessions", { authorization: true });
+  const { data } = await api.get<Session[]>("/whatsapp/sessions", { authorization: true });
   return data;
 }
 
@@ -27,7 +27,7 @@ export const useInstances = () => {
   return useQuery({
     queryKey: ["instances", store?.user?.id],
     queryFn: fetchInstances,
-    staleTime: 1000 * 10
+    staleTime: 1000 * 60 * 5
   })
 }
 

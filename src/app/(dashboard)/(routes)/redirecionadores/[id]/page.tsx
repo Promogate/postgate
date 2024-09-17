@@ -25,7 +25,7 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <section className="space-y-4 md:p-8">
+      <section className="space-y-4">
         <div className="w-full h-96 flex items-center justify-center my-8 ">
           <RotatingLines
             visible={true}
@@ -42,7 +42,7 @@ export default function Page() {
 
   if (isError) {
     return (
-      <section className="space-y-4 md:p-8">
+      <section className="space-y-4">
         <h1 className="text-xl font-bold text-gray-800">
           Redirecionador - { }
         </h1>
@@ -58,7 +58,7 @@ export default function Page() {
   }
 
   return (
-    <section className="w-full flex flex-col space-y-4 md:p-8">
+    <section className="w-full flex flex-col space-y-4">
       <div className="w-full flex justify-between">
         <div className="flex items-center gap-x-8">
           <Link href="/redirecionadores">

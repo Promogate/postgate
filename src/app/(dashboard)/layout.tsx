@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Sidebar.Root />
       </div>
       <main className="md:pl-72">
-        <div>
+        <div className="md:p-8">
           {children}
         </div>
       </main>

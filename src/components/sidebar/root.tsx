@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Smartphone, CalendarDays, Split, Workflow, Settings, ListChecks } from "lucide-react";
+import { LayoutDashboard, Smartphone, CalendarDays, Split, Workflow, Settings, ListChecks, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,6 +24,12 @@ const routes = [
     label: "Agendamentos",
     icon: CalendarDays ,
     href: "/agendamentos",
+    color: "text-[#5528ff]"
+  },
+  {
+    label: "Disparos Rápidos",
+    icon: Zap ,
+    href: "/disparos-rapidos",
     color: "text-[#5528ff]"
   },
   // {
