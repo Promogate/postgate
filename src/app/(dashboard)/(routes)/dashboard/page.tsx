@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { API_URL } from "@/config";
+import { API_URL } from "@/api.config";
 
 export default async function Page() {
   const cookiesStore = cookies();

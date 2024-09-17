@@ -11,7 +11,7 @@ export default function Custom500() {
           Esta página está em manutenção.
         </span>
         <span className="">
-          Estamos trabalhamos para tudo seja normalizado.
+          Estamos trabalhando para tudo seja normalizado.
         </span>
       </div>
     </section>

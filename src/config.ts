@@ -13,4 +13,4 @@ export const S3_BUCKET_NAME="postgate-web-storage"
 export const ADD_WORKFLOW_MODAL = "add_workflow"
 export const GET_QRCODE_MODAL = "get_qrcode"
 
-export const API_URL = "https://api.postgate.app"
+export const API_URL = "http://localhost:8090"
