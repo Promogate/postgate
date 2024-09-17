@@ -34,7 +34,7 @@ const setupAxiosClient = (input: SetupAxiosClientParams) => {
 
 export const api = setupAxiosClient({
   options: {
-    baseURL: "http://localhost:8090",
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: 600 * 1000
   }
 });

@@ -7,12 +7,11 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { API_URL } from "@/api.config";
 
 export default async function Page() {
   const cookiesStore = cookies();
   const authorization = cookiesStore.get("__postgate.session")
-  const { data } = await fetch(API_URL + "/dashboard", {
+  const { data } = await fetch(process.env.NEXT_PUBLIC_API_URL + "/dashboard", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${authorization?.value}`,
