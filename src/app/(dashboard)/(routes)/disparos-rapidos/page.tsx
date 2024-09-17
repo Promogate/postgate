@@ -36,7 +36,7 @@ export default function Page() {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 md:p-8">
       <PageHeader>
         Disparos Rápidos
       </PageHeader>

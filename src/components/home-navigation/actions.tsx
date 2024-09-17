@@ -1,27 +1,20 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export function Actions() {
-  const router = useRouter();
-
-  const handleLogin = (): void => {
-    return router.push("/login");
-  }
-
-  const handleRegister = (): void => {
-    return router.push("/cadastrar-se")
-  }
 
   return (
     <div className="flex items-center gap-x-4">
-      <Button variant="outline" onClick={handleLogin}>
-        Login
-      </Button>
-      <Button onClick={handleRegister}>
-        Cadastrar-se
-      </Button>
+      <Link href="/login">
+        <Button variant="outline">
+          Login
+        </Button>
+      </Link>
+      <Link href="/cadastrar-se">
+        <Button>
+          Cadastrar-se
+        </Button>
+      </Link>
     </div>
   )
 }

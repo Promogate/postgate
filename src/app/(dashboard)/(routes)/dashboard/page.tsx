@@ -18,12 +18,12 @@ export default async function Page() {
   }).then(res => res.json()) as DashboardResult;
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 md:p-8">
       <PageHeader>
         Dashboard
       </PageHeader>
       <div className="grid grid-cols-12 gap-x-4 gap-y-4">
-        <Card className="md:col-span-4 2xl:col-span-6 w-full">
+        <Card className="md:col-span-4 w-full">
           <CardHeader>
             <CardTitle>
               Agendamentos Ativos

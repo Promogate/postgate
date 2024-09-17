@@ -15,14 +15,8 @@ export const columns: ColumnDef<Instance>[] = [
     accessorKey: "instanceName",
     header: "Instância",
     cell: ({ row }) => {
-      const session = JSON.parse(row.original.session);
-
       return <p>
-        {row.original.session ?
-          `${session.info.pushname} - ${session.info.wid.user}` :
-          row.original.name ?
-            `${row.original.name} - ${row.original.description}` :
-            row.original.id}
+        {row.original.name}
       </p>
     }
   }, {

@@ -390,13 +390,17 @@ export type CreateRedirectorInput = {
 
 export type Instance = {
   id: string;
-  session: string;
-  userId: string;
-  status: string;
-  qr: string;
-  retires: number;
-  name: null | string;
-  description: null | string;
+  instanceId: string | null;
+  name: string | null;
+  description: string | null;
+  session: string | null;
+  status: string | null;
+  qr: string | null;
+  token: string | null;
+  retries: number | null;
+  userId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type Session = {
