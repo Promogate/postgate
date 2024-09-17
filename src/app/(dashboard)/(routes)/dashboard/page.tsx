@@ -11,10 +11,10 @@ import {
 export default async function Page() {
   const cookiesStore = cookies();
   const authorization = cookiesStore.get("__postgate.session")
-  const { data } = await fetch("http://localhost:8090/dashboard", {
+  const { data } = await fetch(process.env.NEXT_PUBLIC_API_URL + "/dashboard", {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${authorization?.value}`,
+      Authorization: "Bearer " + authorization?.value,
     }
   }).then(res => res.json()) as DashboardResult;
 
