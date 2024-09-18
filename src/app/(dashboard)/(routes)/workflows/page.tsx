@@ -85,7 +85,7 @@ export default function Page() {
           </h1>
         </div>
         <div>
-          <div className="grid gap-4 md:grid-cols-5">
+          <div className="grid gap-4 xl:grid-cols-4 2xl:grid-cols-5">
             <div className="border-2 p-2 rounded-md flex flex-col gap-2 md:h-80 border-gray-400 border-dashed hover:cursor-pointer hover:bg-slate-100 transition-all ease-in-out" onClick={() => onOpen(ADD_WORKFLOW_MODAL)}>
               <div className="flex items-center justify-center h-full w-full">
                 <div className="flex flex-col items-center">
