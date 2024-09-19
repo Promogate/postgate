@@ -1,6 +1,7 @@
 import { User } from "@/@types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { deleteCookie } from "cookies-next";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -24,6 +25,7 @@ const useAuthStore = create<AuthState>()(
         });
       },
       logout: () => {
+        deleteCookie("__postgate.session");
         set({
           token: null,
           user: null,

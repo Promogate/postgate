@@ -44,7 +44,8 @@ export default function Page() {
         user: {
           id: data.user.id,
           email: data.user.email,
-          username: data.user.username
+          username: data.user.username,
+          userSubscription: data.user.userSubscription
         }
       });
       toast({

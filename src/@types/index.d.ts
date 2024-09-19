@@ -300,6 +300,19 @@ export type User = {
   id: string;
   email: string;
   username: null | undefined | string;
+  userSubscription: {
+    id: string;
+    usage: number;
+    usageLimit: number;
+    stripeCurrentPeriodEnd: string | null;
+    stripeCustomerId: string | null;
+    stripePriceId: string | null;
+    stripeSubscriptionId: string | null;
+    subscriptionLevel: string;
+    createdAt: string;
+    updatedAt: string;
+    userId: string;
+  } | null;
 }
 
 export type SetShowcaseProductInput = {
