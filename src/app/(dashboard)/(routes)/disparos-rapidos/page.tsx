@@ -20,9 +20,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useInstances } from "@/hooks/instances/use-instances";
 import { useInstanceGroups } from "@/hooks/use-instance-groups";
+import { useInstantMessage } from "@/hooks/use-instant-message";
+import useAuthStore from "@/hooks/use-user";
 import { Plus, X } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useStore } from "zustand";
 
 export default function Page() {
   const [instanceId, setInstanceId] = useState<string>("");
@@ -32,8 +35,12 @@ export default function Page() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [disableAddGroupButton, setDisableAddGroupButton] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
+  const [message, setMessage] = useState<string>("");
   const instancesQuery = useInstances();
   const query = useInstanceGroups(instanceId);
+  const authStorage = useStore(useAuthStore, state => state);
+
+  const { mutate, uploadImage } = useInstantMessage();
 
   const handleSelectInstance = async (selectedInstance: string) => {
     setInstanceId(selectedInstance);
@@ -95,6 +102,41 @@ export default function Page() {
       reader.readAsDataURL(file);
     }
   };
+
+  const handlePostInstantMessage = async () => {
+    if (imageFile) {
+      const { imageAwsURL } = await uploadImage.mutateAsync({
+        image: imageFile as File,
+        userId: authStorage.user?.id as string
+      });
+      await mutate.mutateAsync({
+        groups: groupsInfo,
+        message: {
+          label: "image_node",
+          image: imageAwsURL,
+          message
+        },
+        instanceId: instanceId,
+        userId: authStorage.user?.id as string
+      });
+    }
+    if (!imageFile) {
+      await mutate.mutateAsync({
+        groups: groupsInfo,
+        message: {
+          label: "text_node",
+          message
+        },
+        instanceId: instanceId,
+        userId: authStorage.user?.id as string
+      });
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setImageFile(null);
+  }
 
   return (
     <section className="space-y-4 md:p-8">
@@ -199,7 +241,7 @@ export default function Page() {
               <>
                 <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 my-4">Imagem</p>
                 <div className="relative w-full min-h-40 border mb-4">
-                  <Button size="sm" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={() => setImagePreview(null)}>
+                  <Button size="sm" className="rounded-full absolute z-20 -right-1 -top-1" variant="destructive" onClick={handleRemoveImage}>
                     <X size={12} />
                   </Button>
                   <Image src={imagePreview as string} alt="preview" fill objectFit="contain" />
@@ -214,13 +256,18 @@ export default function Page() {
           }
           <Label htmlFor="message">Mensagem</Label>
           <div className="flex flex-col items-center lg:min-h-[320px]">
-            <Textarea className="h-96" />
+            <Textarea
+              className="h-96"
+              onChange={(event) => setMessage(event.target.value)}
+            />
           </div>
-          <Button className="w-full">
+          <Button className="w-full space-x-2" onClick={handlePostInstantMessage}>
+            {
+              (mutate.isPending || uploadImage.isPending) && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw animate-spin"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></svg>
+              )
+            }
             Iniciar Disparo
-          </Button>
-          <Button className="w-full" variant="outline">
-            Salva Lista
           </Button>
         </div>
       </div>
